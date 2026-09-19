@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ka"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07151a"><title>L LIVE</title>
+<style>
+:root{--bg:#071217;--card:#0d2027;--line:#19363e;--green:#35e875;--red:#ed3654;--muted:#aebbc0;--gold:#ffd94a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Georgian",Arial,sans-serif}
+button,input{font:inherit}.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:92px}
+header{position:sticky;top:0;z-index:10;background:#07161c;border-bottom:1px solid var(--line);padding:16px}
+.top{display:flex;align-items:center;gap:10px}.logo{font-size:32px;font-weight:950}.logo b{color:var(--green)}.status{margin-left:auto;color:var(--green);font-size:12px;font-weight:900}.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.search{margin-top:12px;width:100%;border:1px solid var(--line);background:#10262d;color:#dce5e7;border-radius:12px;padding:11px 13px}
+.dates{display:flex;overflow:auto;border-bottom:1px solid var(--line)}.date{min-width:84px;text-align:center;padding:10px;color:#dbe2e4;font-weight:800}.date small{display:block;color:var(--muted);margin-top:4px}.date.active{color:var(--green);border-bottom:3px solid var(--green)}
+.filters{display:flex;gap:8px;overflow:auto;padding:12px}.filter{border:1px solid var(--line);background:#0b2027;color:#fff;border-radius:22px;padding:9px 14px;white-space:nowrap;font-weight:800}.filter.active{background:var(--green);color:#031009;border-color:var(--green)}
+.sports{display:flex;gap:8px;overflow:auto;padding:0 12px 12px}.sportbtn{border:1px solid var(--line);background:#0b2027;color:#fff;border-radius:20px;padding:8px 12px;white-space:nowrap}.sportbtn.active{border-color:var(--green);color:var(--green)}
+.title{padding:10px 16px;background:#09262c;color:var(--gold);font-weight:900}.league{border-bottom:1px solid var(--line)}.leaguehead{display:flex;gap:10px;padding:12px 16px;align-items:center}.icon{font-size:23px}.leaguehead b{font-size:16px}.leaguehead small{display:block;color:var(--muted);margin-top:2px}.match{display:flex;align-items:center;padding:12px 16px;border-top:1px solid #102d35}.teams{flex:1;padding-left:35px}.team{font-weight:800;line-height:1.5}.event{color:var(--gold);font-size:12px;margin-top:3px}.time{width:60px;text-align:center;font-weight:900}.score{width:44px;text-align:right;font-weight:950;font-size:18px}.live{color:var(--red)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:5px}
+.empty{padding:38px 20px;text-align:center;color:var(--muted)}.bottom{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(730px,calc(100% - 24px));background:#17262cdd;backdrop-filter:blur(12px);border:1px solid #3a535b;border-radius:36px;display:flex;padding:7px;z-index:20}.nav{flex:1;text-align:center;font-size:12px;font-weight:800;color:#e8edef;padding:4px}.nav span{display:block;font-size:24px}.nav.active{color:var(--green)}
+</style></head><body><div class="app">
+<header><div class="top"><div class="logo"><b>L</b> LIVE</div><div class="status" id="status">● LIVE DATA</div></div><div class="sub">საქართველოს სპორტი ერთ სივრცეში</div><input id="search" class="search" placeholder="🔎 გუნდი, სპორტსმენი, ჩემპიონატი"></header>
+<div class="dates"><div class="date">გუშინ<small>18.09</small></div><div class="date active">დღეს<small>19.09</small></div><div class="date">ხვალ<small>20.09</small></div><div class="date">ორშ<small>21.09</small></div><div class="date">სამ<small>22.09</small></div></div>
+<div class="filters"><button class="filter active" data-f="all">ყველა</button><button class="filter" data-f="live">🔴 LIVE</button><button class="filter" data-f="upcoming">მომავალი</button><button class="filter" data-f="finished">დასრულებული</button></div>
+<div class="sports" id="sports"></div><div class="title">🇬🇪 საქართველო • დღეს</div><main id="list"><div class="empty">მონაცემები იტვირთება…</div></main>
+<div class="bottom"><div class="nav active"><span>🏠</span>მთავარი</div><div class="nav"><span>🔴</span>LIVE</div><div class="nav"><span>⭐</span>ფავორიტები</div><div class="nav"><span>🏆</span>სპორტები</div></div>
+</div>
+<script>
+let all=[], filter='all', sport='all', q='';
+const sportIcons={football:'⚽',basketball:'🏀',rugby:'🏉',tennis:'🎾',judo:'🥋',wrestling:'🤼',boxing:'🥊',chess:'♟️'};
+async function load(){try{const r=await fetch('/api/events');all=await r.json();document.getElementById('status').textContent='● LIVE DATA';render()}catch(e){document.getElementById('status').textContent='● DEMO';all=[];render()}}
+function render(){
+ const sports=[...new Set(all.map(x=>x.sport))];document.getElementById('sports').innerHTML='<button class="sportbtn '+(sport==='all'?'active':'')+'" onclick="setSport(\'all\')">ყველა სპორტი</button>'+sports.map(s=>`<button class="sportbtn ${sport===s?'active':''}" onclick="setSport('${s}')">${sportIcons[s]||'🏅'} ${label(s)}</button>`).join('');
+ let rows=all.filter(x=>(filter==='all'||x.status===filter)&&(sport==='all'||x.sport===sport)&&(`${x.home} ${x.away} ${x.competition}`.toLowerCase().includes(q.toLowerCase())));
+ const grouped={};rows.forEach(x=>(grouped[x.competition]??=[]).push(x));
+ document.getElementById('list').innerHTML=Object.keys(grouped).map(c=>`<section class="league"><div class="leaguehead"><div class="icon">${sportIcons[grouped[c][0].sport]||'🏅'}</div><div><b>${c}</b><small>${label(grouped[c][0].sport)}</small></div></div>${grouped[c].map(m=>`<div class="match"><div class="teams"><div class="team">${m.home}</div><div class="team">${m.away}</div>${m.event?`<div class="event">${m.event}</div>`:''}</div><div class="time ${m.status==='live'?'live':''}">${m.status==='live'?'<span class="dot"></span>':''}${m.minute||m.time||'FT'}</div><div class="score">${m.homeScore??'–'}<br>${m.awayScore??'–'}</div></div>`).join('')}</section>`).join('')||'<div class="empty">ამ ფილტრით მატჩები ვერ მოიძებნა.</div>';
+}
+function label(s){return ({football:'ფეხბურთი',basketball:'კალათბურთი',rugby:'რაგბი',tennis:'ჩოგბურთი',judo:'ძიუდო',wrestling:'ჭიდაობა',boxing:'კრივი',chess:'ჭადრაკი'})[s]||s}
+function setSport(s){sport=s;render()} document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.f;render()});
+document.getElementById('search').oninput=e=>{q=e.target.value;render()};load();setInterval(load,30000);
+</script></body></html>
