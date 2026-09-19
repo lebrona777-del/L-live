@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>L LIVE</title>
+
+<style>
+:root{
+  --bg:#07110d;
+  --panel:#0d1b15;
+  --green:#20d477;
+  --text:#f4fff9;
+  --muted:#91a99d;
+  --line:#1d3529;
+  --red:#ff4d5f;
+  --yellow:#ffd33d;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#06100c,#0a1711 55%,#06100c);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(5,14,10,.96);
+  border-bottom:1px solid var(--line);
+}
+
+.nav{
+  max-width:1100px;
+  margin:auto;
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  font-size:26px;
+  font-weight:900;
+}
+
+.logo span{
+  color:var(--green);
+}
+
+.navBtns{
+  display:flex;
+  gap:7px;
+}
+
+.navBtn{
+  background:#102219;
+  color:#d9f5e6;
+  padding:9px 12px;
+  border-radius:10px;
+}
+
+.navBtn.active{
+  background:var(--green);
+  color:#04140b;
+  font-weight:800;
+}
+
+.wrap,.admin{
+  max-width:1100px;
+  margin:auto;
+  padding:16px;
+}
+
+.hero{
+  padding:20px 4px 10px;
+}
+
+.hero h1{
+  margin:0 0 6px;
+  font-size:30px;
+}
+
+.hero p{
+  margin:0;
+  color:var(--muted);
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:14px 0;
+}
+
+.chip{
+  white-space:nowrap;
+  background:#0e2018;
+  color:#bcd5c8;
+  padding:9px 13px;
+  border-radius:999px;
+}
+
+.chip.active{
+  background:var(--green);
+  color:#04140b;
+  font-weight:800;
+}
+
+.card{
+  background:linear-gradient(145deg,var(--panel),#0a1812);
+  border:1px solid var(--line);
+  border-radius:16px;
+  margin:10px 0;
+  overflow:hidden;
+}
+
+.cardHead{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+
+.match{
+  padding:16px;
+  display:grid;
+  grid-template-columns:1fr 90px 1fr;
+  align-items:center;
+  gap:8px;
+}
+
+.team{
+  text-align:center;
+  font-weight:800;
+}
+
+.badge{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#183126;
+  margin:0 auto 7px;
+  font-size:22px;
+}
+
+.score{
+  text-align:center;
+  font-size:25px;
+  font-weight:900;
+}
+
+.status{
+  font-size:11px;
+  color:var(--green);
+  margin-top:4px;
+}
+
+.live{
+  color:var(--red);
+}
+
+.finished{
+  color:var(--muted);
+}
+
+.clickable{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.back{
+  background:#102219;
+  color:#d8f4e4;
+  padding:9px 12px;
+  border-radius:10px;
+  margin-bottom:14px;
+}
+
+.competition{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.detailScore{
+  display:grid;
+  grid-template-columns:1fr 110px 1fr;
+  align-items:center;
+  margin:20px 0;
+}
+
+.detailTeam{
+  text-align:center;
+  font-weight:850;
+}
+
+.detailBadge{
+  width:66px;
+  height:66px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#193529;
+  margin:0 auto 8px;
+  font-size:30px;
+}
+
+.bigScore{
+  text-align:center;
+  font-size:38px;
+  font-weight:950;
+}
+
+.tabs{
+  display:flex;
+  overflow:auto;
+  border-bottom:1px solid var(--line);
+}
+
+.tab{
+  background:none;
+  color:var(--muted);
+  padding:13px 15px;
+  white-space:nowrap;
+}
+
+.tab.active{
+  color:var(--green);
+  border-bottom:2px solid var(--green);
+}
+
+.timeline{
+  padding:16px;
+}
+
+.event{
+  display:grid;
+  grid-template-columns:50px 1fr 50px;
+  align-items:center;
+  min-height:65px;
+  border-bottom:1px solid #173024;
+}
+
+.min{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.ico{
+  text-align:center;
+  font-size:20px;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+}
+
+.box h3{
+  margin:0 0 12px;
+}
+
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.ctl{
+  padding:11px 13px;
+  border-radius:10px;
+  background:#173126;
+  color:#eafff3;
+}
+
+.ctl.green{
+  background:var(--green);
+  color:#04140b;
+  font-weight:850;
+}
+
+.ctl.red{
+  background:var(--red);
+  color:#fff;
+}
+
+.ctl.yellow{
+  background:var(--yellow);
+  color:#171000;
+}
+
+label{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+input,select{
+  width:100%;
+  background:#09150f;
+  color:white;
+  border:1px solid #244133;
+  border-radius:10px;
+  padding:11px;
+  margin-bottom:10px;
+}
+
+.adminScore{
+  text-align:center;
+  font-size:38px;
+  font-weight:950;
+  margin:5px 0 12px;
+}
+
+.note{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.firebaseStatus{
+  padding:10px 12px;
+  margin:10px 0;
+  border-radius:10px;
+  background:#102219;
+  color:var(--green);
+  font-size:13px;
+}
+
+@media(max-width:650px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .detailScore{
+    grid-template-columns:1fr 90px 1fr;
+  }
+
+  .match{
+    grid-template-columns:1fr 70px 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+
+<div class="nav">
+
+<div class="logo">
+L <span>LIVE</span>
+</div>
+
+<div class="navBtns">
+
+<button
+class="navBtn active"
+id="homeBtn"
+onclick="showPublic()">
+LIVE
+</button>
+
+<button
+class="navBtn"
+id="adminBtn"
+onclick="showAdmin()">
+ADMIN
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+
+<!-- PUBLIC -->
+
+<main id="public">
+
+<div id="homeView" class="wrap">
+
+<section class="hero">
+
+<h1>საქართველო — LIVE</h1>
+
+<p>
+მატჩები, ანგარიშები და მოვლენები ერთ სივრცეში
+</p>
+
+<div class="firebaseStatus">
+🟢 LIVE SERVER CONNECTED
+</div>
+
+</section>
+
+
+<div class="filters">
+
+<button class="chip active">
+ყველა
+</button>
+
+<button class="chip">
+LIVE
+</button>
+
+<button class="chip">
+დღეს
+</button>
+
+</div>
+
+
+<div id="matchList"></div>
+
+</div>
+
+
+<div id="detailView" class="wrap hidden">
+
+<button
+class="back"
+onclick="closeDetail()">
+
+← მატჩებზე დაბრუნება
+
+</button>
+
+<div id="detail"></div>
+
+</div>
+
+</main>
+
+
+<!-- ADMIN -->
+
+<main id="admin" class="admin hidden">
+
+<h2>LIVE ADMIN</h2>
+
+<p class="note">
+ეს პანელი პირდაპირ Firebase Realtime Database-ს მართავს.
+შეცვლა ყველა დაკავშირებულ მოწყობილობაზე ავტომატურად გამოჩნდება.
+</p>
+
+
+<div class="grid">
+
+
+<section class="box">
+
+<h3>მატჩი</h3>
+
+<label>ტურნირი</label>
+
+<input
+id="aComp"
+value="GAFA • თბილისის სუპერლიგა">
+
+
+<label>მასპინძელი</label>
+
+<input
+id="aHome"
+value="დინამო თბილისი">
+
+
+<label>სტუმარი</label>
+
+<input
+id="aAway"
+value="ტორპედო ქუთაისი">
+
+
+<label>სტატუსი</label>
+
+<select id="aStatus">
+
+<option value="scheduled">
+დაგეგმილი
+</option>
+
+<option value="live">
+LIVE
+</option>
+
+<option value="halftime">
+ტაიმი
+</option>
+
+<option value="finished">
+დასრულებული
+</option>
+
+</select>
+
+
+<div class="row">
+
+<button
+class="ctl green"
+onclick="saveTeams()">
+
+მატჩის შენახვა
+
+</button>
+
+<button
+class="ctl"
+onclick="resetMatch()">
+
+დემო მატჩის აღდგენა
+
+</button>
+
+</div>
+
+</section>
+
+
+<section class="box">
+
+<h3>ანგარიში / წუთი</h3>
+
+<div class="adminScore">
+
+<span id="asHome">0</span>
+:
+<span id="asAway">0</span>
+
+</div>
+
+
+<div class="row">
+
+<button
+class="ctl green"
+onclick="setLive()">
+
+▶ დაწყება
+
+</button>
+
+<button
+class="ctl"
+onclick="setHalf()">
+
+⏸ ტაიმი
+
+</button>
+
+<button
+class="ctl red"
+onclick="finishMatch()">
+
+■ დასრულება
+
+</button>
+
+</div>
+
+
+<div
+class="row"
+style="margin-top:9px">
+
+<button
+class="ctl"
+onclick="addMinute(1)">
+
++1 წთ
+
+</button>
+
+<button
+class="ctl"
+onclick="addMinute(5)">
+
++5 წთ
+
+</button>
+
+<button
+class="ctl"
+onclick="addMinute(-1)">
+
+−1 წთ
+
+</button>
+
+</div>
+
+
+<p class="note">
+
+მიმდინარე წუთი:
+<b id="asMinute">0</b>'
+
+</p>
+
+</section>
+
+
+<section class="box">
+
+<h3>⚽ გოლი</h3>
+
+<div class="row">
+
+<button
+class="ctl green"
+onclick="goal('home')">
+
+⚽ მასპინძელი
+
+</button>
+
+<button
+class="ctl green"
+onclick="goal('away')">
+
+⚽ სტუმარი
+
+</button>
+
+<button
+class="ctl"
+onclick="undoLast()">
+
+↩ გაუქმება
+
+</button>
+
+</div>
+
+</section>
+
+
+<section class="box">
+
+<h3>🟨 ბარათები</h3>
+
+<div class="row">
+
+<button
+class="ctl yellow"
+onclick="card('home','yellow')">
+
+🟨 მასპინძელი
+
+</button>
+
+<button
+class="ctl yellow"
+onclick="card('away','yellow')">
+
+🟨 სტუმარი
+
+</button>
+
+<button
+class="ctl red"
+onclick="card('home','red')">
+
+🟥 მასპინძელი
+
+</button>
+
+<button
+class="ctl red"
+onclick="card('away','red')">
+
+🟥 სტუმარი
+
+</button>
+
+</div>
+
+</section>
+
+
+<section class="box">
+
+<h3>🔄 ცვლილება</h3>
+
+<label>გუნდს</label>
+
+<select id="subSide">
+
+<option value="home">
+მასპინძელი
+</option>
+
+<option value="away">
+სტუმარი
+</option>
+
+</select>
+
+
+<label>შემოვიდა</label>
+
+<input
+id="subIn"
+placeholder="ფეხბურთელი">
+
+
+<label>გავიდა</label>
+
+<input
+id="subOut"
+placeholder="ფეხბურთელი">
+
+
+<button
+class="ctl green"
+onclick="substitution()">
+
+ცვლილების დამატება
+
+</button>
+
+</section>
+
+
+<section class="box">
+
+<h3>⚡ LIVE მოვლენები</h3>
+
+<div
+id="adminEvents"
+class="note">
+
+მოვლენები ჯერ არ არის.
+
+</div>
+
+</section>
+
+
+</div>
+
+</main>
+
+
+<script type="module">
+
+/* =========================
+   FIREBASE
+========================= */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyDzCxUHJvIS-TBPJQnDZuuZX7GP_Wt8fHI",
+
+  authDomain:
+    "l-live.firebaseapp.com",
+
+  databaseURL:
+    "https://l-live-default-rtdb.firebaseio.com",
+
+  projectId:
+    "l-live",
+
+  storageBucket:
+    "l-live.firebasestorage.app",
+
+  messagingSenderId:
+    "1080946597468",
+
+  appId:
+    "1:1080946597468:web:17682b7b655f78ef549099",
+
+  measurementId:
+    "G-VS20XDM1MJ"
+
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+
+const db =
+  getDatabase(app);
+
+
+const matchRef =
+  ref(db,"matches/demo");
+
+
+/* =========================
+   DEFAULT MATCH
+========================= */
+
+const defaultMatch = {
+
+  comp:
+    "GAFA • თბილისის სუპერლიგა",
+
+  home:
+    "დინამო თბილისი",
+
+  away:
+    "ტორპედო ქუთაისი",
+
+  status:
+    "scheduled",
+
+  minute:
+    0,
+
+  homeScore:
+    0,
+
+  awayScore:
+    0,
+
+  events: []
+
+};
+
+
+let match =
+  structuredClone(defaultMatch);
+
+
+let currentTab =
+  "events";
+
+
+/* =========================
+   FIREBASE REALTIME LISTENER
+========================= */
+
+onValue(
+  matchRef,
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+    if(data){
+
+      match = data;
+
+    }else{
+
+      match =
+        structuredClone(defaultMatch);
+
+      save();
+
+    }
+
+    renderAll();
+
+  }
+);
+
+
+/* =========================
+   SAVE TO FIREBASE
+========================= */
+
+async function save(){
+
+  try{
+
+    await set(
+      matchRef,
+      match
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Firebase შეცდომა: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   EVENT
+========================= */
+
+function eventObj(
+  type,
+  side,
+  extra={}
+){
+
+  return {
+
+    type,
+    side,
+
+    minute:
+      match.minute,
+
+    ...extra,
+
+    id:
+      Date.now() +
+      Math.random()
+
+  };
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function setLive(){
+
+  match.status =
+    "live";
+
+  await save();
+
+}
+
+
+/* =========================
+   HALF
+========================= */
+
+async function setHalf(){
+
+  match.status =
+    "halftime";
+
+  await save();
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+async function finishMatch(){
+
+  match.status =
+    "finished";
+
+  await save();
+
+}
+
+
+/* =========================
+   MINUTE
+========================= */
+
+async function addMinute(n){
+
+  match.minute =
+    Math.max(
+      0,
+      Number(match.minute || 0) + n
+    );
+
+
+  if(
+    match.status === "scheduled"
+    && n > 0
+  ){
+
+    match.status =
+      "live";
+
+  }
+
+
+  await save();
+
+}
+
+
+/* =========================
+   GOAL
+========================= */
+
+async function goal(side){
+
+  if(
+    match.status === "finished"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    match.status === "scheduled"
+  ){
+
+    match.status =
+      "live";
+
+  }
+
+
+  if(side === "home"){
+
+    match.homeScore =
+      Number(match.homeScore || 0) + 1;
+
+  }else{
+
+    match.awayScore =
+      Number(match.awayScore || 0) + 1;
+
+  }
+
+
+  if(!Array.isArray(match.events)){
+
+    match.events = [];
+
+  }
+
+
+  match.events.unshift(
+
+    eventObj(
+      "goal",
+      side
+    )
+
+  );
+
+
+  await save();
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+async function card(
+  side,
+  type
+){
+
+  if(
+    match.status === "finished"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    match.status === "scheduled"
+  ){
+
+    match.status =
+      "live";
+
+  }
+
+
+  if(!Array.isArray(match.events)){
+
+    match.events = [];
+
+  }
+
+
+  match.events.unshift(
+
+    eventObj(
+      type,
+      side
+    )
+
+  );
+
+
+  await save();
+
+}
+
+
+/* =========================
+   SUBSTITUTION
+========================= */
+
+async function substitution(){
+
+  if(
+    match.status === "finished"
+  ){
+
+    return;
+
+  }
+
+
+  const inn =
+    document
+      .getElementById("subIn")
+      .value
+      .trim()
+    ||
+    "ფეხბურთელი";
+
+
+  const out =
+    document
+      .getElementById("subOut")
+      .value
+      .trim()
+    ||
+    "ფეხბურთელი";
+
+
+  const side =
+    document
+      .getElementById("subSide")
+      .value;
+
+
+  if(!Array.isArray(match.events)){
+
+    match.events = [];
+
+  }
+
+
+  match.events.unshift(
+
+    eventObj(
+      "sub",
+      side,
+      {
+        inn,
+        out
+      }
+    )
+
+  );
+
+
+  document
+    .getElementById("subIn")
+    .value = "";
+
+
+  document
+    .getElementById("subOut")
+    .value = "";
+
+
+  await save();
+
+}
+
+
+/* =========================
+   UNDO
+========================= */
+
+async function undoLast(){
+
+  if(
+    !Array.isArray(match.events)
+    ||
+    match.events.length === 0
+  ){
+
+    return;
+
+  }
+
+
+  const e =
+    match.events.shift();
+
+
+  if(
+    e.type === "goal"
+  ){
+
+    if(
+      e.side === "home"
+    ){
+
+      match.homeScore =
+        Math.max(
+          0,
+          Number(match.homeScore || 0) - 1
+        );
+
+    }else{
+
+      match.awayScore =
+        Math.max(
+          0,
+          Number(match.awayScore || 0) - 1
+        );
+
+    }
+
+  }
+
+
+  await save();
+
+}
+
+
+/* =========================
+   SAVE MATCH INFO
+========================= */
+
+async function saveTeams(){
+
+  match.comp =
+    document
+      .getElementById("aComp")
+      .value
+      .trim();
+
+
+  match.home =
+    document
+      .getElementById("aHome")
+      .value
+      .trim();
+
+
+  match.away =
+    document
+      .getElementById("aAway")
+      .value
+      .trim();
+
+
+  match.status =
+    document
+      .getElementById("aStatus")
+      .value;
+
+
+  await save();
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+async function resetMatch(){
+
+  match =
+    structuredClone(
+      defaultMatch
+    );
+
+  await save();
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function esc(s){
+
+  return String(s ?? "")
+    .replace(
+      /[&<>"']/g,
+      m =>
+        ({
+          "&":"&amp;",
+          "<":"&lt;",
+          ">":"&gt;",
+          '"':"&quot;",
+          "'":"&#039;"
+        }[m])
+    );
+
+}
+
+
+function badge(name){
+
+  return esc(
+    String(name || "?")
+      .slice(0,1)
+      .toUpperCase()
+  );
+
+}
+
+
+function statusText(){
+
+  if(
+    match.status === "live"
+  )
+    return "LIVE";
+
+  if(
+    match.status === "halftime"
+  )
+    return "ტაიმი";
+
+  if(
+    match.status === "finished"
+  )
+    return "დასრულებული";
+
+  return "დაწყება";
+
+}
+
+
+function statusClass(){
+
+  if(
+    match.status === "live"
+  )
+    return "live";
+
+  if(
+    match.status === "finished"
+  )
+    return "finished";
+
+  return "";
+
+}
+
+
+function icon(e){
+
+  if(
+    e.type === "goal"
+  )
+    return "⚽";
+
+  if(
+    e.type === "yellow"
+  )
+    return "🟨";
+
+  if(
+    e.type === "red"
+  )
+    return "🟥";
+
+  return "🔄";
+
+}
+
+
+function eventText(e){
+
+  const team =
+    e.side === "home"
+    ? match.home
+    : match.away;
+
+
+  if(
+    e.type === "goal"
+  ){
+
+    return `
+      <b>გოლი</b>
+      — ${esc(team)}
+    `;
+
+  }
+
+
+  if(
+    e.type === "yellow"
+  ){
+
+    return `
+      ყვითელი ბარათი
+      — ${esc(team)}
+    `;
+
+  }
+
+
+  if(
+    e.type === "red"
+  ){
+
+    return `
+      წითელი ბარათი
+      — ${esc(team)}
+    `;
+
+  }
+
+
+  return `
+    ცვლილება —
+    ${esc(team)}:
+    ${esc(e.out)}
+    →
+    ${esc(e.inn)}
+  `;
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function renderHome(){
+
+  document
+    .getElementById("matchList")
+    .innerHTML = `
+
+    <div
+      class="card clickable"
+      onclick="openDetail()">
+
+      <div class="cardHead">
+
+        <span>
+          ${esc(match.comp)}
+        </span>
+
+        <span>
+          ${statusText()}
+        </span>
+
+      </div>
+
+
+      <div class="match">
+
+
+        <div class="team">
+
+          <div class="badge">
+
+            ${badge(match.home)}
+
+          </div>
+
+          ${esc(match.home)}
+
+        </div>
+
+
+        <div class="score">
+
+          ${Number(match.homeScore || 0)}
+          :
+          ${Number(match.awayScore || 0)}
+
+          <div
+            class="status ${statusClass()}">
+
+            ${
+              match.status === "live"
+              ? Number(match.minute || 0) + "'"
+              : match.status === "finished"
+              ? "FT"
+              : "—"
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="team">
+
+          <div class="badge">
+
+            ${badge(match.away)}
+
+          </div>
+
+          ${esc(match.away)}
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   DETAIL
+========================= */
+
+function renderDetail(){
+
+  document
+    .getElementById("detail")
+    .innerHTML = `
+
+    <div class="card">
+
+      <div style="padding:14px">
+
+        <div class="competition">
+
+          ${esc(match.comp)}
+
+        </div>
+
+
+        <div class="detailScore">
+
+
+          <div class="detailTeam">
+
+            <div class="detailBadge">
+
+              ${badge(match.home)}
+
+            </div>
+
+            ${esc(match.home)}
+
+          </div>
+
+
+          <div class="bigScore">
+
+            ${Number(match.homeScore || 0)}
+            :
+            ${Number(match.awayScore || 0)}
+
+            <div
+              class="status ${statusClass()}">
+
+              ${
+                match.status === "live"
+                ? Number(match.minute || 0) + "' • LIVE"
+                : match.status === "halftime"
+                ? "ტაიმი"
+                : match.status === "finished"
+                ? "FT"
+                : "დაწყებამდე"
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="detailTeam">
+
+            <div class="detailBadge">
+
+              ${badge(match.away)}
+
+            </div>
+
+            ${esc(match.away)}
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <div class="tabs">
+
+        <button
+          class="tab ${currentTab==="events"?"active":""}"
+          onclick="setTab('events')">
+
+          მოვლენები
+
+        </button>
+
+
+        <button
+          class="tab ${currentTab==="stats"?"active":""}"
+          onclick="setTab('stats')">
+
+          სტატისტიკა
+
+        </button>
+
+
+        <button
+          class="tab ${currentTab==="lineups"?"active":""}"
+          onclick="setTab('lineups')">
+
+          შემადგენლობები
+
+        </button>
+
+      </div>
+
+
+      <div id="tabContent"></div>
+
+    </div>
+
+  `;
+
+
+  renderTab();
+
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+function setTab(t){
+
+  currentTab =
+    t;
+
+  renderDetail();
+
+}
+
+
+function renderTab(){
+
+  const c =
+    document
+      .getElementById("tabContent");
+
+
+  if(
+    currentTab === "events"
+  ){
+
+    const events =
+      Array.isArray(match.events)
+      ? match.events
+      : [];
+
+
+    c.innerHTML =
+      events.length
+
+      ?
+
+      `
+      <div class="timeline">
+
+        ${events.map(
+          e => `
+
+          <div class="event">
+
+            <div class="min">
+
+              ${e.minute}'
+
+            </div>
+
+            <div>
+
+              ${eventText(e)}
+
+            </div>
+
+            <div class="ico">
+
+              ${icon(e)}
+
+            </div>
+
+          </div>
+
+        `
+        ).join("")}
+
+      </div>
+      `
+
+      :
+
+      `
+      <div class="empty">
+
+        მატჩში ჯერ მოვლენები არ არის.
+
+      </div>
+      `;
+
+  }
+
+
+  else if(
+    currentTab === "stats"
+  ){
+
+    const events =
+      Array.isArray(match.events)
+      ? match.events
+      : [];
+
+
+    const goals =
+      events.filter(
+        e => e.type === "goal"
+      ).length;
+
+
+    const cards =
+      events.filter(
+        e =>
+          e.type === "yellow"
+          ||
+          e.type === "red"
+      ).length;
+
+
+    c.innerHTML = `
+
+      <div class="timeline">
+
+        <div class="event">
+
+          <div>⚽</div>
+
+          <div>გოლები</div>
+
+          <div>${goals}</div>
+
+        </div>
+
+
+        <div class="event">
+
+          <div>🟨</div>
+
+          <div>ბარათები</div>
+
+          <div>${cards}</div>
+
+        </div>
+
+
+        <div class="event">
+
+          <div>⏱️</div>
+
+          <div>მიმდინარე წუთი</div>
+
+          <div>
+            ${Number(match.minute || 0)}'
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  else{
+
+    c.innerHTML = `
+
+      <div class="empty">
+
+        შემადგენლობები შემდეგ ეტაპზე
+        დაემატება.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   ADMIN RENDER
+========================= */
+
+function renderAdmin(){
+
+  document
+    .getElementById("asHome")
+    .textContent =
+      Number(match.homeScore || 0);
+
+
+  document
+    .getElementById("asAway")
+    .textContent =
+      Number(match.awayScore || 0);
+
+
+  document
+    .getElementById("asMinute")
+    .textContent =
+      Number(match.minute || 0);
+
+
+  document
+    .getElementById("aComp")
+    .value =
+      match.comp || "";
+
+
+  document
+    .getElementById("aHome")
+    .value =
+      match.home || "";
+
+
+  document
+    .getElementById("aAway")
+    .value =
+      match.away || "";
+
+
+  document
+    .getElementById("aStatus")
+    .value =
+      match.status || "scheduled";
+
+
+  const events =
+    Array.isArray(match.events)
+    ? match.events
+    : [];
+
+
+  document
+    .getElementById("adminEvents")
+    .innerHTML =
+      events.length
+
+      ?
+
+      events
+        .map(
+          e =>
+            `${e.minute}' ${icon(e)}
+             ${eventText(e)}`
+        )
+        .join("<br>")
+
+      :
+
+      "მოვლენები ჯერ არ არის.";
+
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderAll(){
+
+  renderHome();
+
+  renderDetail();
+
+  renderAdmin();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function openDetail(){
+
+  document
+    .getElementById("homeView")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("detailView")
+    .classList
+    .remove("hidden");
+
+
+  renderDetail();
+
+}
+
+
+function closeDetail(){
+
+  document
+    .getElementById("detailView")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("homeView")
+    .classList
+    .remove("hidden");
+
+}
+
+
+function showPublic(){
+
+  document
+    .getElementById("public")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("admin")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("homeBtn")
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById("adminBtn")
+    .classList
+    .remove("active");
+
+
+  closeDetail();
+
+}
+
+
+function showAdmin(){
+
+  document
+    .getElementById("public")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("admin")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("adminBtn")
+    .classList
+    .add("active");
+
+
+  document
+    .getElementById("homeBtn")
+    .classList
+    .remove("active");
+
+
+  renderAdmin();
+
+}
+
+
+/* INITIAL */
+
+renderAll();
+
+</script>
+
+</body>
+</html>
