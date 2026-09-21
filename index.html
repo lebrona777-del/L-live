@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<title>L-LIVE</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f3f5f4;
+  color: #202522;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans Georgian",
+    Arial,
+    sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.app {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 90px;
+}
+
+/* HEADER */
+
+.header {
+  background: #2f7d49;
+  color: white;
+  padding: 30px 22px 22px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 31px;
+  font-weight: 950;
+}
+
+.live-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.live-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+/* SPORT BAR */
+
+.sports {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 12px;
+  background: white;
+  scrollbar-width: none;
+}
+
+.sports::-webkit-scrollbar {
+  display: none;
+}
+
+.sport-btn {
+  flex: 0 0 auto;
+  padding: 13px 20px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #4c83e8;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.sport-btn.active {
+  background: #2f7d49;
+  color: white;
+  border-color: #2f7d49;
+}
+
+/* CHAMPIONSHIP BAR */
+
+.championships {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 12px 13px;
+  background: white;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
+  scrollbar-width: none;
+}
+
+.championships::-webkit-scrollbar {
+  display: none;
+}
+
+.champ-btn {
+  flex: 0 0 auto;
+  padding: 12px 19px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  background: white;
+  color: #4c83e8;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.champ-btn.active {
+  background: #2f7d49;
+  color: white;
+  border-color: #2f7d49;
+}
+
+/* TABS */
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  border: 0;
+  background: white;
+  padding: 18px 4px 15px;
+  color: #666;
+  font-size: 16px;
+  font-weight: 900;
+  border-bottom: 4px solid transparent;
+}
+
+.tab.active {
+  color: #2f7d49;
+  border-bottom-color: #2f7d49;
+}
+
+/* CONTENT */
+
+.content {
+  padding: 18px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 950;
+}
+
+.section-small {
+  color: #888;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+/* TEAMS */
+
+.teams {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 3px 0 22px;
+  scrollbar-width: none;
+}
+
+.teams::-webkit-scrollbar {
+  display: none;
+}
+
+.team-chip {
+  flex: 0 0 auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 13px 19px;
+  font-size: 16px;
+  font-weight: 850;
+}
+
+/* MATCHES */
+
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.match-card {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.match-top {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 9px;
+}
+
+.match-status {
+  color: #e53935;
+  font-weight: 950;
+}
+
+.match-row {
+  display: grid;
+  grid-template-columns: 1fr 65px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.home {
+  font-weight: 900;
+}
+
+.away {
+  text-align: right;
+  font-weight: 900;
+}
+
+.score {
+  text-align: center;
+  font-size: 21px;
+  font-weight: 950;
+}
+
+.empty {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 15px;
+  text-align: center;
+  color: #999;
+  font-weight: 800;
+}
+
+/* TABLE */
+
+.standings {
+  margin-top: 30px;
+}
+
+.standings-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.standings-title {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 950;
+}
+
+.source-label {
+  color: #8b918e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.table-box {
+  background: white;
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #2f7d49;
+  color: white;
+}
+
+th {
+  padding: 12px 8px;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+td {
+  padding: 13px 8px;
+  text-align: center;
+  border-bottom: 1px solid #e8ece9;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+td.team {
+  text-align: left;
+  min-width: 190px;
+  font-weight: 900;
+}
+
+/* LOADING */
+
+.loading {
+  background: white;
+  border-radius: 16px;
+  padding: 27px;
+  text-align: center;
+  color: #888;
+  font-weight: 800;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 900px;
+  margin: auto;
+  height: 78px;
+  background: rgba(255,255,255,.98);
+  border-top: 1px solid #ddd;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  z-index: 100;
+}
+
+.nav-btn {
+  border: 0;
+  background: white;
+  color: #777;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.nav-btn span {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.nav-btn.active {
+  color: #2f7d49;
+}
+
+/* ERROR */
+
+.error {
+  background: #fff;
+  border-radius: 16px;
+  padding: 25px;
+  text-align: center;
+  color: #d33;
+  font-weight: 800;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+
+  <header class="header">
+    <div class="header-row">
+
+      <div class="logo">
+        L-LIVE
+      </div>
+
+      <div class="live-title">
+        <span class="live-dot"></span>
+        LIVE SPORTS
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- SPORTS -->
+
+  <div class="sports" id="sportsBar">
+
+    <button
+      type="button"
+      class="sport-btn active"
+      data-sport="football"
+    >
+      ⚽ ფეხბურთი
+    </button>
+
+    <button
+      type="button"
+      class="sport-btn"
+      data-sport="basketball"
+    >
+      🏀 კალათბურთი
+    </button>
+
+    <button
+      type="button"
+      class="sport-btn"
+      data-sport="rugby"
+    >
+      🏉 რაგბი
+    </button>
+
+  </div>
+
+
+  <!-- CHAMPIONSHIPS -->
+
+  <div
+    class="championships"
+    id="championshipBar"
+  ></div>
+
+
+  <!-- MATCH TABS -->
+
+  <div class="tabs">
+
+    <button
+      type="button"
+      class="tab active"
+      data-tab="live"
+    >
+      🔴 LIVE
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      data-tab="today"
+    >
+      დღეს
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      data-tab="upcoming"
+    >
+      მომავალი
+    </button>
+
+    <button
+      type="button"
+      class="tab"
+      data-tab="results"
+    >
+      შედეგები
+    </button>
+
+  </div>
+
+
+  <main class="content">
+
+    <!-- TEAMS -->
+
+    <div class="section-head">
+
+      <h2 class="section-title">
+        გუნდები
+      </h2>
+
+      <div
+        class="section-small"
+        id="competitionLabel"
+      >
+        L-LIVE
+      </div>
+
+    </div>
+
+    <div
+      class="teams"
+      id="teamsList"
+    >
+      <div class="loading">
+        იტვირთება...
+      </div>
+    </div>
+
+
+    <!-- MATCHES -->
+
+    <div class="section-head">
+
+      <h2 class="section-title">
+        მატჩები
+      </h2>
+
+    </div>
+
+    <div
+      class="matches"
+      id="matchesList"
+    >
+      <div class="loading">
+        იტვირთება...
+      </div>
+    </div>
+
+
+    <!-- STANDINGS -->
+
+    <section
+      class="standings"
+      id="standingsSection"
+    >
+
+      <div class="standings-head">
+
+        <h2 class="standings-title">
+          📊 სატურნირო ცხრილი
+        </h2>
+
+        <span class="source-label">
+          ოფიციალური წყარო
+        </span>
+
+      </div>
+
+      <div id="standingsContainer">
+
+        <div class="loading">
+          ცხრილი იტვირთება...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <button
+    type="button"
+    class="nav-btn"
+    id="homeNav"
+  >
+    <span>🏠</span>
+    მთავარი
+  </button>
+
+  <button
+    type="button"
+    class="nav-btn active"
+    id="liveNav"
+  >
+    <span>🔴</span>
+    LIVE
+  </button>
+
+  <button
+    type="button"
+    class="nav-btn"
+    id="tableNav"
+  >
+    <span>📊</span>
+    ცხრილი
+  </button>
+
+  <button
+    type="button"
+    class="nav-btn"
+    id="champNav"
+  >
+    <span>🏆</span>
+    ჩემპიონატები
+  </button>
+
+</nav>
+
+
+<script>
+
+/* =====================================================
+   L-LIVE
+   მთავარი JavaScript
+   ===================================================== */
+
+"use strict";
+
+
+const API = "/api";
+
+
+let currentSport = "football";
+
+let currentCompetition = "national-league";
+
+let currentTab = "live";
+
+let championships = [];
+
+let standingsRequestNumber = 0;
+
+
+/* =====================================================
+   API
+   ===================================================== */
+
+async function getAPI(path) {
+
+  const response = await fetch(
+    API + path,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Accept": "application/json"
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "API error: " + response.status
+    );
+  }
+
+  return await response.json();
+}
+
+
+/* =====================================================
+   ESCAPE
+   ===================================================== */
+
+function safe(value) {
+
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+/* =====================================================
+   CHAMPIONSHIPS
+   ===================================================== */
+
+async function loadChampionships() {
+
+  const bar =
+    document.getElementById(
+      "championshipBar"
+    );
+
+  bar.innerHTML =
+    '<div class="loading">იტვირთება...</div>';
+
+  try {
+
+    const data =
+      await getAPI("/championships");
+
+    if (Array.isArray(data)) {
+
+      championships = data;
+
+    } else if (
+      data &&
+      Array.isArray(data.championships)
+    ) {
+
+      championships =
+        data.championships;
+
+    } else if (
+      data &&
+      Array.isArray(data.data)
+    ) {
+
+      championships =
+        data.data;
+
+    } else {
+
+      championships = [];
+    }
+
+    renderChampionships();
+
+  } catch (error) {
+
+    console.error(error);
+
+    bar.innerHTML =
+      '<div class="error">ჩემპიონატების ჩატვირთვა ვერ მოხერხდა.</div>';
+  }
+}
+
+
+/* =====================================================
+   RENDER CHAMPIONSHIPS
+   ===================================================== */
+
+function renderChampionships() {
+
+  const bar =
+    document.getElementById(
+      "championshipBar"
+    );
+
+  const list =
+    championships.filter(
+      function(item) {
+
+        return (
+          item &&
+          item.sport === currentSport
+        );
+
+      }
+    );
+
+
+  if (!list.length) {
+
+    bar.innerHTML =
+      '<div class="loading">ჩემპიონატები ჯერ არ არის.</div>';
+
+    return;
+  }
+
+
+  let exists = false;
+
+  for (let i = 0; i < list.length; i++) {
+
+    if (
+      list[i].id ===
+      currentCompetition
+    ) {
+
+      exists = true;
+      break;
+    }
+  }
+
+
+  if (!exists) {
+
+    currentCompetition =
+      list[0].id;
+  }
+
+
+  let html = "";
+
+
+  for (
+    let i = 0;
+    i < list.length;
+    i++
+  ) {
+
+    const item = list[i];
+
+    const active =
+      item.id === currentCompetition
+        ? "active"
+        : "";
+
+
+    html +=
+      '<button ' +
+      'type="button" ' +
+      'class="champ-btn ' +
+      active +
+      '" ' +
+      'data-competition="' +
+      safe(item.id) +
+      '">' +
+      safe(
+        item.shortName ||
+        item.name ||
+        item.id
+      ) +
+      '</button>';
+  }
+
+
+  bar.innerHTML = html;
+
+
+  const buttons =
+    bar.querySelectorAll(
+      ".champ-btn"
+    );
+
+
+  for (
+    let i = 0;
+    i < buttons.length;
+    i++
+  ) {
+
+    buttons[i].addEventListener(
+      "click",
+      function() {
+
+        currentCompetition =
+          this.getAttribute(
+            "data-competition"
+          );
+
+        renderChampionships();
+
+        loadAll();
+
+      }
+    );
+  }
+
+
+  updateCompetitionLabel();
+}
+
+
+/* =====================================================
+   SPORTS
+   ===================================================== */
+
+function setupSports() {
+
+  const buttons =
+    document.querySelectorAll(
+      ".sport-btn"
+    );
+
+
+  for (
+    let i = 0;
+    i < buttons.length;
+    i++
+  ) {
+
+    buttons[i].addEventListener(
+      "click",
+      function() {
+
+        currentSport =
+          this.getAttribute(
+            "data-sport"
+          );
+
+
+        for (
+          let j = 0;
+          j < buttons.length;
+          j++
+        ) {
+
+          buttons[j].classList.remove(
+            "active"
+          );
+        }
+
+
+        this.classList.add(
+          "active"
+        );
+
+
+        const list =
+          championships.filter(
+            function(item) {
+
+              return (
+                item &&
+                item.sport ===
+                currentSport
+              );
+
+            }
+          );
+
+
+        if (list.length) {
+
+          currentCompetition =
+            list[0].id;
+        }
+
+
+        renderChampionships();
+
+        loadAll();
+
+      }
+    );
+  }
+}
+
+
+/* =====================================================
+   TABS
+   ===================================================== */
+
+function setupTabs() {
+
+  const buttons =
+    document.querySelectorAll(
+      ".tab"
+    );
+
+
+  for (
+    let i = 0;
+    i < buttons.length;
+    i++
+  ) {
+
+    buttons[i].addEventListener(
+      "click",
+      function() {
+
+        currentTab =
+          this.getAttribute(
+            "data-tab"
+          );
+
+
+        for (
+          let j = 0;
+          j < buttons.length;
+          j++
+        ) {
+
+          buttons[j].classList.remove(
+            "active"
+          );
+        }
+
+
+        this.classList.add(
+          "active"
+        );
+
+
+        loadMatches();
+
+      }
+    );
+  }
+}
+
+
+/* =====================================================
+   TEAMS
+   ===================================================== */
+
+async function loadTeams() {
+
+  const box =
+    document.getElementById(
+      "teamsList"
+    );
+
+  box.innerHTML =
+    '<div class="loading">გუნდები იტვირთება...</div>';
+
+
+  try {
+
+    const data =
+      await getAPI(
+        "/teams?competition=" +
+        encodeURIComponent(
+          currentCompetition
+        )
+      );
+
+
+    let teams = [];
+
+
+    if (Array.isArray(data)) {
+
+      teams = data;
+
+    } else if (
+      data &&
+      Array.isArray(data.teams)
+    ) {
+
+      teams = data.teams;
+
+    } else if (
+      data &&
+      Array.isArray(data.data)
+    ) {
+
+      teams = data.data;
+    }
+
+
+    /*
+     * თუ /teams ცარიელია,
+     * ვიყენებთ championship-ის გუნდებს.
+     */
+
+    if (!teams.length) {
+
+      for (
+        let i = 0;
+        i < championships.length;
+        i++
+      ) {
+
+        if (
+          championships[i].id ===
+          currentCompetition
+        ) {
+
+          if (
+            Array.isArray(
+              championships[i].teams
+            )
+          ) {
+
+            teams =
+              championships[i].teams;
+          }
+
+          break;
+        }
+      }
+    }
+
+
+    renderTeams(teams);
+
+  } catch (error) {
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="empty">გუნდები ვერ ჩაიტვირთა.</div>';
+  }
+}
+
+
+/* =====================================================
+   RENDER TEAMS
+   ===================================================== */
+
+function renderTeams(teams) {
+
+  const box =
+    document.getElementById(
+      "teamsList"
+    );
+
+
+  if (!teams || !teams.length) {
+
+    box.innerHTML =
+      '<div class="empty">გუნდები ჯერ არ არის.</div>';
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  for (
+    let i = 0;
+    i < teams.length;
+    i++
+  ) {
+
+    let name = teams[i];
+
+
+    if (
+      typeof teams[i] === "object"
+    ) {
+
+      name =
+        teams[i].name ||
+        teams[i].title ||
+        "გუნდი";
+    }
+
+
+    html +=
+      '<div class="team-chip">' +
+      safe(name) +
+      '</div>';
+  }
+
+
+  box.innerHTML = html;
+}
+
+
+/* =====================================================
+   MATCHES
+   ===================================================== */
+
+async function loadMatches() {
+
+  const box =
+    document.getElementById(
+      "matchesList"
+    );
+
+
+  box.innerHTML =
+    '<div class="loading">მატჩები იტვირთება...</div>';
+
+
+  let endpoint = "/live";
+
+
+  if (currentTab === "today") {
+
+    endpoint =
+      "/matches/today";
+
+  } else if (
+    currentTab === "upcoming"
+  ) {
+
+    endpoint =
+      "/matches/upcoming";
+
+  } else if (
+    currentTab === "results"
+  ) {
+
+    endpoint =
+      "/matches/results";
+  }
+
+
+  try {
+
+    const data =
+      await getAPI(
+        endpoint +
+        "?competition=" +
+        encodeURIComponent(
+          currentCompetition
+        )
+      );
+
+
+    let matches = [];
+
+
+    if (Array.isArray(data)) {
+
+      matches = data;
+
+    } else if (
+      data &&
+      Array.isArray(data.matches)
+    ) {
+
+      matches =
+        data.matches;
+
+    } else if (
+      data &&
+      Array.isArray(data.data)
+    ) {
+
+      matches =
+        data.data;
+    }
+
+
+    renderMatches(matches);
+
+  } catch (error) {
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="empty">მატჩების ჩატვირთვა ვერ მოხერხდა.</div>';
+  }
+}
+
+
+/* =====================================================
+   RENDER MATCHES
+   ===================================================== */
+
+function renderMatches(matches) {
+
+  const box =
+    document.getElementById(
+      "matchesList"
+    );
+
+
+  if (!matches.length) {
+
+    box.innerHTML =
+      '<div class="empty">მატჩები არ არის.</div>';
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  for (
+    let i = 0;
+    i < matches.length;
+    i++
+  ) {
+
+    const match =
+      matches[i] || {};
+
+
+    const home =
+      match.homeTeam ||
+      match.home ||
+      match.home_team ||
+      "მასპინძელი";
+
+
+    const away =
+      match.awayTeam ||
+      match.away ||
+      match.away_team ||
+      "სტუმარი";
+
+
+    const homeScore =
+      match.homeScore !== undefined
+        ? match.homeScore
+        : (
+          match.home_score !== undefined
+            ? match.home_score
+            : "-"
+        );
+
+
+    const awayScore =
+      match.awayScore !== undefined
+        ? match.awayScore
+        : (
+          match.away_score !== undefined
+            ? match.away_score
+            : "-"
+        );
+
+
+    const time =
+      match.time ||
+      match.startTime ||
+      match.date ||
+      "";
+
+
+    const status =
+      match.status ||
+      (
+        currentTab === "live"
+          ? "LIVE"
+          : ""
+      );
+
+
+    html +=
+      '<div class="match-card">' +
+
+        '<div class="match-top">' +
+
+          '<span>' +
+            safe(time) +
+          '</span>' +
+
+          '<span class="match-status">' +
+            safe(status) +
+          '</span>' +
+
+        '</div>' +
+
+        '<div class="match-row">' +
+
+          '<div class="home">' +
+            safe(home) +
+          '</div>' +
+
+          '<div class="score">' +
+            safe(homeScore) +
+            ' - ' +
+            safe(awayScore) +
+          '</div>' +
+
+          '<div class="away">' +
+            safe(away) +
+          '</div>' +
+
+        '</div>' +
+
+      '</div>';
+  }
+
+
+  box.innerHTML = html;
+}
+
+
+/* =====================================================
+   STANDINGS
+   ===================================================== */
+
+async function loadStandings() {
+
+  const box =
+    document.getElementById(
+      "standingsContainer"
+    );
+
+
+  box.innerHTML =
+    '<div class="loading">ცხრილი იტვირთება...</div>';
+
+
+  standingsRequestNumber++;
+
+  const request =
+    standingsRequestNumber;
+
+
+  try {
+
+    const data =
+      await getAPI(
+        "/standings?competition=" +
+        encodeURIComponent(
+          currentCompetition
+        )
+      );
+
+
+    /*
+     * თუ ამ დროს სხვა ჩემპიონატზე
+     * გადავიდა მომხმარებელი,
+     * ძველი პასუხი აღარ გამოაჩინოს.
+     */
+
+    if (
+      request !==
+      standingsRequestNumber
+    ) {
+
+      return;
+    }
+
+
+    let groups = [];
+
+
+    if (
+      data &&
+      Array.isArray(data.groups)
+    ) {
+
+      groups =
+        data.groups;
+
+    } else if (
+      Array.isArray(data)
+    ) {
+
+      groups =
+        data;
+    }
+
+
+    renderStandings(groups);
+
+  } catch (error) {
+
+    console.error(error);
+
+    box.innerHTML =
+      '<div class="empty">სატურნირო ცხრილი ვერ ჩაიტვირთა.</div>';
+  }
+}
+
+
+/* =====================================================
+   RENDER STANDINGS
+   ===================================================== */
+
+function renderStandings(groups) {
+
+  const box =
+    document.getElementById(
+      "standingsContainer"
+    );
+
+
+  if (
+    !groups ||
+    !groups.length
+  ) {
+
+    box.innerHTML =
+      '<div class="empty">ამ ჩემპიონატისთვის ცხრილი ჯერ არ არის.</div>';
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  for (
+    let g = 0;
+    g < groups.length;
+    g++
+  ) {
+
+    const group =
+      groups[g] || {};
+
+
+    const rows =
+      Array.isArray(group.rows)
+        ? group.rows
+        : (
+          Array.isArray(group.table)
+            ? group.table
+            : []
+        );
+
+
+    if (!rows.length) {
+      continue;
+    }
+
+
+    if (
+      groups.length > 1
+    ) {
+
+      html +=
+        '<div style="' +
+        'background:white;' +
+        'padding:13px 15px;' +
+        'font-weight:900;' +
+        'font-size:17px;' +
+        'border-bottom:1px solid #e5e8e6;' +
+        '">' +
+        safe(
+          group.name ||
+          group.title ||
+          ("ჯგუფი " + (g + 1))
+        ) +
+        '</div>';
+    }
+
+
+    html +=
+      '<div class="table-box" style="margin-bottom:14px">' +
+
+      '<table>' +
+
+      '<thead>' +
+
+      '<tr>' +
+
+      '<th>#</th>' +
+
+      '<th style="text-align:left">გუნდი</th>' +
+
+      '<th>თ</th>' +
+
+      '<th>მ</th>' +
+
+      '<th>ფ</th>' +
+
+      '<th>წ</th>' +
+
+      '<th>ქ</th>' +
+
+      '</tr>' +
+
+      '</thead>' +
+
+      '<tbody>';
+
+
+    for (
+      let r = 0;
+      r < rows.length;
+      r++
+    ) {
+
+      const row =
+        rows[r] || {};
+
+
+      const position =
+        row.position ||
+        row.pos ||
+        row.rank ||
+        (r + 1);
+
+
+      const team =
+        row.team ||
+        row.name ||
+        row.club ||
+        row.teamName ||
+        "გუნდი";
+
+
+      const played =
+        row.played !== undefined
+          ? row.played
+          : (
+            row.p !== undefined
+              ? row.p
+              : (
+                row.games !== undefined
+                  ? row.games
+                  : "-"
+              )
+          );
+
+
+      const wins =
+        row.wins !== undefined
+          ? row.wins
+          : (
+            row.w !== undefined
+              ? row.w
+              : "-"
+          );
+
+
+      const draws =
+        row.draws !== undefined
+          ? row.draws
+          : (
+            row.d !== undefined
+              ? row.d
+              : "-"
+          );
+
+
+      const losses =
+        row.losses !== undefined
+          ? row.losses
+          : (
+            row.l !== undefined
+              ? row.l
+              : "-"
+          );
+
+
+      const points =
+        row.points !== undefined
+          ? row.points
+          : (
+            row.pts !== undefined
+              ? row.pts
+              : "-"
+          );
+
+
+      html +=
+        '<tr>' +
+
+        '<td>' +
+          safe(position) +
+        '</td>' +
+
+        '<td class="team">' +
+          safe(team) +
+        '</td>' +
+
+        '<td>' +
+          safe(played) +
+        '</td>' +
+
+        '<td>' +
+          safe(wins) +
+        '</td>' +
+
+        '<td>' +
+          safe(draws) +
+        '</td>' +
+
+        '<td>' +
+          safe(losses) +
+        '</td>' +
+
+        '<td>' +
+          safe(points) +
+        '</td>' +
+
+        '</tr>';
+    }
+
+
+    html +=
+      '</tbody>' +
+      '</table>' +
+      '</div>';
+  }
+
+
+  if (!html) {
+
+    box.innerHTML =
+      '<div class="empty">ცხრილი ჯერ არ არის.</div>';
+
+    return;
+  }
+
+
+  box.innerHTML = html;
+}
+
+
+/* =====================================================
+   LABEL
+   ===================================================== */
+
+function updateCompetitionLabel() {
+
+  const label =
+    document.getElementById(
+      "competitionLabel"
+    );
+
+
+  for (
+    let i = 0;
+    i < championships.length;
+    i++
+  ) {
+
+    if (
+      championships[i].id ===
+      currentCompetition
+    ) {
+
+      label.textContent =
+        championships[i].name ||
+        championships[i].shortName ||
+        currentCompetition;
+
+      return;
+    }
+  }
+
+
+  label.textContent =
+    "L-LIVE";
+}
+
+
+/* =====================================================
+   LOAD EVERYTHING
+   ===================================================== */
+
+async function loadAll() {
+
+  updateCompetitionLabel();
+
+  await Promise.all([
+    loadTeams(),
+    loadMatches(),
+    loadStandings()
+  ]);
+}
+
+
+/* =====================================================
+   BOTTOM NAV
+   ===================================================== */
+
+function setupBottomNavigation() {
+
+  const home =
+    document.getElementById(
+      "homeNav"
+    );
+
+  const live =
+    document.getElementById(
+      "liveNav"
+    );
+
+  const table =
+    document.getElementById(
+      "tableNav"
+    );
+
+  const championshipsButton =
+    document.getElementById(
+      "champNav"
+    );
+
+
+  /*
+   * მთავარი
+   */
+
+  home.addEventListener(
+    "click",
+    function() {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+  );
+
+
+  /*
+   * LIVE
+   */
+
+  live.addEventListener(
+    "click",
+    function() {
+
+      currentTab = "live";
+
+
+      document
+        .querySelectorAll(".tab")
+        .forEach(function(button) {
+
+          button.classList.remove(
+            "active"
+          );
+
+        });
+
+
+      const liveTab =
+        document.querySelector(
+          '.tab[data-tab="live"]'
+        );
+
+
+      if (liveTab) {
+        liveTab.classList.add(
+          "active"
+        );
+      }
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+
+      loadMatches();
+    }
+  );
+
+
+  /*
+   * ცხრილი
+   */
+
+  table.addEventListener(
+    "click",
+    function() {
+
+      const section =
+        document.getElementById(
+          "standingsSection"
+        );
+
+
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+
+      loadStandings();
+    }
+  );
+
+
+  /*
+   * ჩემპიონატები
+   */
+
+  championshipsButton.addEventListener(
+    "click",
+    function() {
+
+      const bar =
+        document.getElementById(
+          "championshipBar"
+        );
+
+
+      bar.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    }
+  );
+}
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
+async function start() {
+
+  /*
+   * ღილაკების listener-ები
+   * თავიდანვე ვამატებთ.
+   */
+
+  setupSports();
+
+  setupTabs();
+
+  setupBottomNavigation();
+
+
+  /*
+   * შემდეგ ჩემპიონატები
+   * და მონაცემები.
+   */
+
+  await loadChampionships();
+
+
+  /*
+   * თავიდან ეროვნული ლიგა.
+   */
+
+  let nationalLeagueExists =
+    false;
+
+
+  for (
+    let i = 0;
+    i < championships.length;
+    i++
+  ) {
+
+    if (
+      championships[i].id ===
+      "national-league"
+    ) {
+
+      nationalLeagueExists =
+        true;
+
+      break;
+    }
+  }
+
+
+  if (
+    !nationalLeagueExists
+  ) {
+
+    const football =
+      championships.filter(
+        function(item) {
+
+          return (
+            item &&
+            item.sport === "football"
+          );
+
+        }
+      );
+
+
+    if (football.length) {
+
+      currentCompetition =
+        football[0].id;
+    }
+  }
+
+
+  renderChampionships();
+
+  await loadAll();
+}
+
+
+/*
+ * აპის გაშვება
+ */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    start();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
