@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L-LIVE</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#06151b;
+  color:white;
+}
+
+header{
+  padding:25px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:38px;
+  font-weight:900;
+}
+
+.refresh{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  border:0;
+  background:#12313b;
+  color:white;
+  font-size:28px;
+}
+
+.sports{
+  display:flex;
+  gap:10px;
+  padding:0 18px 20px;
+  overflow-x:auto;
+}
+
+.sport{
+  padding:15px 22px;
+  border-radius:30px;
+  background:#102d36;
+  white-space:nowrap;
+  font-weight:bold;
+}
+
+.sport.active{
+  background:#df294b;
+}
+
+.tabs{
+  display:flex;
+  border-top:1px solid #183640;
+  border-bottom:1px solid #183640;
+  overflow-x:auto;
+}
+
+.tab{
+  min-width:110px;
+  padding:20px 10px;
+  text-align:center;
+  color:#aeb9bd;
+  font-weight:bold;
+}
+
+.tab.active{
+  color:#ed3153;
+  border-bottom:4px solid #ed3153;
+}
+
+main{
+  padding:25px 18px 120px;
+}
+
+.title{
+  font-size:30px;
+  font-weight:900;
+}
+
+.subtitle{
+  color:#89979c;
+  margin:8px 0 25px;
+}
+
+.match{
+  background:#0b2028;
+  border:1px solid #21434e;
+  border-radius:20px;
+  padding:20px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.live{
+  color:#ed3153;
+  font-weight:bold;
+}
+
+.minute{
+  color:#aeb9bd;
+}
+
+.league{
+  color:#89979c;
+  margin-bottom:20px;
+}
+
+.teams{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+}
+
+.team{
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.score{
+  font-size:35px;
+  font-weight:900;
+  text-align:center;
+}
+
+.time{
+  font-size:13px;
+  color:#89979c;
+  margin-top:5px;
+}
+
+.details{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:#df294b;
+  color:white;
+  font-weight:bold;
+  font-size:16px;
+}
+
+.loading,.empty{
+  text-align:center;
+  padding:40px 15px;
+  background:#0b2028;
+  border-radius:20px;
+  color:#aeb9bd;
+}
+
+footer{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:90px;
+  background:#07171e;
+  border-top:1px solid #183640;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav{
+  text-align:center;
+  color:#89979c;
+  font-size:13px;
+}
+
+.nav.active{
+  color:#ed3153;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  padding:20px;
+  overflow:auto;
+}
+
+.box{
+  background:#0b2028;
+  border-radius:20px;
+  padding:25px;
+  margin-top:40px;
+}
+
+.close{
+  float:right;
+  font-size:30px;
+}
+
+.event{
+  padding:12px 0;
+  border-bottom:1px solid #21434e;
+}
+
+.stat{
+  margin:20px 0;
+}
+
+.statrow{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+}
+
+.bar{
+  height:8px;
+  background:#203a43;
+  border-radius:10px;
+}
+
+.barin{
+  height:100%;
+  background:#df294b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">L-LIVE</div>
+  <button class="refresh" onclick="loadLive()">↻</button>
+</header>
+
+<div class="sports">
+  <div class="sport active">⚽ ფეხბურთი</div>
+  <div class="sport">🏀 კალათბურთი</div>
+  <div class="sport">🏉 რაგბი</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active">🔴 LIVE</div>
+  <div class="tab">დღეს</div>
+  <div class="tab">მომავალი</div>
+  <div class="tab">შედეგები</div>
+</div>
+
+<main>
+
+  <div class="title">LIVE მატჩები</div>
+  <div class="subtitle">ქართული ფეხბურთი</div>
+
+  <div id="matches">
+    <div class="loading">მატჩების ჩატვირთვა...</div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="nav active">⌂<br>მთავარი</div>
+  <div class="nav">●<br>LIVE</div>
+  <div class="nav">★<br>ფავორიტები</div>
+  <div class="nav">🏆<br>ლიგები</div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <span class="close" onclick="closeModal()">×</span>
+    <h2 id="modalTitle"></h2>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+
+async function loadLive(){
+
+  const container=document.getElementById("matches");
+
+  container.innerHTML=
+    '<div class="loading">მატჩების ჩატვირთვა...</div>';
+
+  try{
+
+    const response=await fetch("/api/live?time="+Date.now(),{
+      cache:"no-store"
+    });
+
+    if(!response.ok){
+      throw new Error("API "+response.status);
+    }
+
+    const data=await response.json();
+
+    const matches=data.matches || [];
+
+    if(!matches.length){
+
+      container.innerHTML=
+        '<div class="empty">LIVE მატჩები ამ მომენტში არ არის.</div>';
+
+      return;
+    }
+
+    container.innerHTML="";
+
+    matches.forEach(match=>{
+
+      const card=document.createElement("div");
+
+      card.className="match";
+
+      card.innerHTML=`
+
+        <div class="top">
+          <div class="live">🔴 LIVE</div>
+          <div class="minute">${match.minute || 0}'</div>
+        </div>
+
+        <div class="league">
+          ${match.championship || "ქართული ფეხბურთი"}
+        </div>
+
+        <div class="teams">
+
+          <div class="team">
+            ${match.homeTeam?.name || "მასპინძელი"}
+          </div>
+
+          <div class="score">
+            ${match.score?.home ?? 0} : ${match.score?.away ?? 0}
+            <div class="time">${match.time || ""}</div>
+          </div>
+
+          <div class="team">
+            ${match.awayTeam?.name || "სტუმარი"}
+          </div>
+
+        </div>
+
+        <button class="details">
+          მატჩის დეტალები
+        </button>
+      `;
+
+      card.querySelector(".details").onclick=()=>{
+        openMatch(match);
+      };
+
+      container.appendChild(card);
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML=`
+      <div class="empty">
+        ❌ LIVE მონაცემების ჩატვირთვა ვერ მოხერხდა.
+        <br><br>
+        დააჭირე ↻ ღილაკს.
+      </div>
+    `;
+  }
+}
+
+
+function openMatch(match){
+
+  document.getElementById("modalTitle").textContent=
+    `${match.homeTeam.name} ${match.score.home} : ${match.score.away} ${match.awayTeam.name}`;
+
+  let html="<h3>⚽ მოვლენები</h3>";
+
+  if(match.events && match.events.length){
+
+    match.events.forEach(event=>{
+
+      html+=`
+        <div class="event">
+          ${event.minute}' — ⚽ ${event.player}
+        </div>
+      `;
+
+    });
+
+  }else{
+
+    html+=`
+      <div class="event">
+        მოვლენები ჯერ არ არის.
+      </div>
+    `;
+  }
+
+  html+="<h3>📊 სტატისტიკა</h3>";
+
+  const stats=match.statistics || {};
+
+  addStat("ბურთის ფლობა",stats.possession);
+  addStat("დარტყმები",stats.shots);
+  addStat("ზუსტი დარტყმები",stats.shotsOnTarget);
+  addStat("კუთხურები",stats.corners);
+  addStat("ჯარიმები",stats.fouls);
+
+  function addStat(name,value){
+
+    if(!value)return;
+
+    html+=`
+      <div class="stat">
+
+        <div class="statrow">
+          <span>${value.home}</span>
+          <strong>${name}</strong>
+          <span>${value.away}</span>
+        </div>
+
+        <div class="bar">
+          <div
+            class="barin"
+            style="width:${value.home}%">
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  document.getElementById("modalContent").innerHTML=html;
+
+  document.getElementById("modal").style.display="block";
+}
+
+
+function closeModal(){
+  document.getElementById("modal").style.display="none";
+}
+
+
+loadLive();
+
+setInterval(loadLive,30000);
+
+</script>
+
+</body>
+</html>
