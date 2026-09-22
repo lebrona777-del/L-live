@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#3d8b5a">
+<title>L-LIVE</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f3f7f5;
+  color:#15221c;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+}
+button,input{font:inherit}
+button{cursor:pointer}
+
+.header{
+  background:#fff;
+  padding:28px 22px 18px;
+  border-bottom:1px solid #e0e8e4;
+  position:sticky;
+  top:0;
+  z-index:20
+}
+
+.head{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:18px
+}
+
+.logo{
+  width:72px;
+  height:72px;
+  border-radius:25px;
+  background:#3d8b5a;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:45px;
+  font-weight:900
+}
+
+.brand h1{
+  margin:0;
+  color:#286642;
+  font-size:40px
+}
+
+.brand small{
+  color:#7b8781;
+  font-weight:700
+}
+
+.online{
+  color:#748079;
+  font-weight:800
+}
+
+.dot{
+  display:inline-block;
+  width:12px;
+  height:12px;
+  background:#53c56f;
+  border-radius:50%;
+  margin-right:8px
+}
+
+.wrap{
+  max-width:900px;
+  margin:auto;
+  padding:18px 16px 70px
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:4px 0 14px
+}
+
+.nav button{
+  white-space:nowrap;
+  border:0;
+  background:#e9efec;
+  color:#48544e;
+  border-radius:22px;
+  padding:15px 24px;
+  font-weight:800
+}
+
+.nav button.active{
+  background:#3d8b5a;
+  color:#fff
+}
+
+.hero{
+  background:#3d8b5a;
+  color:#fff;
+  border-radius:30px;
+  padding:28px;
+  margin:10px 0 22px
+}
+
+.hero h2{
+  font-size:35px;
+  margin:0 0 8px
+}
+
+.hero p{
+  font-size:20px;
+  line-height:1.45;
+  margin:0
+}
+
+.section{
+  display:none
+}
+
+.section.active{
+  display:block
+}
+
+.title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:22px 4px 12px
+}
+
+.title h2{
+  font-size:27px;
+  margin:0
+}
+
+.refresh{
+  border:0;
+  background:#e6f3eb;
+  color:#286642;
+  border-radius:14px;
+  padding:11px 16px;
+  font-weight:900
+}
+
+.card{
+  background:#fff;
+  border:1px solid #dce6e1;
+  border-radius:24px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px rgba(20,50,35,.05)
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  color:#748079;
+  font-weight:800
+}
+
+.status{
+  background:#edf1ef;
+  border-radius:12px;
+  padding:7px 10px;
+  font-size:13px
+}
+
+.status.live{
+  color:#c51e1e;
+  background:#ffeaea
+}
+
+.status.finished{
+  color:#5e6964
+}
+
+.teams{
+  display:grid;
+  grid-template-columns:1fr 110px 1fr;
+  align-items:center;
+  gap:10px;
+  margin-top:18px
+}
+
+.team{
+  text-align:center;
+  font-weight:900;
+  font-size:17px
+}
+
+.team img{
+  width:55px;
+  height:55px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 8px
+}
+
+.ph{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#edf3ef;
+  display:grid;
+  place-items:center;
+  margin:0 auto 8px
+}
+
+.score{
+  text-align:center;
+  font-size:29px;
+  font-weight:950
+}
+
+.open{
+  border:0;
+  background:transparent;
+  width:100%;
+  color:inherit;
+  text-align:inherit
+}
+
+.empty,
+.loading,
+.error,
+.info{
+  background:#fff;
+  border:1px solid #dce6e1;
+  border-radius:22px;
+  padding:28px;
+  text-align:center;
+  color:#7a8580;
+  margin-bottom:14px
+}
+
+.error{
+  color:#a21f1f
+}
+
+.detail{
+  background:#fff;
+  border-radius:24px;
+  padding:20px;
+  border:1px solid #dce6e1
+}
+
+.detailTeams{
+  display:grid;
+  grid-template-columns:1fr 120px 1fr;
+  align-items:center;
+  text-align:center;
+  gap:8px
+}
+
+.detailTeam{
+  font-weight:900;
+  font-size:18px
+}
+
+.detailTeam img{
+  width:75px;
+  height:75px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 8px
+}
+
+.detailScore{
+  font-size:36px;
+  font-weight:950
+}
+
+.time{
+  font-size:13px;
+  color:#78857f;
+  margin-top:5px
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin:20px 0
+}
+
+.tabs button{
+  white-space:nowrap;
+  border:0;
+  background:#edf2ef;
+  color:#286642;
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:800
+}
+
+.tabs button.active{
+  background:#3d8b5a;
+  color:#fff
+}
+
+.event,
+.stat{
+  display:grid;
+  grid-template-columns:55px 1fr 1fr;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid #edf1ef
+}
+
+.stat b:last-child{
+  text-align:right
+}
+
+.ai{
+  background:linear-gradient(135deg,#276642,#3d8b5a);
+  color:#fff;
+  border-radius:26px;
+  padding:25px
+}
+
+.ai h2{
+  margin-top:0
+}
+
+.aiRow{
+  display:flex;
+  gap:8px
+}
+
+.ai input{
+  flex:1;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  outline:0
+}
+
+.ai button{
+  border:0;
+  border-radius:14px;
+  padding:0 18px;
+  background:#fff;
+  color:#286642;
+  font-weight:900
+}
+
+.answer{
+  white-space:pre-wrap;
+  background:rgba(255,255,255,.12);
+  border-radius:15px;
+  padding:15px;
+  margin-top:14px
+}
+
+.footer{
+  text-align:center;
+  color:#87918c;
+  margin-top:35px
+}
+
+@media(max-width:600px){
+  .brand h1{
+    font-size:30px
+  }
+
+  .logo{
+    width:62px;
+    height:62px;
+    font-size:38px
+  }
+
+  .teams{
+    grid-template-columns:1fr 78px 1fr
+  }
+
+  .team{
+    font-size:14px
+  }
+
+  .detailTeams{
+    grid-template-columns:1fr 85px 1fr
+  }
+
+  .detailTeam img{
+    width:60px;
+    height:60px
+  }
+
+  .hero h2{
+    font-size:28px
+  }
+
+  .hero p{
+    font-size:17px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="head">
+
+    <div class="brand">
+      <div class="logo">L</div>
+
+      <div>
+        <h1>L-LIVE</h1>
+        <small>Football Live</small>
+      </div>
+    </div>
+
+    <div class="online">
+      <span class="dot"></span>
+      <span id="connection">ONLINE</span>
+    </div>
+
+  </div>
+</header>
+
+<main class="wrap">
+
+<nav class="nav">
+
+  <button
+    data-s="home"
+    class="active"
+    onclick="show('home',this)">
+    მთავარი
+  </button>
+
+  <button
+    data-s="live"
+    onclick="show('live',this)">
+    🔴 LIVE
+  </button>
+
+  <button
+    data-s="today"
+    onclick="show('today',this)">
+    მატჩები
+  </button>
+
+  <button
+    data-s="upcoming"
+    onclick="show('upcoming',this)">
+    მომდევნო
+  </button>
+
+  <button
+    data-s="finished"
+    onclick="show('finished',this)">
+    დასრულებული
+  </button>
+
+  <button
+    data-s="leagues"
+    onclick="show('leagues',this)">
+    ჩემპიონატები
+  </button>
+
+  <button
+    data-s="ai"
+    onclick="show('ai',this)">
+    L-LIVE AI
+  </button>
+
+</nav>
+
+<section
+  id="home"
+  class="section active">
+
+  <div class="hero">
+    <h2>L-LIVE</h2>
+
+    <p>
+      რეალური მატჩები, LIVE ანგარიშები,
+      სტატისტიკა და Match Analysis
+      ერთ სივრცეში.
+    </p>
+  </div>
+
+  <div class="title">
+    <h2>🔴 ახალი LIVE</h2>
+
+    <button
+      class="refresh"
+      onclick="loadLive()">
+      განახლება
+    </button>
+  </div>
+
+  <div
+    id="homeLive"
+    class="loading">
+    იტვირთება...
+  </div>
+
+  <div class="title">
+    <h2>📅 დღევანდელი მატჩები</h2>
+  </div>
+
+  <div
+    id="homeToday"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="live"
+  class="section">
+
+  <div class="title">
+
+    <h2>🔴 LIVE</h2>
+
+    <button
+      class="refresh"
+      onclick="loadLive()">
+      განახლება
+    </button>
+
+  </div>
+
+  <div
+    id="liveList"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="today"
+  class="section">
+
+  <div class="title">
+
+    <h2>📅 დღევანდელი მატჩები</h2>
+
+    <button
+      class="refresh"
+      onclick="loadToday()">
+      განახლება
+    </button>
+
+  </div>
+
+  <div
+    id="todayList"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="upcoming"
+  class="section">
+
+  <div class="title">
+
+    <h2>⏭️ მომდევნო მატჩები</h2>
+
+    <button
+      class="refresh"
+      onclick="loadUpcoming()">
+      განახლება
+    </button>
+
+  </div>
+
+  <div
+    id="upcomingList"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="finished"
+  class="section">
+
+  <div class="title">
+
+    <h2>🏁 დასრულებული</h2>
+
+    <button
+      class="refresh"
+      onclick="loadFinished()">
+      განახლება
+    </button>
+
+  </div>
+
+  <div
+    id="finishedList"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="leagues"
+  class="section">
+
+  <div class="title">
+    <h2>🏆 ჩემპიონატები</h2>
+  </div>
+
+  <div
+    id="leagueList"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<section
+  id="ai"
+  class="section">
+
+  <div class="ai">
+
+    <h2>🤖 L-LIVE AI</h2>
+
+    <p>
+      დაუსვი კითხვა რეალურ
+      L-LIVE მონაცემებზე.
+    </p>
+
+    <div class="aiRow">
+
+      <input
+        id="aiInput"
+        placeholder="გუნდი ან მატჩი...">
+
+      <button
+        onclick="askAI()">
+        ანალიზი
+      </button>
+
+    </div>
+
+    <div
+      id="aiAnswer"
+      class="answer"
+      style="display:none">
+    </div>
+
+  </div>
+
+</section>
+
+<section
+  id="detail"
+  class="section">
+
+  <div class="title">
+
+    <h2>⚽ მატჩის დეტალები</h2>
+
+    <button
+      class="refresh"
+      onclick="back()">
+      ← უკან
+    </button>
+
+  </div>
+
+  <div
+    id="detailBox"
+    class="loading">
+    იტვირთება...
+  </div>
+
+</section>
+
+<div class="footer">
+  L-LIVE • Real Football Data
+</div>
+
+</main>
+
+<script>
+
+let all = [];
+let selected = null;
+let previous = "home";
+let current = "home";
+
+async function api(url, options = {}) {
+
+  const response =
+    await fetch(url, options);
+
+  const text =
+    await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      "სერვერმა JSON მონაცემი ვერ დააბრუნა."
+    );
+  }
+
+  if (
+    !response.ok ||
+    data.ok === false
+  ) {
+    throw new Error(
+      data.error ||
+      "სერვერის შეცდომა"
+    );
+  }
+
+  return data;
+}
+
+function esc(value) {
+
+  return String(value ?? "")
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+function arr(data) {
+
+  return Array.isArray(
+    data?.matches
+  )
+    ? data.matches
+    : [];
+}
+
+function name(match, side) {
+
+  return (
+    match?.[side] ||
+    match?.teams?.[side]?.name ||
+    "მონაცემი მიუწვდომელია"
+  );
+}
+
+function logo(match, side) {
+
+  return (
+    match?.[side + "Logo"] ||
+    match?.[side + "_logo"] ||
+    match?.teams?.[side]?.logo ||
+    ""
+  );
+}
+
+function comp(match) {
+
+  return (
+    match?.competition ||
+    match?.league?.name ||
+    "Football"
+  );
+}
+
+function live(match) {
+
+  const status =
+    String(
+      match?.status?.short ||
+      ""
+    ).toUpperCase();
+
+  return [
+    "1H",
+    "2H",
+    "HT",
+    "ET",
+    "P",
+    "LIVE"
+  ].includes(status) ||
+    status.includes("LIVE");
+}
+
+function finished(match) {
+
+  const status =
+    String(
+      match?.status?.short ||
+      ""
+    ).toUpperCase();
+
+  return [
+    "FT",
+    "AET",
+    "PEN",
+    "AWD",
+    "WO"
+  ].includes(status);
+}
+
+function state(match) {
+
+  if (live(match)) {
+
+    return match?.status?.elapsed
+      ? match.status.elapsed + "'"
+      : "LIVE";
+  }
+
+  if (finished(match)) {
+    return "დასრულებული";
+  }
+
+  if (match?.date) {
+
+    const date =
+      new Date(
+        match.date
+      );
+
+    if (
+      !Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return date.toLocaleString(
+        "ka-GE",
+        {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+    }
+  }
+
+  return "მომავალი";
+}
+
+function score(match) {
+
+  const home =
+    match?.homeScore;
+
+  const away =
+    match?.awayScore;
+
+  if (
+    home == null ||
+    away == null
+  ) {
+    return "— : —";
+  }
+
+  return (
+    home +
+    " : " +
+    away
+  );
+}
+
+function card(match) {
+
+  const index =
+    all.findIndex(
+      item =>
+        String(
+          item?.id
+        ) ===
+        String(
+          match?.id
+        )
+    );
+
+  const statusClass =
+    live(match)
+      ? "live"
+      : finished(match)
+        ? "finished"
+        : "";
+
+  function image(side) {
+
+    const url =
+      logo(
+        match,
+        side
+      );
+
+    if (url) {
+
+      return `
+        <img
+          src="${esc(url)}"
+          onerror="this.style.display='none'">
+      `;
+    }
+
+    return `
+      <div class="ph">
+        ⚽
+      </div>
+    `;
+  }
+
+  return `
+    <article class="card">
+
+      <button
+        class="open"
+        onclick="openMatch(${index})">
+
+        <div class="top">
+
+          <span>
+            ${esc(
+              comp(match)
+            )}
+          </span>
+
+          <span
+            class="status ${statusClass}">
+            ${esc(
+              state(match)
+            )}
+          </span>
+
+        </div>
+
+        <div class="teams">
+
+          <div class="team">
+
+            ${image("home")}
+
+            <span>
+              ${esc(
+                name(
+                  match,
+                  "home"
+                )
+              )}
+            </span>
+
+          </div>
+
+          <div class="score">
+            ${esc(
+              score(match)
+            )}
+          </div>
+
+          <div class="team">
+
+            ${image("away")}
+
+            <span>
+              ${esc(
+                name(
+                  match,
+                  "away"
+                )
+              )}
+            </span>
+
+          </div>
+
+        </div>
+
+      </button>
+
+    </article>
+  `;
+}
+
+function render(
+  id,
+  matches,
+  emptyText
+) {
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+  if (!element) return;
+
+  element.className = "";
+
+  element.innerHTML =
+    matches.length
+      ? matches
+          .map(card)
+          .join("")
+      : `
+        <div class="empty">
+          ${emptyText}
+        </div>
+      `;
+}
+
+function merge(matches) {
+
+  const map =
+    new Map(
+      all.map(
+        match => [
+          String(
+            match.id
+          ),
+          match
+        ]
+      )
+    );
+
+  matches.forEach(
+    match => {
+      map.set(
+        String(
+          match.id
+        ),
+        match
+      );
+    }
+  );
+
+  all =
+    [...map.values()];
+}
+
+async function loadToday() {
+
+  try {
+
+    const data =
+      await api(
+        "/api/matches"
+      );
+
+    const matches =
+      arr(data);
+
+    merge(matches);
+
+    render(
+      "todayList",
+      matches,
+      "დღეს მატჩები არ არის."
+    );
+
+    render(
+      "homeToday",
+      matches,
+      "დღეს მატჩები არ არის."
+    );
+
+    renderLeagues();
+
+    online(true);
+
+  } catch (error) {
+
+    showError(
+      "todayList",
+      error
+    );
+  }
+}
+
+async function loadLive() {
+
+  try {
+
+    const data =
+      await api(
+        "/api/live"
+      );
+
+    const matches =
+      arr(data);
+
+    merge(matches);
+
+    render(
+      "liveList",
+      matches,
+      "ამ მომენტში LIVE მატჩი არ არის."
+    );
+
+    render(
+      "homeLive",
+      matches,
+      "ამ მომენტში LIVE მატჩი არ არის."
+    );
+
+    renderLeagues();
+
+    online(true);
+
+  } catch (error) {
+
+    showError(
+      "liveList",
+      error
+    );
+
+    showError(
+      "homeLive",
+      error
+    );
+  }
+}
+
+async function loadUpcoming() {
+
+  try {
+
+    const data =
+      await api(
+        "/api/upcoming"
+      );
+
+    const matches =
+      arr(data);
+
+    merge(matches);
+
+    render(
+      "upcomingList",
+      matches,
+      "მომდევნო მატჩები ვერ მოიძებნა."
+    );
+
+    renderLeagues();
+
+    online(true);
+
+  } catch (error) {
+
+    showError(
+      "upcomingList",
+      error
+    );
+  }
+}
+
+async function loadFinished() {
+
+  try {
+
+    const data =
+      await api(
+        "/api/finished"
+      );
+
+    const matches =
+      arr(data);
+
+    merge(matches);
+
+    render(
+      "finishedList",
+      matches,
+      "დასრულებული მატჩები ვერ მოიძებნა."
+    );
+
+    renderLeagues();
+
+    online(true);
+
+  } catch (error) {
+
+    showError(
+      "finishedList",
+      error
+    );
+  }
+}
+
+function showError(
+  id,
+  error
+) {
+
+  const element =
+    document.getElementById(
+      id
+    );
+
+  if (!element) return;
+
+  element.innerHTML = `
+    <div class="error">
+
+      <b>
+        მონაცემების ჩატვირთვა
+        ვერ მოხერხდა.
+      </b>
+
+      <br><br>
+
+      ${esc(
+        error.message
+      )}
+
+    </div>
+  `;
+
+  online(false);
+}
+
+function online(value) {
+
+  const element =
+    document.getElementById(
+      "connection"
+    );
+
+  if (element) {
+    element.textContent =
+      value
+        ? "ONLINE"
+        : "OFFLINE";
+  }
+}
+
+function renderLeagues() {
+
+  const element =
+    document.getElementById(
+      "leagueList"
+    );
+
+  if (!element) return;
+
+  const map =
+    new Map();
+
+  all.forEach(
+    match => {
+      map.set(
+        comp(match),
+        true
+      );
+    }
+  );
+
+  const leagues =
+    [...map.keys()];
+
+  element.className = "";
+
+  element.innerHTML =
+    leagues.length
+      ? leagues
+          .map(
+            league => `
+              <div class="info">
+                <b>
+                  🏆 ${esc(
+                    league
+                  )}
+                </b>
+              </div>
+            `
+          )
+          .join("")
+      : `
+        <div class="empty">
+          ჩემპიონატები ვერ მოიძებნა.
+        </div>
+      `;
+}
+
+function show(
+  name,
+  button
+) {
+
+  if (
+    current !==
+    "detail"
+  ) {
+    previous =
+      current;
+  }
+
+  current =
+    name;
+
+  document
+    .querySelectorAll(
+      ".section"
+    )
+    .forEach(
+      section =>
+        section.classList.remove(
+          "active"
+        )
+    );
+
+  const section =
+    document.getElementById(
+      name
+    );
+
+  if (section) {
+    section.classList.add(
+      "active"
+    );
+  }
+
+  document
+    .querySelectorAll(
+      ".nav button"
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "active"
+        )
+    );
+
+  const navButton =
+    button ||
+    document.querySelector(
+      `[data-s="${name}"]`
+    );
+
+  if (navButton) {
+    navButton.classList.add(
+      "active"
+    );
+  }
+
+  window.scrollTo(
+    {
+      top: 0,
+      behavior:
+        "smooth"
+    }
+  );
+
+  if (
+    name ===
+    "live"
+  ) {
+    loadLive();
+  }
+
+  if (
+    name ===
+    "today"
+  ) {
+    loadToday();
+  }
+
+  if (
+    name ===
+    "upcoming"
+  ) {
+    loadUpcoming();
+  }
+
+  if (
+    name ===
+    "finished"
+  ) {
+    loadFinished();
+  }
+}
+
+async function openMatch(
+  index
+) {
+
+  const match =
+    all[index];
+
+  if (!match) return;
+
+  selected =
+    match;
+
+  previous =
+    current;
+
+  show(
+    "detail"
+  );
+
+  const box =
+    document.getElementById(
+      "detailBox"
+    );
+
+  box.className =
+    "loading";
+
+  box.textContent =
+    "მატჩის რეალური მონაცემები იტვირთება...";
+
+  try {
+
+    const data =
+      await api(
+        "/api/world-analysis/" +
+        encodeURIComponent(
+          match.id
+        )
+      );
+
+    const fixture =
+      data.fixture ||
+      match;
+
+    fixture.statistics =
+      data.statistics ||
+      [];
+
+    fixture.events =
+      data.events ||
+      [];
+
+    fixture.lineups =
+      data.lineups ||
+      [];
+
+    selected =
+      fixture;
+
+    renderDetail(
+      fixture
+    );
+
+  } catch (error) {
+
+    showError(
+      "detailBox",
+      error
+    );
+  }
+}
+
+function renderDetail(
+  match
+) {
+
+  const box =
+    document.getElementById(
+      "detailBox"
+    );
+
+  const events =
+    Array.isArray(
+      match.events
+    )
+      ? match.events
+      : [];
+
+  const statistics =
+    Array.isArray(
+      match.statistics
+    )
+      ? match.statistics
+      : [];
+
+  const homeId =
+    match.teams?.home?.id;
+
+  const awayId =
+    match.teams?.away?.id;
+
+  const homeStats =
+    statistics.find(
+      item =>
+        item?.team?.id ===
+        homeId
+    )?.statistics ||
+    [];
+
+  const awayStats =
+    statistics.find(
+      item =>
+        item?.team?.id ===
+        awayId
+    )?.statistics ||
+    [];
+
+  const statsMap =
+    new Map();
+
+  homeStats.forEach(
+    item => {
+
+      const key =
+        item?.type;
+
+      if (!key) return;
+
+      statsMap.set(
+        key,
+        {
+          name:
+            key,
+          home:
+            item?.value ??
+            "—",
+          away:
+            "—"
+        }
+      );
+    }
+  );
+
+  awayStats.forEach(
+    item => {
+
+      const key =
+        item?.type;
+
+      if (!key) return;
+
+      if (
+        statsMap.has(
+          key
+        )
+      ) {
+
+        statsMap.get(
+          key
+        ).away =
+          item?.value ??
+          "—";
+
+      } else {
+
+        statsMap.set(
+          key,
+          {
+            name:
+              key,
+            home:
+              "—",
+            away:
+              item?.value ??
+              "—"
+          }
+        );
+      }
+    }
+  );
+
+  function detailLogo(
+    side
+  ) {
+
+    const url =
+      logo(
+        match,
+        side
+      );
+
+    return url
+      ? `
+        <img
+          src="${esc(url)}"
+          onerror="this.style.display='none'">
+      `
+      : `
+        <div class="ph">
+          ⚽
+        </div>
+      `;
+  }
+
+  const eventsHTML =
+    events.length
+      ? events
+          .map(
+            event => {
+
+              const minute =
+                event?.time
+                  ?.elapsed ??
+                "";
+
+              const text =
+                [
+                  event?.type,
+                  event?.detail,
+                  event?.player?.name,
+                  event?.assist?.name
+                ]
+                  .filter(
+                    Boolean
+                  )
+                  .join(
+                    " · "
+                  ) ||
+                "მოვლენა";
+
+              return `
+                <div class="event">
+
+                  <b>
+                    ${esc(
+                      minute
+                    )}′
+                  </b>
+
+                  <span>
+                    ${esc(
+                      text
+                    )}
+                  </span>
+
+                </div>
+              `;
+            }
+          )
+          .join("")
+      : `
+        <div class="empty">
+          მოვლენები მიუწვდომელია.
+        </div>
+      `;
+
+  const statsHTML =
+    [...statsMap.values()]
+      .map(
+        item => `
+          <div class="stat">
+
+            <b>
+              ${esc(
+                item.home
+              )}
+            </b>
+
+            <span>
+              ${esc(
+                item.name
+              )}
+            </span>
+
+            <b>
+              ${esc(
+                item.away
+              )}
+            </b>
+
+          </div>
+        `
+      )
+      .join("") ||
+    `
+      <div class="empty">
+        სტატისტიკა მიუწვდომელია.
+      </div>
+    `;
+
+  const lineupsHTML =
+    `
+      <pre
+        style="
+          white-space:pre-wrap;
+          overflow:auto;
+          font-size:12px
+        "
+      >${esc(
+        JSON.stringify(
+          match.lineups ||
+          [],
+          null,
+          2
+        )
+      )}</pre>
+    `;
+
+  box.className =
+    "detail";
+
+  box.innerHTML = `
+
+    <div class="detailTeams">
+
+      <div class="detailTeam">
+
+        ${detailLogo(
+          "home"
+        )}
+
+        <div>
+          ${esc(
+            name(
+              match,
+              "home"
+            )
+          )}
+        </div>
+
+      </div>
+
+      <div>
+
+        <div class="detailScore">
+          ${esc(
+            score(match)
+          )}
+        </div>
+
+        <div class="time">
+          ${esc(
+            state(match)
+          )}
+        </div>
+
+      </div>
+
+      <div class="detailTeam">
+
+        ${detailLogo(
+          "away"
+        )}
+
+        <div>
+          ${esc(
+            name(
+              match,
+              "away"
+            )
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="tabs">
+
+      <button
+        class="active"
+        onclick="
+          tab(
+            'events',
+            this
+          )
+        ">
+        მოვლენები
+      </button>
+
+      <button
+        onclick="
+          tab(
+            'stats',
+            this
+          )
+        ">
+        სტატისტიკა
+      </button>
+
+      <button
+        onclick="
+          tab(
+            'lineups',
+            this
+          )
+        ">
+        შემადგენლობა
+      </button>
+
+    </div>
+
+    <div id="tab-events">
+      ${eventsHTML}
+    </div>
+
+    <div
+      id="tab-stats"
+      style="display:none">
+      ${statsHTML}
+    </div>
+
+    <div
+      id="tab-lineups"
+      style="display:none">
+      ${lineupsHTML}
+    </div>
+
+  `;
+}
+
+function tab(
+  name,
+  button
+) {
+
+  [
+    "events",
+    "stats",
+    "lineups"
+  ].forEach(
+    item => {
+
+      const element =
+        document.getElementById(
+          "tab-" +
+          item
+        );
+
+      if (element) {
+        element.style.display =
+          item ===
+          name
+            ? "block"
+            : "none";
+      }
+    }
+  );
+
+  button.parentElement
+    .querySelectorAll(
+      "button"
+    )
+    .forEach(
+      item =>
+        item.classList.remove(
+          "active"
+        )
+    );
+
+  button.classList.add(
+    "active"
+  );
+}
+
+function back() {
+
+  show(
+    previous
+  );
+}
+
+async function askAI() {
+
+  const query =
+    document
+      .getElementById(
+        "aiInput"
+      )
+      .value
+      .trim();
+
+  const answer =
+    document.getElementById(
+      "aiAnswer"
+    );
+
+  if (!query) return;
+
+  answer.style.display =
+    "block";
+
+  answer.textContent =
+    "🤖 ვამოწმებ რეალურ მონაცემებს...";
+
+  try {
+
+    const data =
+      await api(
+        "/api/ai-search",
+        {
+          method:
+            "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              query,
+
+              data: {
+                selectedMatch:
+                  selected,
+
+                matches:
+                  all
+              }
+            })
+        }
+      );
+
+    answer.textContent =
+      data.answer ||
+      "პასუხი ვერ მივიღე.";
+
+  } catch (error) {
+
+    answer.textContent =
+      "AI შეცდომა:\n\n" +
+      error.message;
+  }
+}
+
+async function init() {
+
+  await loadToday();
+
+  await loadLive();
+
+  await loadUpcoming();
+
+  await loadFinished();
+
+  setInterval(
+    loadLive,
+    60000
+  );
+}
+
+init();
+
+</script>
+
+</body>
+</html>
