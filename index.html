@@ -1,0 +1,2786 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>L-LIVE — Football Live</title>
+
+<style>
+:root{
+  --green:#08783f;
+  --green2:#0ca95a;
+  --bg:#f3f7f5;
+  --card:#fff;
+  --text:#122018;
+  --muted:#718078;
+  --line:#dce8e1;
+  --red:#d73535;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  overflow-x:hidden;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#fff;
+  padding:15px;
+}
+
+.header-row{
+  width:100%;
+  max-width:1050px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+}
+
+.connection{
+  font-size:12px;
+  font-weight:800;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  white-space:nowrap;
+}
+
+main{
+  width:100%;
+  max-width:1050px;
+  margin:auto;
+  padding:14px;
+}
+
+.search{
+  display:flex;
+  gap:8px;
+  width:100%;
+  margin-bottom:12px;
+}
+
+input{
+  width:100%;
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:13px;
+  font-size:16px;
+  background:#fff;
+  outline:none;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:11px 14px;
+  background:var(--green);
+  color:#fff;
+  font-weight:800;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+button.secondary{
+  background:#e8f1ec;
+  color:var(--green);
+}
+
+nav{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:10px;
+  scrollbar-width:none;
+}
+
+nav::-webkit-scrollbar{
+  display:none;
+}
+
+nav button{
+  white-space:nowrap;
+  background:#e5efe9;
+  color:#185b39;
+}
+
+nav button.active{
+  background:var(--green);
+  color:#fff;
+}
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:12px 0;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:21px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#0b7540,#13aa5d);
+  color:#fff;
+  border-radius:20px;
+  padding:21px;
+  margin-bottom:14px;
+}
+
+.hero h1{
+  margin:0 0 6px;
+  font-size:27px;
+}
+
+.hero p{
+  margin:0;
+  opacity:.92;
+  line-height:1.45;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:11px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:14px;
+  box-shadow:0 4px 18px rgba(16,65,39,.05);
+}
+
+.match{
+  cursor:pointer;
+}
+
+.comp{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.teams{
+  display:grid;
+  grid-template-columns:1fr 80px 1fr;
+  align-items:center;
+  gap:8px;
+}
+
+.team{
+  text-align:center;
+  font-weight:800;
+  font-size:14px;
+}
+
+.team img,
+.logo-placeholder{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  margin:auto auto 6px;
+  display:block;
+}
+
+.logo-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#edf4ef;
+  border-radius:50%;
+  font-size:21px;
+}
+
+.score{
+  text-align:center;
+  font-size:22px;
+  font-weight:900;
+}
+
+.status{
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.status.live{
+  color:var(--red);
+  font-weight:900;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:7px;
+  background:#eef5f0;
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+}
+
+.empty,
+.loading{
+  padding:28px;
+  text-align:center;
+  color:var(--muted);
+  background:#fff;
+  border-radius:16px;
+  border:1px dashed var(--line);
+}
+
+.country-toolbar{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+
+.country-toolbar button{
+  background:#e5efe9;
+  color:#185b39;
+  white-space:nowrap;
+}
+
+.country-toolbar button.active{
+  background:var(--green);
+  color:#fff;
+}
+
+.country-search{
+  margin-bottom:12px;
+}
+
+.country-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:10px;
+}
+
+.country-card{
+  cursor:pointer;
+  transition:.15s;
+}
+
+.country-card:active{
+  transform:scale(.98);
+}
+
+.country-top{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.flag{
+  font-size:30px;
+  width:42px;
+  text-align:center;
+}
+
+.country-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.country-meta{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
+}
+
+.country-arrow{
+  margin-left:auto;
+  color:var(--green);
+  font-size:20px;
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.detail-score{
+  text-align:center;
+  font-size:31px;
+  font-weight:900;
+  padding:12px;
+}
+
+.event{
+  padding:10px;
+  border-bottom:1px solid var(--line);
+}
+
+.ai-box{
+  display:grid;
+  gap:10px;
+}
+
+.answer{
+  white-space:pre-wrap;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  min-height:80px;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:28px 10px;
+}
+
+.footer a{
+  color:var(--green);
+  font-weight:800;
+}
+
+@media(max-width:600px){
+
+  main{
+    padding:11px;
+  }
+
+  .teams{
+    grid-template-columns:1fr 68px 1fr;
+  }
+
+  .team{
+    font-size:13px;
+  }
+
+  .logo{
+    font-size:23px;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="header-row">
+
+<div class="logo">
+L-LIVE ⚽
+</div>
+
+<div id="connection" class="connection">
+შემოწმება...
+</div>
+
+</div>
+
+</header>
+
+<main>
+
+<div class="search">
+
+<input
+id="globalSearch"
+placeholder="გუნდის, ლიგის ან მატჩის ძებნა"
+>
+
+<button onclick="searchMatches()">
+ძებნა
+</button>
+
+</div>
+
+<nav>
+
+<button
+data-section="home"
+onclick="showSection('home')"
+>
+მთავარი
+</button>
+
+<button
+data-section="live"
+onclick="showSection('live')"
+>
+🔴 LIVE
+</button>
+
+<button
+data-section="today"
+onclick="showSection('today')"
+>
+დღეს
+</button>
+
+<button
+data-section="finished"
+onclick="showSection('finished')"
+>
+დასრულებული
+</button>
+
+<button
+data-section="countries"
+onclick="showSection('countries')"
+>
+🌍 ქვეყნები
+</button>
+
+<button
+data-section="leagues"
+onclick="showSection('leagues')"
+>
+🏆 ლიგები
+</button>
+
+<button
+data-section="ai"
+onclick="showSection('ai')"
+>
+🤖 AI
+</button>
+
+</nav>
+
+
+<!-- HOME -->
+
+<section id="home" class="section active">
+
+<div class="hero">
+
+<h1>
+L-LIVE Football
+</h1>
+
+<p>
+ფეხბურთის რეალური ანგარიშები, LIVE მატჩები,
+შედეგები და მატჩის დეტალები ერთ სივრცეში.
+</p>
+
+</div>
+
+<div class="section-title">
+
+<h2>
+მატჩები
+</h2>
+
+<button
+class="secondary"
+onclick="loadAll()"
+>
+განახლება
+</button>
+
+</div>
+
+<div id="homeList" class="grid">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LIVE -->
+
+<section id="live" class="section">
+
+<div class="section-title">
+
+<h2>
+🔴 LIVE ახლა
+</h2>
+
+<button
+class="secondary"
+onclick="loadLive()"
+>
+განახლება
+</button>
+
+</div>
+
+<div id="liveList" class="grid">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TODAY -->
+
+<section id="today" class="section">
+
+<div class="section-title">
+
+<h2>
+დღევანდელი მატჩები
+</h2>
+
+<button
+class="secondary"
+onclick="loadToday()"
+>
+განახლება
+</button>
+
+</div>
+
+<div id="todayList" class="grid">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FINISHED -->
+
+<section id="finished" class="section">
+
+<div class="section-title">
+
+<h2>
+დასრულებული
+</h2>
+
+<button
+class="secondary"
+onclick="loadFinished()"
+>
+განახლება
+</button>
+
+</div>
+
+<div id="finishedList" class="grid">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- COUNTRIES -->
+
+<section id="countries" class="section">
+
+<div class="section-title">
+
+<h2>
+🌍 ფეხბურთის ქვეყნები
+</h2>
+
+<span class="badge">
+182 ქვეყანა
+</span>
+
+</div>
+
+<div class="card">
+
+<p style="margin-top:0;color:var(--muted);line-height:1.5">
+აირჩიე კონტინენტი ან მოძებნე ქვეყანა.
+ქვეყნის ბარათი გადაგიყვანს შესაბამის SportScore
+ქვეყნის საფეხბურთო გვერდზე.
+</p>
+
+<div class="country-search">
+
+<input
+id="countrySearch"
+placeholder="ქვეყნის ძებნა..."
+oninput="renderCountries()"
+>
+
+</div>
+
+<div class="country-toolbar">
+
+<button
+class="active"
+data-continent="all"
+onclick="setContinent('all')"
+>
+ყველა
+</button>
+
+<button
+data-continent="Europe"
+onclick="setContinent('Europe')"
+>
+🇪🇺 ევროპა
+</button>
+
+<button
+data-continent="South America"
+onclick="setContinent('South America')"
+>
+🌎 სამხრეთი ამერიკა
+</button>
+
+<button
+data-continent="North America"
+onclick="setContinent('North America')"
+>
+🌎 ჩრდილოეთი ამერიკა
+</button>
+
+<button
+data-continent="Asia"
+onclick="setContinent('Asia')"
+>
+🌏 აზია
+</button>
+
+<button
+data-continent="Africa"
+onclick="setContinent('Africa')"
+>
+🌍 აფრიკა
+</button>
+
+<button
+data-continent="Oceania"
+onclick="setContinent('Oceania')"
+>
+🌊 ოკეანეთი
+</button>
+
+<button
+data-continent="International"
+onclick="setContinent('International')"
+>
+🌐 საერთაშორისო
+</button>
+
+</div>
+
+</div>
+
+<div
+id="countryList"
+class="country-grid"
+style="margin-top:12px"
+>
+</div>
+
+</section>
+
+
+<!-- LEAGUES -->
+
+<section id="leagues" class="section">
+
+<div class="section-title">
+
+<h2>
+🏆 ლიგები
+</h2>
+
+</div>
+
+<div id="leagueList" class="grid">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AI -->
+
+<section id="ai" class="section">
+
+<div class="section-title">
+
+<h2>
+🤖 L-LIVE AI
+</h2>
+
+</div>
+
+<div class="card ai-box">
+
+<input
+id="aiInput"
+placeholder="მაგ: რა მოხდა ამ მატჩში?"
+>
+
+<button onclick="askAI()">
+ანალიზი
+</button>
+
+<div id="aiAnswer" class="answer">
+AI პასუხი აქ გამოჩნდება.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DETAIL -->
+
+<section id="detail" class="section">
+
+<div class="section-title">
+
+<h2>
+მატჩის დეტალები
+</h2>
+
+<button
+class="secondary"
+onclick="back()"
+>
+← უკან
+</button>
+
+</div>
+
+<div id="detailBox">
+
+<div class="loading">
+იტვირთება...
+</div>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+
+L-LIVE Football · Data by
+
+<a
+href="https://sportscore.com/"
+target="_blank"
+rel="noopener"
+>
+Powered by SportScore
+</a>
+
+</div>
+
+</main>
+
+
+<script>
+
+const SPORTSCORE =
+"https://sportscore.com";
+
+const SRC =
+"l-live-five.vercel.app";
+
+
+const state = {
+
+matches:[],
+
+selected:null,
+
+previous:"home",
+
+timer:null,
+
+continent:"all"
+
+};
+
+
+/* =========================
+   182 COUNTRIES
+========================= */
+
+const COUNTRIES = [
+
+/* EUROPE */
+
+["Albania","🇦🇱","Europe",4],
+["Andorra","🇦🇩","Europe",4],
+["Armenia","🇦🇲","Europe",5],
+["Austria","🇦🇹","Europe",11],
+["Azerbaijan","🇦🇿","Europe",5],
+["Belarus","🇧🇾","Europe",12],
+["Belgium","🇧🇪","Europe",16],
+["Bosnia and Herzegovina","🇧🇦","Europe",10],
+["Bulgaria","🇧🇬","Europe",12],
+["Croatia","🇭🇷","Europe",13],
+["Cyprus","🇨🇾","Europe",13],
+["Czech Republic","🇨🇿","Europe",16],
+["Denmark","🇩🇰","Europe",21],
+["England","🏴","Europe",67],
+["Estonia","🇪🇪","Europe",12],
+["Faroe Islands","🇫🇴","Europe",7],
+["Finland","🇫🇮","Europe",26],
+["France","🇫🇷","Europe",23],
+["Georgia","🇬🇪","Europe",9],
+["Germany","🇩🇪","Europe",38],
+["Gibraltar","🇬🇮","Europe",2],
+["Greece","🇬🇷","Europe",15],
+["Hungary","🇭🇺","Europe",18],
+["Iceland","🇮🇸","Europe",27],
+["Ireland","🇮🇪","Europe",26],
+["Israel","🇮🇱","Europe",18],
+["Italy","🇮🇹","Europe",39],
+["Kazakhstan","🇰🇿","Europe",10],
+["Kosovo","🇽🇰","Europe",7],
+["Latvia","🇱🇻","Europe",11],
+["Liechtenstein","🇱🇮","Europe",1],
+["Lithuania","🇱🇹","Europe",7],
+["Luxembourg","🇱🇺","Europe",6],
+["Malta","🇲🇹","Europe",8],
+["Moldova","🇲🇩","Europe",6],
+["Montenegro","🇲🇪","Europe",8],
+["Netherlands","🇳🇱","Europe",17],
+["North Macedonia","🇲🇰","Europe",8],
+["Northern Ireland","🇬🇧","Europe",13],
+["Norway","🇳🇴","Europe",14],
+["Poland","🇵🇱","Europe",17],
+["Portugal","🇵🇹","Europe",29],
+["Romania","🇷🇴","Europe",14],
+["Russia","🇷🇺","Europe",23],
+["San Marino","🇸🇲","Europe",3],
+["Scotland","🏴","Europe",21],
+["Serbia","🇷🇸","Europe",8],
+["Slovakia","🇸🇰","Europe",14],
+["Slovenia","🇸🇮","Europe",9],
+["Spain","🇪🇸","Europe",42],
+["Sweden","🇸🇪","Europe",21],
+["Switzerland","🇨🇭","Europe",16],
+["Turkey","🇹🇷","Europe",28],
+["Ukraine","🇺🇦","Europe",14],
+["Wales","🏴","Europe",10],
+
+/* SOUTH AMERICA */
+
+["Argentina","🇦🇷","South America",33],
+["Bolivia","🇧🇴","South America",13],
+["Brazil","🇧🇷","South America",139],
+["Chile","🇨🇱","South America",11],
+["Colombia","🇨🇴","South America",12],
+["Ecuador","🇪🇨","South America",10],
+["Guyana","🇬🇾","South America",1],
+["Paraguay","🇵🇾","South America",15],
+["Peru","🇵🇪","South America",10],
+["Suriname","🇸🇷","South America",2],
+["Uruguay","🇺🇾","South America",12],
+["Venezuela","🇻🇪","South America",7],
+
+/* NORTH AMERICA */
+
+["Antigua and Barbuda","🇦🇬","North America",1],
+["Barbados","🇧🇧","North America",3],
+["Belize","🇧🇿","North America",1],
+["Bermuda","🇧🇲","North America",2],
+["Canada","🇨🇦","North America",6],
+["Costa Rica","🇨🇷","North America",12],
+["Cuba","🇨🇺","North America",2],
+["Curacao","🇨🇼","North America",1],
+["Dominican Republic","🇩🇴","North America",3],
+["El Salvador","🇸🇻","North America",7],
+["Grenada","🇬🇩","North America",3],
+["Guatemala","🇬🇹","North America",8],
+["Haiti","🇭🇹","North America",1],
+["Honduras","🇭🇳","North America",6],
+["Jamaica","🇯🇲","North America",3],
+["Mexico","🇲🇽","North America",19],
+["Nicaragua","🇳🇮","North America",6],
+["Panama","🇵🇦","North America",5],
+["Puerto Rico","🇵🇷","North America",2],
+["Saint Kitts and Nevis","🇰🇳","North America",1],
+["Trinidad and Tobago","🇹🇹","North America",3],
+["United States","🇺🇸","North America",28],
+
+/* ASIA */
+
+["Afghanistan","🇦🇫","Asia",1],
+["Bahrain","🇧🇭","Asia",11],
+["Bangladesh","🇧🇩","Asia",9],
+["Bhutan","🇧🇹","Asia",4],
+["Brunei","🇧🇳","Asia",2],
+["Cambodia","🇰🇭","Asia",6],
+["China","🇨🇳","Asia",129],
+["India","🇮🇳","Asia",63],
+["Indonesia","🇮🇩","Asia",26],
+["Iran","🇮🇷","Asia",7],
+["Iraq","🇮🇶","Asia",5],
+["Japan","🇯🇵","Asia",39],
+["Jordan","🇯🇴","Asia",11],
+["Kuwait","🇰🇼","Asia",11],
+["Kyrgyzstan","🇰🇬","Asia",2],
+["Laos","🇱🇦","Asia",5],
+["Lebanon","🇱🇧","Asia",10],
+["Malaysia","🇲🇾","Asia",23],
+["Maldives","🇲🇻","Asia",4],
+["Mongolia","🇲🇳","Asia",8],
+["Myanmar","🇲🇲","Asia",8],
+["Nepal","🇳🇵","Asia",8],
+["Oman","🇴🇲","Asia",6],
+["Pakistan","🇵🇰","Asia",5],
+["Palestine","🇵🇸","Asia",2],
+["Philippines","🇵🇭","Asia",6],
+["Qatar","🇶🇦","Asia",17],
+["Saudi Arabia","🇸🇦","Asia",18],
+["Singapore","🇸🇬","Asia",9],
+["South Korea","🇰🇷","Asia",19],
+["Sri Lanka","🇱🇰","Asia",3],
+["Syria","🇸🇾","Asia",8],
+["Tajikistan","🇹🇯","Asia",6],
+["Thailand","🇹🇭","Asia",21],
+["Turkmenistan","🇹🇲","Asia",4],
+["United Arab Emirates","🇦🇪","Asia",19],
+["Uzbekistan","🇺🇿","Asia",12],
+["Vietnam","🇻🇳","Asia",18],
+["Yemen","🇾🇪","Asia",5],
+
+/* AFRICA */
+
+["Algeria","🇩🇿","Africa",18],
+["Angola","🇦🇴","Africa",2],
+["Benin","🇧🇯","Africa",1],
+["Botswana","🇧🇼","Africa",2],
+["Burkina Faso","🇧🇫","Africa",3],
+["Burundi","🇧🇮","Africa",3],
+["Cameroon","🇨🇲","Africa",6],
+["Comoros","🇰🇲","Africa",1],
+["Congo","🇨🇬","Africa",1],
+["Djibouti","🇩🇯","Africa",1],
+["Egypt","🇪🇬","Africa",7],
+["Ethiopia","🇪🇹","Africa",5],
+["Gabon","🇬🇦","Africa",1],
+["Gambia","🇬🇲","Africa",3],
+["Ghana","🇬🇭","Africa",9],
+["Ivory Coast","🇨🇮","Africa",4],
+["Kenya","🇰🇪","Africa",9],
+["Lesotho","🇱🇸","Africa",1],
+["Liberia","🇱🇷","Africa",7],
+["Libya","🇱🇾","Africa",3],
+["Madagascar","🇲🇬","Africa",1],
+["Malawi","🇲🇼","Africa",4],
+["Mali","🇲🇱","Africa",3],
+["Mauritania","🇲🇷","Africa",3],
+["Morocco","🇲🇦","Africa",7],
+["Mozambique","🇲🇿","Africa",4],
+["Namibia","🇳🇦","Africa",3],
+["Niger","🇳🇪","Africa",3],
+["Nigeria","🇳🇬","Africa",9],
+["Rwanda","🇷🇼","Africa",6],
+["Sao Tome and Principe","🇸🇹","Africa",1],
+["Senegal","🇸🇳","Africa",4],
+["Seychelles","🇸🇨","Africa",2],
+["Sierra Leone","🇸🇱","Africa",2],
+["South Africa","🇿🇦","Africa",14],
+["Sudan","🇸🇩","Africa",3],
+["Tanzania","🇹🇿","Africa",11],
+["Togo","🇹🇬","Africa",3],
+["Tunisia","🇹🇳","Africa",8],
+["Uganda","🇺🇬","Africa",6],
+["Zambia","🇿🇲","Africa",5],
+["Zimbabwe","🇿🇼","Africa",4],
+
+/* OCEANIA */
+
+["Australia","🇦🇺","Oceania",127],
+["Fiji","🇫🇯","Oceania",6],
+["New Zealand","🇳🇿","Oceania",15],
+["Samoa","🇼🇸","Oceania",2],
+["Solomon Islands","🇸🇧","Oceania",4],
+["Vanuatu","🇻🇺","Oceania",1],
+
+/* INTERNATIONAL */
+
+["Aruba","🇦🇼","International",3],
+["Democratic Republic of the Congo","🇨🇩","International",1],
+["Dominica","🇩🇲","International",2],
+["Hong Kong, China","🇭🇰","International",3],
+["Macao, China","🇲🇴","International",1]
+
+];
+
+
+/* =========================
+   BASIC HELPERS
+========================= */
+
+function esc(v){
+
+return String(v ?? "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function live(m){
+
+return m?.status === "live";
+
+}
+
+
+function finished(m){
+
+return m?.status === "finished";
+
+}
+
+
+/* =========================
+   SPORT SCORE API
+========================= */
+
+async function sportScore(endpoint,params={}){
+
+const url =
+new URL(SPORTSCORE + endpoint);
+
+Object.entries(params).forEach(
+([k,v])=>{
+
+if(
+v !== undefined &&
+v !== null &&
+v !== ""
+){
+
+url.searchParams.set(
+k,
+String(v)
+);
+
+}
+
+});
+
+url.searchParams.set(
+"src",
+SRC
+);
+
+
+const response =
+await fetch(
+url.toString(),
+{
+headers:{
+Accept:"application/json"
+}
+}
+);
+
+
+const text =
+await response.text();
+
+
+let data;
+
+try{
+
+data =
+JSON.parse(text);
+
+}catch{
+
+throw new Error(
+"SportScore-მა JSON-ის ნაცვლად სხვა პასუხი დააბრუნა."
+);
+
+}
+
+
+if(!response.ok){
+
+throw new Error(
+`SportScore HTTP ${response.status}`
+);
+
+}
+
+
+return data;
+
+}
+
+
+/* =========================
+   MATCH NORMALIZATION
+========================= */
+
+function arr(x){
+
+if(Array.isArray(x))
+return x;
+
+if(Array.isArray(x?.data))
+return x.data;
+
+if(Array.isArray(x?.matches))
+return x.matches;
+
+if(Array.isArray(x?.fixtures))
+return x.fixtures;
+
+if(Array.isArray(x?.results))
+return x.results;
+
+return [];
+
+}
+
+
+function team(x){
+
+if(!x){
+
+return{
+name:"",
+logo:""
+};
+
+}
+
+
+if(typeof x === "string"){
+
+return{
+name:x,
+logo:""
+};
+
+}
+
+
+return{
+
+name:
+x.name ??
+x.team ??
+x.team_name ??
+"",
+
+logo:
+x.logo ??
+x.image ??
+x.team_logo ??
+"",
+
+id:
+x.id ??
+x.team_id ??
+null
+
+};
+
+}
+
+
+function status(v,item={}){
+
+const s =
+String(
+v ??
+item.status_text ??
+item.statusText ??
+item.state ??
+""
+).toLowerCase();
+
+
+if(
+s.includes("live") ||
+s.includes("playing") ||
+s.includes("progress") ||
+s === "ht" ||
+s.includes("half")
+){
+
+return "live";
+
+}
+
+
+if(
+s.includes("finish") ||
+s.includes("ended") ||
+s.includes("complete") ||
+s === "ft"
+){
+
+return "finished";
+
+}
+
+
+return "upcoming";
+
+}
+
+
+function normalize(item){
+
+const h =
+team(
+item.home_team ??
+item.homeTeam ??
+item.home
+);
+
+
+const a =
+team(
+item.away_team ??
+item.awayTeam ??
+item.away
+);
+
+
+const s =
+item.score ??
+item.scores ??
+{};
+
+
+const hs =
+item.home_score ??
+item.homeScore ??
+s.home ??
+s.home_score ??
+null;
+
+
+const as =
+item.away_score ??
+item.awayScore ??
+s.away ??
+s.away_score ??
+null;
+
+
+const url =
+item.url ??
+item.match_url ??
+"";
+
+
+const slug =
+item.slug ??
+item.match_slug ??
+String(url)
+.replace(/^\/+|\/+$/g,"")
+.replace(/^football\/match\//,"")
+.replace(/\/+$/g,"");
+
+
+return{
+
+id:
+item.id ??
+item.match_id ??
+null,
+
+slug,
+
+home:h.name || "",
+
+away:a.name || "",
+
+home_logo:
+h.logo ||
+item.home_logo ||
+"",
+
+away_logo:
+a.logo ||
+item.away_logo ||
+"",
+
+home_score:hs,
+
+away_score:as,
+
+score:
+hs != null &&
+as != null
+? `${hs} : ${as}`
+: "— : —",
+
+status:
+status(item.status,item),
+
+status_text:
+item.status_text ??
+item.statusText ??
+item.status ??
+"",
+
+live_minute:
+item.live_minute ??
+item.liveMinute ??
+item.minute ??
+null,
+
+time:
+item.time ??
+item.datetime ??
+item.date ??
+item.start_time ??
+null,
+
+competition:
+item.competition ??
+item.league?.name ??
+item.championship ??
+item.tournament ??
+"",
+
+competition_logo:
+item.competition_logo ??
+item.league?.logo ??
+"",
+
+url,
+
+source:"SportScore",
+
+raw:item
+
+};
+
+}
+
+
+function normalizeList(data){
+
+return arr(
+data?.matches
+? data
+: data
+).map(normalize);
+
+}
+
+
+/* =========================
+   MATCH CARD
+========================= */
+
+function logo(url){
+
+if(url){
+
+return `
+<img
+src="${esc(url)}"
+onerror="this.outerHTML='<div class=&quot;logo-placeholder&quot;>⚽</div>'"
+>
+`;
+
+}
+
+return `
+<div class="logo-placeholder">
+⚽
+</div>
+`;
+
+}
+
+
+function timeText(m){
+
+if(live(m)){
+
+return m.live_minute
+? `${esc(m.live_minute)}' LIVE`
+: "LIVE";
+
+}
+
+
+if(finished(m))
+return "დასრულებული";
+
+
+if(!m.time)
+return "მომავალი";
+
+
+try{
+
+return new Date(
+m.time
+).toLocaleString(
+"ka-GE",
+{
+day:"2-digit",
+month:"2-digit",
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}catch{
+
+return esc(m.time);
+
+}
+
+}
+
+
+function card(m,index){
+
+return `
+
+<div
+class="card match"
+onclick="openMatch(${index})"
+>
+
+<div class="comp">
+
+<span>
+${esc(
+m.competition ||
+"Football"
+)}
+</span>
+
+<span class="badge">
+
+${
+live(m)
+? "LIVE"
+: finished(m)
+? "FT"
+: "NEXT"
+}
+
+</span>
+
+</div>
+
+
+<div class="teams">
+
+<div class="team">
+
+${logo(m.home_logo)}
+
+${esc(
+m.home ||
+"Home"
+)}
+
+</div>
+
+
+<div>
+
+<div class="score">
+${esc(m.score)}
+</div>
+
+<div
+class="status ${
+live(m) ? "live" : ""
+}"
+>
+${timeText(m)}
+</div>
+
+</div>
+
+
+<div class="team">
+
+${logo(m.away_logo)}
+
+${esc(
+m.away ||
+"Away"
+)}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   STATE
+========================= */
+
+function merge(ms){
+
+const map =
+new Map(
+state.matches.map(
+m=>[
+String(
+m.id ??
+m.slug ??
+`${m.home}|${m.away}|${m.time}`
+),
+m
+]
+)
+);
+
+
+ms.forEach(m=>{
+
+map.set(
+String(
+m.id ??
+m.slug ??
+`${m.home}|${m.away}|${m.time}`
+),
+m
+);
+
+});
+
+
+state.matches =
+[...map.values()];
+
+}
+
+
+function render(id,ms){
+
+const e =
+document.getElementById(id);
+
+
+e.innerHTML =
+ms.length
+
+? ms.map(
+m=>
+card(
+m,
+state.matches.indexOf(m)
+)
+).join("")
+
+: `
+
+<div class="empty">
+ამ კატეგორიაში მატჩი ვერ მოიძებნა.
+</div>
+
+`;
+
+}
+
+
+function online(v){
+
+const e =
+document.getElementById(
+"connection"
+);
+
+e.textContent =
+v ? "ONLINE" : "OFFLINE";
+
+e.style.background =
+v
+? "rgba(255,255,255,.16)"
+: "rgba(215,53,53,.85)";
+
+}
+
+
+/* =========================
+   LOAD MATCHES
+========================= */
+
+async function loadRaw(){
+
+return normalizeList(
+
+await sportScore(
+"/api/widget/matches/",
+{
+sport:"football",
+limit:50
+}
+)
+
+);
+
+}
+
+
+async function loadAll(){
+
+try{
+
+const ms =
+await loadRaw();
+
+merge(ms);
+
+render(
+"homeList",
+ms.slice(0,20)
+);
+
+renderLeagues();
+
+online(true);
+
+}catch(e){
+
+online(false);
+
+document.getElementById(
+"homeList"
+).innerHTML=`
+
+<div class="empty">
+${esc(e.message)}
+</div>
+
+`;
+
+}
+
+}
+
+
+async function loadLive(){
+
+try{
+
+const ms =
+(
+await loadRaw()
+).filter(live);
+
+merge(ms);
+
+render(
+"liveList",
+ms
+);
+
+online(true);
+
+}catch(e){
+
+online(false);
+
+document.getElementById(
+"liveList"
+).innerHTML=`
+
+<div class="empty">
+${esc(e.message)}
+</div>
+
+`;
+
+}
+
+}
+
+
+async function loadToday(){
+
+try{
+
+const ms =
+await loadRaw();
+
+const today =
+new Intl.DateTimeFormat(
+"en-CA",
+{
+timeZone:"Asia/Tbilisi",
+year:"numeric",
+month:"2-digit",
+day:"2-digit"
+}
+).format(new Date());
+
+
+const out =
+ms.filter(m=>{
+
+if(!m.time)
+return false;
+
+const date =
+new Intl.DateTimeFormat(
+"en-CA",
+{
+timeZone:"Asia/Tbilisi",
+year:"numeric",
+month:"2-digit",
+day:"2-digit"
+}
+).format(
+new Date(m.time)
+);
+
+return date === today;
+
+});
+
+
+merge(out);
+
+render(
+"todayList",
+out
+);
+
+online(true);
+
+}catch(e){
+
+online(false);
+
+document.getElementById(
+"todayList"
+).innerHTML=`
+
+<div class="empty">
+${esc(e.message)}
+</div>
+
+`;
+
+}
+
+}
+
+
+async function loadFinished(){
+
+try{
+
+const ms =
+(
+await loadRaw()
+).filter(finished);
+
+merge(ms);
+
+render(
+"finishedList",
+ms
+);
+
+online(true);
+
+}catch(e){
+
+online(false);
+
+document.getElementById(
+"finishedList"
+).innerHTML=`
+
+<div class="empty">
+${esc(e.message)}
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =========================
+   COUNTRIES
+========================= */
+
+function setContinent(continent){
+
+state.continent =
+continent;
+
+document
+.querySelectorAll(
+".country-toolbar button"
+)
+.forEach(
+button=>{
+button.classList.toggle(
+"active",
+button.dataset.continent === continent
+);
+}
+);
+
+renderCountries();
+
+}
+
+
+function countrySlug(name){
+
+return name
+.toLowerCase()
+.trim()
+.replace(/&/g,"and")
+.replace(/,/g,"")
+.replace(/[’']/g,"")
+.replace(/\s+/g,"-")
+.replace(/[^a-z0-9-]/g,"");
+
+}
+
+
+function openCountry(country){
+
+const slug =
+countrySlug(country[0]);
+
+/*
+SportScore-ის ქვეყნის დირექტორიის
+სტანდარტული ბმული.
+*/
+
+const url =
+`https://sportscore.com/football/countries/${slug}/`;
+
+window.open(
+url,
+"_blank",
+"noopener"
+);
+
+}
+
+
+function renderCountries(){
+
+const search =
+(
+document.getElementById(
+"countrySearch"
+)?.value ||
+""
+)
+.toLowerCase()
+.trim();
+
+
+let list =
+COUNTRIES.filter(
+c=>{
+
+const matchesContinent =
+state.continent === "all" ||
+c[2] === state.continent;
+
+const matchesSearch =
+!search ||
+c[0]
+.toLowerCase()
+.includes(search);
+
+return (
+matchesContinent &&
+matchesSearch
+);
+
+}
+);
+
+
+const container =
+document.getElementById(
+"countryList"
+);
+
+
+if(!list.length){
+
+container.innerHTML=`
+
+<div class="empty"
+style="grid-column:1/-1">
+
+ქვეყანა ვერ მოიძებნა.
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+container.innerHTML =
+list.map(
+c=>`
+
+<div
+class="card country-card"
+onclick='openCountry(${JSON.stringify(c)})'
+>
+
+<div class="country-top">
+
+<div class="flag">
+${c[1]}
+</div>
+
+<div>
+
+<div class="country-name">
+${esc(c[0])}
+</div>
+
+<div class="country-meta">
+
+${esc(c[3])}
+ ჩემპიონატი/ტურნირი
+
+</div>
+
+</div>
+
+<div class="country-arrow">
+›
+</div>
+
+</div>
+
+</div>
+
+`
+).join("");
+
+}
+
+
+/* =========================
+   LEAGUES FROM MATCH FEED
+========================= */
+
+function renderLeagues(){
+
+const map =
+new Map();
+
+
+state.matches.forEach(m=>{
+
+if(
+m.competition &&
+!map.has(m.competition)
+){
+
+map.set(
+m.competition,
+m
+);
+
+}
+
+});
+
+
+const out =
+[...map.entries()];
+
+
+document.getElementById(
+"leagueList"
+).innerHTML =
+
+out.length
+
+? out.map(
+([n,m])=>`
+
+<div class="card">
+
+<b>
+🏆 ${esc(n)}
+</b>
+
+<div
+class="comp"
+style="margin-top:8px"
+>
+
+${esc(m.home)}
+vs
+${esc(m.away)}
+
+</div>
+
+</div>
+
+`
+).join("")
+
+: `
+
+<div class="empty">
+ლიგები ჯერ ვერ მოიძებნა.
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   MATCH DETAIL
+========================= */
+
+async function openMatch(index){
+
+const m =
+state.matches[index];
+
+if(!m)
+return;
+
+
+if(!m.slug){
+
+alert(
+"ამ მატჩისთვის SportScore match slug ვერ მოიძებნა."
+);
+
+return;
+
+}
+
+
+state.selected =
+m;
+
+state.previous =
+document.querySelector(
+".section.active"
+)?.id || "home";
+
+
+showSection(
+"detail",
+false
+);
+
+
+document.getElementById(
+"detailBox"
+).innerHTML=`
+
+<div class="loading">
+მატჩის სრული მონაცემები იტვირთება...
+</div>
+
+`;
+
+
+try{
+
+const d =
+await sportScore(
+"/api/widget/match/",
+{
+sport:"football",
+slug:m.slug
+}
+);
+
+
+const x =
+d?.match ??
+d?.data?.match ??
+d?.data ??
+d;
+
+
+const detail={
+
+...normalize(x),
+
+incidents:
+Array.isArray(x?.incidents)
+? x.incidents
+: [],
+
+stats:
+Array.isArray(x?.stats)
+? x.stats
+: [],
+
+lineups:
+x?.lineups ||
+null
+
+};
+
+
+state.selected =
+detail;
+
+renderDetail(
+detail
+);
+
+}catch(e){
+
+document.getElementById(
+"detailBox"
+).innerHTML=`
+
+<div class="empty">
+${esc(e.message)}
+</div>
+
+`;
+
+}
+
+}
+
+
+function renderDetail(m){
+
+const incidents =
+m.incidents || [];
+
+const stats =
+m.stats || [];
+
+const l =
+m.lineups || {};
+
+
+const events =
+incidents.length
+
+? incidents.map(
+x=>`
+
+<div class="event">
+
+⚽
+
+${esc(
+x.player ??
+x.name ??
+x.type ??
+"მოვლენა"
+)}
+
+${
+x.minute
+? `· ${esc(x.minute)}'`
+: ""
+}
+
+</div>
+
+`
+).join("")
+
+: `
+
+<div class="empty">
+მოვლენების მონაცემი მიუწვდომელია.
+</div>
+
+`;
+
+
+const stat =
+stats.length
+
+? stats.map(
+x=>`
+
+<div class="info-row">
+
+<span>
+${esc(
+x.name ??
+x.type ??
+"სტატისტიკა"
+)}
+</span>
+
+<b>
+
+${esc(
+x.value ??
+x.home ??
+"—"
+)}
+
+/
+
+${esc(
+x.away ??
+"—"
+)}
+
+</b>
+
+</div>
+
+`
+).join("")
+
+: `
+
+<div class="empty">
+სტატისტიკა ამ მატჩისთვის მიუწვდომელია.
+</div>
+
+`;
+
+
+document.getElementById(
+"detailBox"
+).innerHTML=`
+
+<div class="card">
+
+<div class="comp">
+
+<span>
+${esc(
+m.competition ||
+"Football"
+)}
+</span>
+
+<span class="badge">
+
+${
+live(m)
+? "LIVE"
+: finished(m)
+? "FT"
+: "NEXT"
+}
+
+</span>
+
+</div>
+
+
+<div class="teams">
+
+<div class="team">
+
+${logo(m.home_logo)}
+
+${esc(m.home)}
+
+</div>
+
+
+<div>
+
+<div class="detail-score">
+${esc(m.score)}
+</div>
+
+<div
+class="status ${
+live(m) ? "live" : ""
+}"
+>
+
+${timeText(m)}
+
+</div>
+
+</div>
+
+
+<div class="team">
+
+${logo(m.away_logo)}
+
+${esc(m.away)}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+მატჩის მოვლენები
+</h3>
+
+${events}
+
+</div>
+
+
+<div class="card">
+
+<h3>
+სტატისტიკა
+</h3>
+
+${stat}
+
+</div>
+
+
+<div class="card">
+
+<h3>
+შემადგენლობები
+</h3>
+
+
+<div class="info-row">
+
+<b>
+შემადგენლობები
+</b>
+
+<span>
+
+${
+l.confirmed
+? "დადასტურებული"
+: "მონაცემი"
+}
+
+</span>
+
+</div>
+
+
+<div class="info-row">
+
+<span>
+Home formation
+</span>
+
+<b>
+${esc(
+l.home_formation ||
+"—"
+)}
+</b>
+
+</div>
+
+
+<div class="info-row">
+
+<span>
+Away formation
+</span>
+
+<b>
+${esc(
+l.away_formation ||
+"—"
+)}
+</b>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchMatches(){
+
+const q =
+document.getElementById(
+"globalSearch"
+).value
+.trim()
+.toLowerCase();
+
+
+if(!q){
+
+showSection(
+"home"
+);
+
+return;
+
+}
+
+
+const found =
+state.matches.filter(
+m=>[
+m.home,
+m.away,
+m.competition
+]
+.join(" ")
+.toLowerCase()
+.includes(q)
+);
+
+
+showSection(
+"home",
+false
+);
+
+
+document.getElementById(
+"homeList"
+).innerHTML =
+
+found.length
+
+? found.map(
+m=>
+card(
+m,
+state.matches.indexOf(m)
+)
+).join("")
+
+: `
+
+<div class="empty">
+
+„${esc(q)}“
+—
+მატჩი ვერ მოიძებნა.
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   AI
+========================= */
+
+async function askAI(){
+
+const q =
+document.getElementById(
+"aiInput"
+).value
+.trim();
+
+
+const out =
+document.getElementById(
+"aiAnswer"
+);
+
+
+if(!q){
+
+out.textContent =
+"დაწერე კითხვა.";
+
+return;
+
+}
+
+
+out.textContent =
+"🤖 ვამზადებ ანალიზს...";
+
+
+try{
+
+const r =
+await fetch(
+"/api/ai-search",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+query:q,
+
+data:{
+selectedMatch:
+state.selected,
+
+matches:
+state.matches
+
+}
+
+})
+
+}
+);
+
+
+const d =
+await r.json();
+
+
+if(
+!r.ok ||
+d.ok === false
+){
+
+throw new Error(
+d.error ||
+"AI შეცდომა"
+);
+
+}
+
+
+out.textContent =
+d.answer ||
+"პასუხი ვერ მივიღე.";
+
+
+}catch(e){
+
+out.textContent =
+"AI შეცდომა:\n\n" +
+e.message;
+
+}
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(
+name,
+remember=true
+){
+
+if(
+remember &&
+name !== "detail"
+){
+
+state.previous =
+name;
+
+}
+
+
+document
+.querySelectorAll(
+".section"
+)
+.forEach(
+x =>
+x.classList.remove(
+"active"
+)
+);
+
+
+document
+.getElementById(name)
+.classList.add(
+"active"
+);
+
+
+document
+.querySelectorAll(
+"nav button"
+)
+.forEach(
+x =>
+x.classList.toggle(
+"active",
+x.dataset.section === name
+)
+);
+
+
+if(name === "live")
+loadLive();
+
+
+if(name === "today")
+loadToday();
+
+
+if(name === "finished")
+loadFinished();
+
+
+if(name === "countries")
+renderCountries();
+
+
+if(name === "leagues")
+renderLeagues();
+
+}
+
+
+function back(){
+
+showSection(
+state.previous ||
+"home"
+);
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function initialize(){
+
+document
+.querySelector(
+'[data-section="home"]'
+)
+.classList.add(
+"active"
+);
+
+
+renderCountries();
+
+
+await loadAll();
+
+
+await loadLive();
+
+
+clearInterval(
+state.timer
+);
+
+
+state.timer =
+setInterval(
+loadLive,
+60000
+);
+
+}
+
+
+initialize();
+
+</script>
+
+</body>
+</html>
