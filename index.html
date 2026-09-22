@@ -1,0 +1,2839 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b8f55">
+  <title>L-LIVE — Football Live</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      width:100%;
+      min-height:100%;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:#f3f6f5;
+      color:#17231e;
+      overflow-x:hidden;
+    }
+
+    button,input{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    .app{
+      width:100%;
+      min-height:100vh;
+    }
+
+    /* HEADER */
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:100;
+      background:#0b8f55;
+      color:#fff;
+      box-shadow:0 2px 10px rgba(0,0,0,.12);
+    }
+
+    .header-inner{
+      max-width:1200px;
+      margin:auto;
+      padding:12px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      font-weight:900;
+      font-size:21px;
+      letter-spacing:.5px;
+    }
+
+    .brand-ball{
+      font-size:25px;
+    }
+
+    .status{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:12px;
+      font-weight:800;
+      background:rgba(255,255,255,.13);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#ffcf33;
+    }
+
+    .status.online .status-dot{
+      background:#43ff91;
+    }
+
+    .status.offline .status-dot{
+      background:#ff5c5c;
+    }
+
+    /* SEARCH */
+
+    .top-search{
+      max-width:1200px;
+      margin:auto;
+      padding:10px 16px 12px;
+    }
+
+    .search-box{
+      width:100%;
+      border:0;
+      outline:0;
+      padding:13px 15px;
+      border-radius:13px;
+      background:#fff;
+      color:#17231e;
+      box-shadow:0 1px 5px rgba(0,0,0,.08);
+    }
+
+    /* NAV */
+
+    .nav-wrap{
+      background:#fff;
+      border-bottom:1px solid #e3e9e6;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+
+    .nav-wrap::-webkit-scrollbar{
+      display:none;
+    }
+
+    .nav{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      gap:6px;
+      padding:8px 12px;
+      min-width:max-content;
+    }
+
+    .nav button{
+      border:0;
+      background:#eef3f1;
+      color:#53615b;
+      border-radius:10px;
+      padding:10px 13px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .nav button.active{
+      background:#0b8f55;
+      color:#fff;
+    }
+
+    /* MAIN */
+
+    main{
+      max-width:1200px;
+      margin:auto;
+      padding:16px;
+    }
+
+    .section{
+      display:none;
+    }
+
+    .section.active{
+      display:block;
+    }
+
+    .page-title{
+      font-size:24px;
+      font-weight:950;
+      margin:4px 0 5px;
+    }
+
+    .page-subtitle{
+      color:#69756f;
+      margin-bottom:18px;
+      font-size:14px;
+    }
+
+    /* HERO */
+
+    .hero{
+      background:linear-gradient(135deg,#087c4a,#0ca861);
+      color:#fff;
+      border-radius:20px;
+      padding:22px;
+      margin-bottom:16px;
+      box-shadow:0 8px 25px rgba(11,143,85,.2);
+    }
+
+    .hero h1{
+      margin:0 0 8px;
+      font-size:28px;
+    }
+
+    .hero p{
+      margin:0;
+      opacity:.92;
+      line-height:1.5;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:18px;
+    }
+
+    .hero-actions button{
+      border:0;
+      border-radius:11px;
+      padding:11px 14px;
+      font-weight:900;
+    }
+
+    .hero-actions .primary{
+      background:#fff;
+      color:#087c4a;
+    }
+
+    .hero-actions .secondary{
+      background:rgba(255,255,255,.15);
+      color:#fff;
+    }
+
+    /* CARDS */
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:12px;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid #e2e9e5;
+      border-radius:16px;
+      padding:16px;
+      box-shadow:0 2px 8px rgba(0,0,0,.04);
+    }
+
+    .card.clickable{
+      cursor:pointer;
+      transition:.15s;
+    }
+
+    .card.clickable:active{
+      transform:scale(.98);
+    }
+
+    .card-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .card-title{
+      font-weight:900;
+    }
+
+    .muted{
+      color:#718079;
+      font-size:13px;
+    }
+
+    /* MATCH */
+
+    .matches{
+      display:grid;
+      gap:10px;
+    }
+
+    .match{
+      background:#fff;
+      border:1px solid #e1e8e4;
+      border-radius:16px;
+      padding:14px;
+      cursor:pointer;
+      transition:.15s;
+    }
+
+    .match:active{
+      transform:scale(.99);
+    }
+
+    .match-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .competition{
+      font-size:12px;
+      color:#68766f;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .live-badge{
+      background:#e83d3d;
+      color:#fff;
+      padding:4px 7px;
+      border-radius:7px;
+      font-size:11px;
+      font-weight:950;
+    }
+
+    .status-badge{
+      background:#edf2ef;
+      color:#59665f;
+      padding:4px 7px;
+      border-radius:7px;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .teams{
+      display:grid;
+      grid-template-columns:1fr 55px 1fr;
+      align-items:center;
+      gap:8px;
+    }
+
+    .team{
+      font-weight:900;
+      line-height:1.25;
+    }
+
+    .team.home{
+      text-align:right;
+    }
+
+    .team.away{
+      text-align:left;
+    }
+
+    .score{
+      text-align:center;
+      font-size:20px;
+      font-weight:950;
+    }
+
+    .match-bottom{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:#75827c;
+      font-size:12px;
+    }
+
+    /* EMPTY / ERROR */
+
+    .empty{
+      background:#fff;
+      border:1px dashed #ccd7d1;
+      border-radius:16px;
+      padding:28px 18px;
+      text-align:center;
+      color:#68756f;
+    }
+
+    .error{
+      background:#fff2f2;
+      border:1px solid #ffd0d0;
+      color:#a32222;
+      border-radius:14px;
+      padding:15px;
+      line-height:1.45;
+      font-size:13px;
+    }
+
+    .loading{
+      text-align:center;
+      padding:30px;
+      color:#68756f;
+    }
+
+    /* COUNTRIES */
+
+    .country-toolbar{
+      background:#fff;
+      border:1px solid #e1e8e4;
+      border-radius:16px;
+      padding:13px;
+      margin-bottom:14px;
+    }
+
+    .country-search{
+      width:100%;
+      border:1px solid #dce5e0;
+      outline:none;
+      border-radius:11px;
+      padding:12px;
+      background:#f8faf9;
+    }
+
+    .continents{
+      display:flex;
+      gap:7px;
+      overflow-x:auto;
+      padding-top:10px;
+      scrollbar-width:none;
+    }
+
+    .continents::-webkit-scrollbar{
+      display:none;
+    }
+
+    .continents button{
+      border:0;
+      background:#eef3f1;
+      color:#53615b;
+      padding:9px 12px;
+      border-radius:9px;
+      white-space:nowrap;
+      font-weight:800;
+    }
+
+    .continents button.active{
+      background:#0b8f55;
+      color:#fff;
+    }
+
+    .country-card{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:76px;
+    }
+
+    .flag{
+      width:42px;
+      height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f1f5f3;
+      border-radius:12px;
+      font-size:25px;
+      flex:none;
+    }
+
+    .country-info{
+      flex:1;
+      min-width:0;
+    }
+
+    .country-name{
+      font-size:16px;
+      font-weight:950;
+    }
+
+    .country-count{
+      margin-top:4px;
+      color:#748079;
+      font-size:12px;
+    }
+
+    .chevron{
+      font-size:24px;
+      color:#9aa59f;
+    }
+
+    /* COUNTRY DETAIL */
+
+    .back-btn{
+      border:0;
+      background:#fff;
+      border:1px solid #dfe7e3;
+      border-radius:11px;
+      padding:10px 13px;
+      font-weight:900;
+      color:#33423a;
+      margin-bottom:13px;
+    }
+
+    .country-hero{
+      background:#fff;
+      border:1px solid #e0e8e4;
+      border-radius:18px;
+      padding:20px;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      margin-bottom:15px;
+    }
+
+    .country-hero .big-flag{
+      width:64px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:17px;
+      background:#f0f5f2;
+      font-size:38px;
+      flex:none;
+    }
+
+    .country-hero h2{
+      margin:0 0 5px;
+      font-size:25px;
+    }
+
+    .country-hero p{
+      margin:0;
+      color:#6c7972;
+      font-size:13px;
+    }
+
+    .country-info-box{
+      background:#fff;
+      border:1px solid #e1e8e4;
+      border-radius:16px;
+      padding:16px;
+      margin-bottom:14px;
+    }
+
+    .country-info-box h3{
+      margin:0 0 8px;
+    }
+
+    /* DETAIL */
+
+    .detail-card{
+      background:#fff;
+      border:1px solid #e0e8e4;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .detail-score{
+      text-align:center;
+      padding:15px 0 20px;
+    }
+
+    .detail-score .big{
+      font-size:38px;
+      font-weight:950;
+      margin:12px 0;
+    }
+
+    .detail-teams{
+      display:grid;
+      grid-template-columns:1fr 80px 1fr;
+      gap:12px;
+      align-items:center;
+    }
+
+    .detail-team{
+      font-size:18px;
+      font-weight:950;
+    }
+
+    .detail-team:first-child{
+      text-align:right;
+    }
+
+    .detail-team:last-child{
+      text-align:left;
+    }
+
+    .detail-center{
+      text-align:center;
+    }
+
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:11px 0;
+      border-bottom:1px solid #edf1ef;
+      font-size:14px;
+    }
+
+    .info-row:last-child{
+      border-bottom:0;
+    }
+
+    .info-label{
+      color:#718079;
+    }
+
+    .info-value{
+      font-weight:850;
+      text-align:right;
+    }
+
+    /* AI */
+
+    .ai-box{
+      background:#fff;
+      border:1px solid #e0e8e4;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .ai-input{
+      width:100%;
+      min-height:130px;
+      resize:vertical;
+      border:1px solid #dce5e0;
+      border-radius:13px;
+      padding:13px;
+      outline:none;
+      margin:12px 0;
+    }
+
+    .green-btn{
+      border:0;
+      background:#0b8f55;
+      color:#fff;
+      padding:12px 17px;
+      border-radius:11px;
+      font-weight:900;
+    }
+
+    .ai-result{
+      margin-top:15px;
+      background:#f4f8f6;
+      border-radius:13px;
+      padding:15px;
+      white-space:pre-wrap;
+      line-height:1.55;
+    }
+
+    /* FOOTER */
+
+    footer{
+      max-width:1200px;
+      margin:20px auto;
+      padding:18px 16px 30px;
+      color:#7a8780;
+      text-align:center;
+      font-size:12px;
+    }
+
+    footer a{
+      color:#0b8f55;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    @media(max-width:600px){
+      main{
+        padding:12px;
+      }
+
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        font-size:24px;
+      }
+
+      .teams{
+        grid-template-columns:1fr 45px 1fr;
+      }
+
+      .detail-teams{
+        grid-template-columns:1fr 65px 1fr;
+      }
+
+      .detail-team{
+        font-size:15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-ball">⚽</span>
+        <span>L-LIVE</span>
+      </div>
+
+      <div id="status" class="status offline">
+        <span class="status-dot"></span>
+        <span id="statusText">OFFLINE</span>
+      </div>
+    </div>
+
+    <div class="top-search">
+      <input
+        id="globalSearch"
+        class="search-box"
+        type="search"
+        placeholder="მოძებნე გუნდი, ქვეყანა ან მატჩი..."
+        autocomplete="off"
+      >
+    </div>
+  </header>
+
+  <div class="nav-wrap">
+    <nav class="nav">
+
+      <button data-section="home" class="active">
+        🏠 მთავარი
+      </button>
+
+      <button data-section="live">
+        🔴 LIVE
+      </button>
+
+      <button data-section="today">
+        📅 დღეს
+      </button>
+
+      <button data-section="finished">
+        ✅ დასრულებული
+      </button>
+
+      <button data-section="countries">
+        🌍 ქვეყნები
+      </button>
+
+      <button data-section="leagues">
+        🏆 ლიგები
+      </button>
+
+      <button data-section="ai">
+        🤖 AI
+      </button>
+
+    </nav>
+  </div>
+
+  <main>
+
+    <!-- HOME -->
+
+    <section id="home" class="section active">
+
+      <div class="hero">
+        <h1>L-LIVE ⚽</h1>
+        <p>
+          ფეხბურთის ლაივ-ანგარიშები, მატჩები, ქვეყნები,
+          შედეგები და მატჩის დეტალები ერთ სივრცეში.
+        </p>
+
+        <div class="hero-actions">
+          <button class="primary" onclick="showSection('live')">
+            🔴 LIVE მატჩები
+          </button>
+
+          <button class="secondary" onclick="showSection('countries')">
+            🌍 ქვეყნები
+          </button>
+
+          <button class="secondary" onclick="showSection('today')">
+            📅 დღევანდელი მატჩები
+          </button>
+        </div>
+      </div>
+
+      <div class="grid">
+
+        <div class="card clickable" onclick="showSection('live')">
+          <div class="card-head">
+            <div>
+              <div class="card-title">🔴 LIVE</div>
+              <div class="muted">მიმდინარე მატჩები</div>
+            </div>
+            <strong id="homeLiveCount">—</strong>
+          </div>
+        </div>
+
+        <div class="card clickable" onclick="showSection('today')">
+          <div class="card-head">
+            <div>
+              <div class="card-title">📅 დღეს</div>
+              <div class="muted">დღევანდელი მატჩები</div>
+            </div>
+            <strong id="homeTodayCount">—</strong>
+          </div>
+        </div>
+
+        <div class="card clickable" onclick="showSection('finished')">
+          <div class="card-head">
+            <div>
+              <div class="card-title">✅ შედეგები</div>
+              <div class="muted">დასრულებული მატჩები</div>
+            </div>
+            <strong id="homeFinishedCount">—</strong>
+          </div>
+        </div>
+
+        <div class="card clickable" onclick="showSection('countries')">
+          <div class="card-head">
+            <div>
+              <div class="card-title">🌍 ქვეყნები</div>
+              <div class="muted">ფეხბურთის ქვეყნები</div>
+            </div>
+            <strong>182</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- LIVE -->
+
+    <section id="live" class="section">
+
+      <div class="page-title">🔴 LIVE მატჩები</div>
+      <div class="page-subtitle">
+        მიმდინარე ფეხბურთის მატჩები
+      </div>
+
+      <div id="liveContainer" class="matches">
+        <div class="loading">იტვირთება...</div>
+      </div>
+
+    </section>
+
+
+    <!-- TODAY -->
+
+    <section id="today" class="section">
+
+      <div class="page-title">📅 დღევანდელი მატჩები</div>
+      <div class="page-subtitle">
+        დღეს დაგეგმილი და მიმდინარე მატჩები
+      </div>
+
+      <div id="todayContainer" class="matches">
+        <div class="loading">იტვირთება...</div>
+      </div>
+
+    </section>
+
+
+    <!-- FINISHED -->
+
+    <section id="finished" class="section">
+
+      <div class="page-title">✅ დასრულებული</div>
+      <div class="page-subtitle">
+        ბოლო დასრულებული მატჩები
+      </div>
+
+      <div id="finishedContainer" class="matches">
+        <div class="loading">იტვირთება...</div>
+      </div>
+
+    </section>
+
+
+    <!-- COUNTRIES -->
+
+    <section id="countries" class="section">
+
+      <div class="page-title">🌍 ქვეყნები</div>
+
+      <div class="page-subtitle">
+        ფეხბურთი მსოფლიოს ქვეყნებიდან
+      </div>
+
+      <div class="country-toolbar">
+
+        <input
+          id="countrySearch"
+          class="country-search"
+          type="search"
+          placeholder="აირჩიე ქვეყანა..."
+          autocomplete="off"
+        >
+
+        <div class="continents">
+
+          <button class="active" data-continent="all">
+            ყველა
+          </button>
+
+          <button data-continent="Europe">
+            🇪🇺 ევროპა
+          </button>
+
+          <button data-continent="South America">
+            🌎 სამხრეთ ამერიკა
+          </button>
+
+          <button data-continent="North America">
+            🌎 ჩრდილოეთ ამერიკა
+          </button>
+
+          <button data-continent="Asia">
+            🌏 აზია
+          </button>
+
+          <button data-continent="Africa">
+            🌍 აფრიკა
+          </button>
+
+          <button data-continent="Oceania">
+            🌊 ოკეანეთი
+          </button>
+
+          <button data-continent="International">
+            🌐 საერთაშორისო
+          </button>
+
+        </div>
+
+      </div>
+
+      <div id="countriesContainer" class="grid"></div>
+
+    </section>
+
+
+    <!-- COUNTRY DETAIL -->
+
+    <section id="countryDetail" class="section">
+
+      <button class="back-btn" onclick="showSection('countries')">
+        ← ქვეყნების დაბრუნება
+      </button>
+
+      <div id="countryDetailContent">
+        <div class="loading">იტვირთება...</div>
+      </div>
+
+    </section>
+
+
+    <!-- LEAGUES -->
+
+    <section id="leagues" class="section">
+
+      <div class="page-title">🏆 ლიგები</div>
+
+      <div class="page-subtitle">
+        ლიგების ცხრილები და მატჩები
+      </div>
+
+      <div class="card">
+        <h3>ლიგის მოძებნა</h3>
+
+        <input
+          id="leagueSearch"
+          class="country-search"
+          type="search"
+          placeholder="მაგ: Premier League"
+        >
+
+        <div id="leagueResult" style="margin-top:12px">
+          <div class="muted">
+            ლიგის მოძებნა შესაძლებელია მატჩების მონაცემებიდან.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- AI -->
+
+    <section id="ai" class="section">
+
+      <div class="page-title">🤖 AI მატჩის ანალიზი</div>
+
+      <div class="page-subtitle">
+        AI-სთვის გამოყენებული უნდა იყოს მხოლოდ L-LIVE-ში მიღებული რეალური სპორტული მონაცემები.
+      </div>
+
+      <div class="ai-box">
+
+        <strong>მატჩის ანალიზის კითხვა</strong>
+
+        <textarea
+          id="aiQuestion"
+          class="ai-input"
+          placeholder="მაგ: ამ მატჩის სტატისტიკის მიხედვით რა მოხდა თამაშში?"
+        ></textarea>
+
+        <button
+          class="green-btn"
+          onclick="runAI()"
+        >
+          🤖 ანალიზი
+        </button>
+
+        <div id="aiResult" class="ai-result" style="display:none"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- MATCH DETAIL -->
+
+    <section id="detail" class="section">
+
+      <button class="back-btn" onclick="goBackFromDetail()">
+        ← უკან
+      </button>
+
+      <div id="detailContainer">
+        <div class="loading">იტვირთება...</div>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    L-LIVE ⚽
+    <br>
+    Football live data powered by
+    <a
+      href="https://sportscore.com"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      SportScore
+    </a>
+  </footer>
+
+</div>
+
+
+<script>
+
+  /*
+  =========================================================
+  L-LIVE
+  FOOTBALL FRONTEND
+  SPORT SCORE DIRECT BROWSER API
+  =========================================================
+  */
+
+  const SPORTSCORE = "https://sportscore.com";
+  const SRC = "l-live-five.vercel.app";
+
+  const state = {
+    section: "home",
+    previousSection: "home",
+    selectedCountry: null,
+    selectedMatch: null,
+    live: [],
+    today: [],
+    finished: [],
+    allMatches: [],
+    continent: "all"
+  };
+
+
+  /*
+  =========================================================
+  COUNTRY DATABASE
+  =========================================================
+  */
+
+  const COUNTRIES = [
+
+    /* EUROPE */
+
+    ["Albania","🇦🇱","Europe",4],
+    ["Andorra","🇦🇩","Europe",4],
+    ["Armenia","🇦🇲","Europe",5],
+    ["Austria","🇦🇹","Europe",11],
+    ["Azerbaijan","🇦🇿","Europe",5],
+    ["Belarus","🇧🇾","Europe",12],
+    ["Belgium","🇧🇪","Europe",16],
+    ["Bosnia and Herzegovina","🇧🇦","Europe",10],
+    ["Bulgaria","🇧🇬","Europe",12],
+    ["Croatia","🇭🇷","Europe",13],
+    ["Cyprus","🇨🇾","Europe",13],
+    ["Czech Republic","🇨🇿","Europe",16],
+    ["Denmark","🇩🇰","Europe",21],
+    ["England","🏴","Europe",67],
+    ["Estonia","🇪🇪","Europe",12],
+    ["Faroe Islands","🇫🇴","Europe",7],
+    ["Finland","🇫🇮","Europe",26],
+    ["France","🇫🇷","Europe",23],
+    ["Georgia","🇬🇪","Europe",9],
+    ["Germany","🇩🇪","Europe",38],
+    ["Gibraltar","🇬🇮","Europe",2],
+    ["Greece","🇬🇷","Europe",15],
+    ["Hungary","🇭🇺","Europe",18],
+    ["Iceland","🇮🇸","Europe",27],
+    ["Ireland","🇮🇪","Europe",26],
+    ["Israel","🇮🇱","Europe",18],
+    ["Italy","🇮🇹","Europe",39],
+    ["Kazakhstan","🇰🇿","Europe",10],
+    ["Kosovo","🇽🇰","Europe",7],
+    ["Latvia","🇱🇻","Europe",11],
+    ["Liechtenstein","🇱🇮","Europe",1],
+    ["Lithuania","🇱🇹","Europe",7],
+    ["Luxembourg","🇱🇺","Europe",6],
+    ["Malta","🇲🇹","Europe",8],
+    ["Moldova","🇲🇩","Europe",6],
+    ["Montenegro","🇲🇪","Europe",8],
+    ["Netherlands","🇳🇱","Europe",17],
+    ["North Macedonia","🇲🇰","Europe",8],
+    ["Northern Ireland","🇬🇧","Europe",13],
+    ["Norway","🇳🇴","Europe",14],
+    ["Poland","🇵🇱","Europe",17],
+    ["Portugal","🇵🇹","Europe",29],
+    ["Romania","🇷🇴","Europe",14],
+    ["Russia","🇷🇺","Europe",23],
+    ["San Marino","🇸🇲","Europe",3],
+    ["Scotland","🏴","Europe",21],
+    ["Serbia","🇷🇸","Europe",8],
+    ["Slovakia","🇸🇰","Europe",14],
+    ["Slovenia","🇸🇮","Europe",9],
+    ["Spain","🇪🇸","Europe",42],
+    ["Sweden","🇸🇪","Europe",21],
+    ["Switzerland","🇨🇭","Europe",16],
+    ["Turkey","🇹🇷","Europe",28],
+    ["Ukraine","🇺🇦","Europe",14],
+    ["Wales","🏴","Europe",10],
+
+    /* SOUTH AMERICA */
+
+    ["Argentina","🇦🇷","South America"],
+    ["Bolivia","🇧🇴","South America"],
+    ["Brazil","🇧🇷","South America"],
+    ["Chile","🇨🇱","South America"],
+    ["Colombia","🇨🇴","South America"],
+    ["Ecuador","🇪🇨","South America"],
+    ["Paraguay","🇵🇾","South America"],
+    ["Peru","🇵🇪","South America"],
+    ["Uruguay","🇺🇾","South America"],
+    ["Venezuela","🇻🇪","South America"],
+
+    /* NORTH AMERICA */
+
+    ["Canada","🇨🇦","North America"],
+    ["Costa Rica","🇨🇷","North America"],
+    ["Cuba","🇨🇺","North America"],
+    ["Dominican Republic","🇩🇴","North America"],
+    ["El Salvador","🇸🇻","North America"],
+    ["Guatemala","🇬🇹","North America"],
+    ["Haiti","🇭🇹","North America"],
+    ["Honduras","🇭🇳","North America"],
+    ["Jamaica","🇯🇲","North America"],
+    ["Mexico","🇲🇽","North America"],
+    ["Nicaragua","🇳🇮","North America"],
+    ["Panama","🇵🇦","North America"],
+    ["Trinidad and Tobago","🇹🇹","North America"],
+    ["United States","🇺🇸","North America"],
+
+    /* ASIA */
+
+    ["Afghanistan","🇦🇫","Asia"],
+    ["Australia","🇦🇺","Oceania",127],
+    ["Bahrain","🇧🇭","Asia"],
+    ["Bangladesh","🇧🇩","Asia"],
+    ["Bhutan","🇧🇹","Asia"],
+    ["Cambodia","🇰🇭","Asia"],
+    ["China","🇨🇳","Asia"],
+    ["Chinese Taipei","🇹🇼","Asia"],
+    ["Hong Kong","🇭🇰","Asia",3],
+    ["India","🇮🇳","Asia"],
+    ["Indonesia","🇮🇩","Asia"],
+    ["Iran","🇮🇷","Asia"],
+    ["Iraq","🇮🇶","Asia"],
+    ["Japan","🇯🇵","Asia"],
+    ["Jordan","🇯🇴","Asia"],
+    ["Kuwait","🇰🇼","Asia"],
+    ["Kyrgyzstan","🇰🇬","Asia"],
+    ["Lebanon","🇱🇧","Asia"],
+    ["Malaysia","🇲🇾","Asia"],
+    ["Maldives","🇲🇻","Asia"],
+    ["Mongolia","🇲🇳","Asia"],
+    ["Myanmar","🇲🇲","Asia"],
+    ["Nepal","🇳🇵","Asia"],
+    ["North Korea","🇰🇵","Asia"],
+    ["Oman","🇴🇲","Asia"],
+    ["Pakistan","🇵🇰","Asia"],
+    ["Palestine","🇵🇸","Asia"],
+    ["Philippines","🇵🇭","Asia"],
+    ["Qatar","🇶🇦","Asia"],
+    ["Saudi Arabia","🇸🇦","Asia"],
+    ["Singapore","🇸🇬","Asia"],
+    ["South Korea","🇰🇷","Asia"],
+    ["Sri Lanka","🇱🇰","Asia"],
+    ["Syria","🇸🇾","Asia"],
+    ["Tajikistan","🇹🇯","Asia"],
+    ["Thailand","🇹🇭","Asia"],
+    ["Turkmenistan","🇹🇲","Asia"],
+    ["United Arab Emirates","🇦🇪","Asia"],
+    ["Uzbekistan","🇺🇿","Asia"],
+    ["Vietnam","🇻🇳","Asia"],
+    ["Yemen","🇾🇪","Asia"],
+
+    /* AFRICA */
+
+    ["Algeria","🇩🇿","Africa",18],
+    ["Angola","🇦🇴","Africa",2],
+    ["Benin","🇧🇯","Africa",1],
+    ["Botswana","🇧🇼","Africa",2],
+    ["Burkina Faso","🇧🇫","Africa",3],
+    ["Burundi","🇧🇮","Africa",3],
+    ["Cameroon","🇨🇲","Africa",6],
+    ["Comoros","🇰🇲","Africa",1],
+    ["Congo","🇨🇬","Africa",1],
+    ["Djibouti","🇩🇯","Africa",1],
+    ["Egypt","🇪🇬","Africa",7],
+    ["Ethiopia","🇪🇹","Africa",5],
+    ["Gabon","🇬🇦","Africa",1],
+    ["Gambia","🇬🇲","Africa",3],
+    ["Ghana","🇬🇭","Africa",9],
+    ["Ivory Coast","🇨🇮","Africa",4],
+    ["Kenya","🇰🇪","Africa",9],
+    ["Lesotho","🇱🇸","Africa",1],
+    ["Liberia","🇱🇷","Africa",7],
+    ["Libya","🇱🇾","Africa",3],
+    ["Madagascar","🇲🇬","Africa",1],
+    ["Malawi","🇲🇼","Africa",4],
+    ["Mali","🇲🇱","Africa",3],
+    ["Mauritania","🇲🇷","Africa",3],
+    ["Morocco","🇲🇦","Africa",7],
+    ["Mozambique","🇲🇿","Africa",4],
+    ["Namibia","🇳🇦","Africa",3],
+    ["Niger","🇳🇪","Africa",3],
+    ["Nigeria","🇳🇬","Africa",9],
+    ["Rwanda","🇷🇼","Africa",6],
+    ["Sao Tome and Principe","🇸🇹","Africa",1],
+    ["Senegal","🇸🇳","Africa",4],
+    ["Seychelles","🇸🇨","Africa",2],
+    ["Sierra Leone","🇸🇱","Africa",2],
+    ["South Africa","🇿🇦","Africa",14],
+    ["Sudan","🇸🇩","Africa",3],
+    ["Tanzania","🇹🇿","Africa",11],
+    ["Togo","🇹🇬","Africa",3],
+    ["Tunisia","🇹🇳","Africa",8],
+    ["Uganda","🇺🇬","Africa",6],
+    ["Zambia","🇿🇲","Africa",5],
+    ["Zimbabwe","🇿🇼","Africa",4],
+
+    /* OCEANIA */
+
+    ["Fiji","🇫🇯","Oceania",6],
+    ["New Zealand","🇳🇿","Oceania",15],
+    ["Samoa","🇼🇸","Oceania",2],
+    ["Solomon Islands","🇸🇧","Oceania",4],
+    ["Vanuatu","🇻🇺","Oceania",1],
+
+    /* INTERNATIONAL */
+
+    ["Aruba","🇦🇼","International",3],
+    ["Democratic Republic of the Congo","🇨🇩","International",1],
+    ["Dominica","🇩🇲","International",2],
+    ["Macao","🇲🇴","International",1]
+
+  ];
+
+
+  /*
+  =========================================================
+  SECTION NAVIGATION
+  =========================================================
+  */
+
+  function showSection(section, remember = true){
+
+    if(remember && state.section !== section){
+      state.previousSection = state.section;
+    }
+
+    state.section = section;
+
+    document.querySelectorAll(".section").forEach(el=>{
+      el.classList.remove("active");
+    });
+
+    const target = document.getElementById(section);
+
+    if(target){
+      target.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn=>{
+      btn.classList.toggle(
+        "active",
+        btn.dataset.section === section
+      );
+    });
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+    if(section === "live"){
+      loadLive();
+    }
+
+    if(section === "today"){
+      loadToday();
+    }
+
+    if(section === "finished"){
+      loadFinished();
+    }
+
+    if(section === "countries"){
+      renderCountries();
+    }
+  }
+
+
+  document.querySelectorAll(".nav button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      showSection(btn.dataset.section);
+    });
+  });
+
+
+  /*
+  =========================================================
+  SPORT SCORE API
+  =========================================================
+  */
+
+  async function sportScore(endpoint, params = {}){
+
+    const url = new URL(
+      SPORTSCORE + endpoint
+    );
+
+    Object.entries(params).forEach(([key,value])=>{
+      if(value !== undefined && value !== null && value !== ""){
+        url.searchParams.set(key,value);
+      }
+    });
+
+    url.searchParams.set("src",SRC);
+
+    const response = await fetch(
+      url.toString(),
+      {
+        method:"GET",
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
+
+    const text = await response.text();
+
+    if(!response.ok){
+      throw new Error(
+        `SportScore HTTP ${response.status}: ${text.slice(0,250)}`
+      );
+    }
+
+    let data;
+
+    try{
+      data = JSON.parse(text);
+    }catch{
+      throw new Error(
+        "SportScore-მ JSON-ის ნაცვლად სხვა პასუხი დააბრუნა."
+      );
+    }
+
+    return data;
+  }
+
+
+  /*
+  =========================================================
+  STATUS
+  =========================================================
+  */
+
+  function setOnline(online){
+
+    const status = document.getElementById("status");
+    const text = document.getElementById("statusText");
+
+    status.classList.toggle("online",online);
+    status.classList.toggle("offline",!online);
+
+    text.textContent = online
+      ? "ONLINE"
+      : "OFFLINE";
+  }
+
+
+  /*
+  =========================================================
+  NORMALIZE MATCH
+  =========================================================
+  */
+
+  function normalizeMatch(raw){
+
+    if(!raw){
+      return null;
+    }
+
+    const home =
+      raw.home ||
+      raw.home_team ||
+      raw.homeTeam ||
+      raw.team_home ||
+      raw.teams?.home ||
+      {};
+
+    const away =
+      raw.away ||
+      raw.away_team ||
+      raw.awayTeam ||
+      raw.team_away ||
+      raw.teams?.away ||
+      {};
+
+    const homeName =
+      typeof home === "string"
+        ? home
+        : home.name || home.title || "Home";
+
+    const awayName =
+      typeof away === "string"
+        ? away
+        : away.name || away.title || "Away";
+
+    const homeScore =
+      raw.home_score ??
+      raw.homeScore ??
+      raw.score?.home ??
+      raw.scores?.home ??
+      home.score ??
+      null;
+
+    const awayScore =
+      raw.away_score ??
+      raw.awayScore ??
+      raw.score?.away ??
+      raw.scores?.away ??
+      away.score ??
+      null;
+
+    const status =
+      raw.status ||
+      raw.state ||
+      raw.match_status ||
+      "";
+
+    const competition =
+      raw.competition?.name ||
+      raw.league?.name ||
+      raw.tournament?.name ||
+      raw.competition_name ||
+      raw.league_name ||
+      "Football";
+
+    const slug =
+      raw.slug ||
+      raw.match_slug ||
+      raw.url_slug ||
+      "";
+
+    const id =
+      raw.id ||
+      raw.match_id ||
+      raw.event_id ||
+      "";
+
+    const timestamp =
+      raw.timestamp ||
+      raw.start_timestamp ||
+      raw.startTime ||
+      raw.kickoff ||
+      raw.date ||
+      raw.start_time ||
+      null;
+
+    return {
+      raw,
+      id,
+      slug,
+      homeName,
+      awayName,
+      homeScore,
+      awayScore,
+      status,
+      competition,
+      timestamp
+    };
+  }
+
+
+  function extractMatches(data){
+
+    if(Array.isArray(data)){
+      return data.map(normalizeMatch).filter(Boolean);
+    }
+
+    if(Array.isArray(data?.matches)){
+      return data.matches.map(normalizeMatch).filter(Boolean);
+    }
+
+    if(Array.isArray(data?.events)){
+      return data.events.map(normalizeMatch).filter(Boolean);
+    }
+
+    if(Array.isArray(data?.data)){
+      return data.data.map(normalizeMatch).filter(Boolean);
+    }
+
+    return [];
+  }
+
+
+  /*
+  =========================================================
+  MATCH STATUS HELPERS
+  =========================================================
+  */
+
+  function isLive(match){
+
+    const s = String(match.status || "").toLowerCase();
+
+    return [
+      "live",
+      "inplay",
+      "in_play",
+      "1h",
+      "2h",
+      "ht",
+      "et",
+      "extra",
+      "pen",
+      "playing"
+    ].some(x=>s.includes(x));
+  }
+
+
+  function isFinished(match){
+
+    const s = String(match.status || "").toLowerCase();
+
+    return [
+      "ft",
+      "finished",
+      "ended",
+      "complete",
+      "completed"
+    ].some(x=>s.includes(x));
+  }
+
+
+  function formatTime(value){
+
+    if(!value){
+      return "";
+    }
+
+    try{
+
+      const d = new Date(
+        typeof value === "number"
+          ? value < 10000000000
+            ? value * 1000
+            : value
+          : value
+      );
+
+      if(Number.isNaN(d.getTime())){
+        return "";
+      }
+
+      return d.toLocaleTimeString(
+        "ka-GE",
+        {
+          hour:"2-digit",
+          minute:"2-digit"
+        }
+      );
+
+    }catch{
+      return "";
+    }
+  }
+
+
+  /*
+  =========================================================
+  MATCH CARD
+  =========================================================
+  */
+
+  function matchHTML(match){
+
+    const live = isLive(match);
+    const finished = isFinished(match);
+
+    let badge = "";
+
+    if(live){
+      badge = `<span class="live-badge">LIVE</span>`;
+    }else if(finished){
+      badge = `<span class="status-badge">FT</span>`;
+    }else{
+      badge = `<span class="status-badge">
+        ${formatTime(match.timestamp) || "მომავალი"}
+      </span>`;
+    }
+
+    const homeScore =
+      match.homeScore === null ||
+      match.homeScore === undefined
+        ? "-"
+        : match.homeScore;
+
+    const awayScore =
+      match.awayScore === null ||
+      match.awayScore === undefined
+        ? "-"
+        : match.awayScore;
+
+    return `
+      <article
+        class="match"
+        onclick='openMatch(${JSON.stringify(
+          match
+        ).replace(/'/g,"&#39;")})'
+      >
+
+        <div class="match-top">
+          <div class="competition">
+            ${escapeHTML(match.competition)}
+          </div>
+
+          ${badge}
+        </div>
+
+        <div class="teams">
+
+          <div class="team home">
+            ${escapeHTML(match.homeName)}
+          </div>
+
+          <div class="score">
+            ${homeScore} : ${awayScore}
+          </div>
+
+          <div class="team away">
+            ${escapeHTML(match.awayName)}
+          </div>
+
+        </div>
+
+        <div class="match-bottom">
+          <span>
+            ${live ? "მიმდინარეობს" : ""}
+          </span>
+
+          <span>
+            მატჩის დეტალები →
+          </span>
+        </div>
+
+      </article>
+    `;
+  }
+
+
+  function renderMatches(containerId,matches,message){
+
+    const container =
+      document.getElementById(containerId);
+
+    if(!container){
+      return;
+    }
+
+    if(!matches.length){
+
+      container.innerHTML = `
+        <div class="empty">
+          ${message || "მატჩები ვერ მოიძებნა."}
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      matches.map(matchHTML).join("");
+  }
+
+
+  /*
+  =========================================================
+  LOAD LIVE
+  =========================================================
+  */
+
+  async function loadLive(){
+
+    const container =
+      document.getElementById("liveContainer");
+
+    container.innerHTML =
+      `<div class="loading">🔄 LIVE იტვირთება...</div>`;
+
+    try{
+
+      const data =
+        await sportScore(
+          "/api/widget/matches/",
+          {
+            sport:"football",
+            limit:50
+          }
+        );
+
+      const matches =
+        extractMatches(data);
+
+      state.allMatches = matches;
+
+      state.live =
+        matches.filter(isLive);
+
+      setOnline(true);
+
+      document.getElementById(
+        "homeLiveCount"
+      ).textContent =
+        state.live.length;
+
+      renderMatches(
+        "liveContainer",
+        state.live,
+        "ამ მომენტში LIVE მატჩები ვერ მოიძებნა."
+      );
+
+    }catch(error){
+
+      setOnline(false);
+
+      container.innerHTML = `
+        <div class="error">
+          <strong>LIVE მონაცემების შეცდომა</strong>
+          <br><br>
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+    }
+  }
+
+
+  /*
+  =========================================================
+  LOAD TODAY
+  =========================================================
+  */
+
+  async function loadToday(){
+
+    const container =
+      document.getElementById("todayContainer");
+
+    container.innerHTML =
+      `<div class="loading">🔄 დღევანდელი მატჩები იტვირთება...</div>`;
+
+    try{
+
+      const data =
+        await sportScore(
+          "/api/widget/matches/",
+          {
+            sport:"football",
+            limit:50
+          }
+        );
+
+      const matches =
+        extractMatches(data);
+
+      state.allMatches = matches;
+
+      const now = new Date();
+
+      state.today =
+        matches.filter(match=>{
+
+          if(!match.timestamp){
+            return true;
+          }
+
+          try{
+
+            const d = new Date(
+              typeof match.timestamp === "number"
+                ? match.timestamp < 10000000000
+                  ? match.timestamp * 1000
+                  : match.timestamp
+                : match.timestamp
+            );
+
+            return (
+              d.getFullYear() === now.getFullYear() &&
+              d.getMonth() === now.getMonth() &&
+              d.getDate() === now.getDate()
+            );
+
+          }catch{
+            return true;
+          }
+
+        });
+
+      document.getElementById(
+        "homeTodayCount"
+      ).textContent =
+        state.today.length;
+
+      renderMatches(
+        "todayContainer",
+        state.today,
+        "დღევანდელი მატჩები ვერ მოიძებნა."
+      );
+
+    }catch(error){
+
+      container.innerHTML = `
+        <div class="error">
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+    }
+  }
+
+
+  /*
+  =========================================================
+  LOAD FINISHED
+  =========================================================
+  */
+
+  async function loadFinished(){
+
+    const container =
+      document.getElementById("finishedContainer");
+
+    container.innerHTML =
+      `<div class="loading">🔄 შედეგები იტვირთება...</div>`;
+
+    try{
+
+      const data =
+        await sportScore(
+          "/api/widget/matches/",
+          {
+            sport:"football",
+            limit:50
+          }
+        );
+
+      const matches =
+        extractMatches(data);
+
+      state.allMatches = matches;
+
+      state.finished =
+        matches.filter(isFinished);
+
+      document.getElementById(
+        "homeFinishedCount"
+      ).textContent =
+        state.finished.length;
+
+      renderMatches(
+        "finishedContainer",
+        state.finished,
+        "დასრულებული მატჩები ვერ მოიძებნა."
+      );
+
+    }catch(error){
+
+      container.innerHTML = `
+        <div class="error">
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+    }
+  }
+
+
+  /*
+  =========================================================
+  COUNTRIES
+  IMPORTANT:
+  COUNTRY CLICK STAYS INSIDE L-LIVE
+  =========================================================
+  */
+
+  function renderCountries(){
+
+    const container =
+      document.getElementById("countriesContainer");
+
+    if(!container){
+      return;
+    }
+
+    const query =
+      (
+        document.getElementById(
+          "countrySearch"
+        )?.value || ""
+      )
+      .trim()
+      .toLowerCase();
+
+    const filtered =
+      COUNTRIES.filter(country=>{
+
+        const name =
+          country[0].toLowerCase();
+
+        const continent =
+          country[2];
+
+        const continentOK =
+          state.continent === "all" ||
+          continent === state.continent;
+
+        const searchOK =
+          !query ||
+          name.includes(query);
+
+        return continentOK && searchOK;
+      });
+
+    if(!filtered.length){
+
+      container.innerHTML = `
+        <div class="empty">
+          ქვეყანა ვერ მოიძებნა.
+        </div>
+      `;
+
+      return;
+    }
+
+    container.innerHTML =
+      filtered.map((country,index)=>{
+
+        const name = country[0];
+        const flag = country[1];
+        const continent = country[2];
+        const count = country[3];
+
+        return `
+          <div
+            class="card clickable country-card"
+            data-country-index="${COUNTRIES.indexOf(country)}"
+          >
+
+            <div class="flag">
+              ${flag}
+            </div>
+
+            <div class="country-info">
+
+              <div class="country-name">
+                ${escapeHTML(name)}
+              </div>
+
+              <div class="country-count">
+                ${
+                  count
+                    ? `${count} შეჯიბრი`
+                    : "ფეხბურთის მონაცემები"
+                }
+              </div>
+
+            </div>
+
+            <div class="chevron">
+              ›
+            </div>
+
+          </div>
+        `;
+      }).join("");
+
+    container
+      .querySelectorAll(".country-card")
+      .forEach(card=>{
+
+        card.addEventListener("click",()=>{
+
+          const index =
+            Number(
+              card.dataset.countryIndex
+            );
+
+          const country =
+            COUNTRIES[index];
+
+          openCountry(country);
+
+        });
+
+      });
+  }
+
+
+  /*
+  =========================================================
+  OPEN COUNTRY
+  NO window.open()
+  NO EXTERNAL REDIRECT
+  =========================================================
+  */
+
+  function openCountry(country){
+
+    state.selectedCountry = country;
+
+    showSection(
+      "countryDetail",
+      true
+    );
+
+    renderCountryDetail(country);
+  }
+
+
+  /*
+  =========================================================
+  COUNTRY DETAIL
+  =========================================================
+  */
+
+  async function renderCountryDetail(country){
+
+    const container =
+      document.getElementById(
+        "countryDetailContent"
+      );
+
+    if(!container){
+      return;
+    }
+
+    const [
+      name,
+      flag,
+      continent,
+      competitionCount
+    ] = country;
+
+    container.innerHTML = `
+
+      <div class="country-hero">
+
+        <div class="big-flag">
+          ${flag}
+        </div>
+
+        <div>
+
+          <h2>
+            ${escapeHTML(name)}
+          </h2>
+
+          <p>
+            ${escapeHTML(continent)}
+            ·
+            ${
+              competitionCount
+                ? `${competitionCount} შეჯიბრი`
+                : "ფეხბურთის მონაცემები"
+            }
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="country-info-box">
+
+        <h3>
+          ⚽ ${escapeHTML(name)} — ფეხბურთი
+        </h3>
+
+        <div class="muted">
+          ეს გვერდი იხსნება პირდაპირ L-LIVE-ში.
+          სხვა საიტზე გადასვლა აღარ ხდება.
+        </div>
+
+      </div>
+
+      <div class="country-info-box">
+
+        <h3>
+          🔴 LIVE / მატჩები
+        </h3>
+
+        <div
+          id="countryMatches"
+          class="matches"
+        >
+          <div class="loading">
+            ქვეყნის მატჩები იტვირთება...
+          </div>
+        </div>
+
+      </div>
+
+      <div class="country-info-box">
+
+        <h3>
+          🏆 ჩემპიონატები
+        </h3>
+
+        <div class="muted">
+          SportScore-ის ოფიციალური REST API ამ ეტაპზე
+          ცალკე ქვეყანა→ჩემპიონატების სიის endpoint-ს
+          არ აქვეყნებს. ამიტომ ჩემპიონატების სახელებს
+          გამოგონილად არ ვაჩვენებთ.
+        </div>
+
+      </div>
+
+    `;
+
+    await loadCountryMatches(country);
+  }
+
+
+  /*
+  =========================================================
+  COUNTRY MATCHES
+  =========================================================
+  */
+
+  async function loadCountryMatches(country){
+
+    const container =
+      document.getElementById(
+        "countryMatches"
+      );
+
+    if(!container){
+      return;
+    }
+
+    const countryName =
+      country[0];
+
+    try{
+
+      const data =
+        await sportScore(
+          "/api/widget/matches/",
+          {
+            sport:"football",
+            limit:50
+          }
+        );
+
+      const matches =
+        extractMatches(data);
+
+      /*
+        SportScore-ის საჯარო matches endpoint-ს
+        ქვეყანა ცალკე ფილტრად არ აქვს.
+        ამიტომ აქ მხოლოდ რეალურად მიღებულ
+        მონაცემებში ქვეყნის სახელის არსებობას
+        ვამოწმებთ.
+      */
+
+      const countryMatches =
+        matches.filter(match=>{
+
+          const rawText =
+            JSON.stringify(
+              match.raw || match
+            ).toLowerCase();
+
+          return rawText.includes(
+            countryName.toLowerCase()
+          );
+
+        });
+
+      if(!countryMatches.length){
+
+        container.innerHTML = `
+          <div class="empty">
+            ამ მომენტში ${escapeHTML(countryName)}
+            -სთვის მატჩი ვერ მოიძებნა.
+            <br><br>
+            შეგიძლია დაბრუნდე და სხვა ქვეყანა აირჩიო.
+          </div>
+        `;
+
+        return;
+      }
+
+      container.innerHTML =
+        countryMatches
+          .map(matchHTML)
+          .join("");
+
+    }catch(error){
+
+      container.innerHTML = `
+        <div class="error">
+          ქვეყნის მატჩების ჩატვირთვა ვერ მოხერხდა.
+          <br><br>
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+    }
+  }
+
+
+  /*
+  =========================================================
+  MATCH DETAIL
+  =========================================================
+  */
+
+  function openMatch(match){
+
+    state.selectedMatch = match;
+
+    showSection(
+      "detail",
+      true
+    );
+
+    loadMatchDetail(match);
+  }
+
+
+  async function loadMatchDetail(match){
+
+    const container =
+      document.getElementById(
+        "detailContainer"
+      );
+
+    container.innerHTML =
+      `<div class="loading">🔄 მატჩის დეტალები იტვირთება...</div>`;
+
+    if(!match.slug){
+
+      container.innerHTML = `
+        <div class="detail-card">
+
+          <div class="detail-score">
+
+            <div class="detail-teams">
+
+              <div class="detail-team">
+                ${escapeHTML(match.homeName)}
+              </div>
+
+              <div class="detail-center">
+                <div class="big">
+                  ${match.homeScore ?? "-"}
+                  :
+                  ${match.awayScore ?? "-"}
+                </div>
+              </div>
+
+              <div class="detail-team">
+                ${escapeHTML(match.awayName)}
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      return;
+    }
+
+    try{
+
+      const data =
+        await sportScore(
+          "/api/widget/match/",
+          {
+            sport:"football",
+            slug:match.slug
+          }
+        );
+
+      const raw =
+        data?.match ||
+        data?.data ||
+        data;
+
+      const details =
+        normalizeMatch(raw) || match;
+
+      renderMatchDetail(
+        details,
+        data
+      );
+
+    }catch(error){
+
+      container.innerHTML = `
+        <div class="error">
+          მატჩის სრული დეტალები ვერ ჩაიტვირთა.
+          <br><br>
+          ${escapeHTML(error.message)}
+        </div>
+      `;
+    }
+  }
+
+
+  function renderMatchDetail(match,data){
+
+    const container =
+      document.getElementById(
+        "detailContainer"
+      );
+
+    const rawText =
+      JSON.stringify(
+        data || {},
+        null,
+        2
+      );
+
+    container.innerHTML = `
+
+      <div class="detail-card">
+
+        <div class="competition"
+             style="text-align:center">
+          ${escapeHTML(match.competition)}
+        </div>
+
+        <div class="detail-score">
+
+          <div class="detail-teams">
+
+            <div class="detail-team">
+              ${escapeHTML(match.homeName)}
+            </div>
+
+            <div class="detail-center">
+
+              <div class="big">
+                ${match.homeScore ?? "-"}
+                :
+                ${match.awayScore ?? "-"}
+              </div>
+
+              <div class="muted">
+                ${escapeHTML(match.status || "")}
+              </div>
+
+            </div>
+
+            <div class="detail-team">
+              ${escapeHTML(match.awayName)}
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">
+            შეჯიბრი
+          </span>
+
+          <span class="info-value">
+            ${escapeHTML(match.competition)}
+          </span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">
+            სტატუსი
+          </span>
+
+          <span class="info-value">
+            ${escapeHTML(match.status || "—")}
+          </span>
+        </div>
+
+        <div class="info-row">
+          <span class="info-label">
+            დრო
+          </span>
+
+          <span class="info-value">
+            ${escapeHTML(formatTime(match.timestamp) || "—")}
+          </span>
+        </div>
+
+      </div>
+
+      <div class="country-info-box" style="margin-top:14px">
+
+        <h3>
+          📊 მატჩის მონაცემები
+        </h3>
+
+        <div class="muted">
+          ქვემოთ ნაჩვენები ინფორმაცია მოდის
+          SportScore-ის რეალური მატჩის პასუხიდან.
+        </div>
+
+      </div>
+
+      <div class="country-info-box">
+
+        <details>
+
+          <summary style="
+            cursor:pointer;
+            font-weight:900;
+          ">
+            ტექნიკური მონაცემები
+          </summary>
+
+          <pre style="
+            white-space:pre-wrap;
+            word-break:break-word;
+            font-size:11px;
+            margin-top:12px;
+            color:#526159;
+          ">${escapeHTML(rawText)}</pre>
+
+        </details>
+
+      </div>
+    `;
+  }
+
+
+  function goBackFromDetail(){
+
+    if(
+      state.previousSection &&
+      state.previousSection !== "detail"
+    ){
+      showSection(
+        state.previousSection,
+        false
+      );
+
+      return;
+    }
+
+    showSection(
+      "home",
+      false
+    );
+  }
+
+
+  /*
+  =========================================================
+  GLOBAL SEARCH
+  =========================================================
+  */
+
+  document
+    .getElementById("globalSearch")
+    .addEventListener(
+      "input",
+      function(){
+
+        const q =
+          this.value
+            .trim()
+            .toLowerCase();
+
+        if(!q){
+          return;
+        }
+
+        const country =
+          COUNTRIES.find(c=>
+            c[0]
+              .toLowerCase()
+              .includes(q)
+          );
+
+        if(country){
+
+          showSection(
+            "countries"
+          );
+
+          const input =
+            document.getElementById(
+              "countrySearch"
+            );
+
+          input.value =
+            this.value;
+
+          renderCountries();
+
+          return;
+        }
+
+        const match =
+          state.allMatches.find(m=>{
+
+            const text =
+              (
+                m.homeName +
+                " " +
+                m.awayName +
+                " " +
+                m.competition
+              )
+              .toLowerCase();
+
+            return text.includes(q);
+          });
+
+        if(match){
+
+          openMatch(match);
+
+        }
+
+      }
+    );
+
+
+  /*
+  =========================================================
+  COUNTRY SEARCH
+  =========================================================
+  */
+
+  document
+    .getElementById("countrySearch")
+    .addEventListener(
+      "input",
+      renderCountries
+    );
+
+
+  /*
+  =========================================================
+  CONTINENT FILTER
+  =========================================================
+  */
+
+  document
+    .querySelectorAll(
+      "[data-continent]"
+    )
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+
+          document
+            .querySelectorAll(
+              "[data-continent]"
+            )
+            .forEach(btn=>{
+              btn.classList.remove(
+                "active"
+              );
+            });
+
+          button.classList.add(
+            "active"
+          );
+
+          state.continent =
+            button.dataset.continent;
+
+          renderCountries();
+
+        }
+      );
+
+    });
+
+
+  /*
+  =========================================================
+  LEAGUE SEARCH
+  =========================================================
+  */
+
+  document
+    .getElementById("leagueSearch")
+    .addEventListener(
+      "input",
+      function(){
+
+        const q =
+          this.value
+            .trim()
+            .toLowerCase();
+
+        const result =
+          document.getElementById(
+            "leagueResult"
+          );
+
+        if(!q){
+
+          result.innerHTML = `
+            <div class="muted">
+              ჩაწერე ლიგის სახელი.
+            </div>
+          `;
+
+          return;
+        }
+
+        const matches =
+          state.allMatches.filter(m=>
+            String(m.competition)
+              .toLowerCase()
+              .includes(q)
+        );
+
+        const unique = [];
+
+        matches.forEach(m=>{
+          if(
+            !unique.includes(
+              m.competition
+            )
+          ){
+            unique.push(
+              m.competition
+            );
+          }
+        });
+
+        if(!unique.length){
+
+          result.innerHTML = `
+            <div class="empty">
+              ამ სახელით ლიგა ამჟამად
+              მიღებულ მონაცემებში ვერ მოიძებნა.
+            </div>
+          `;
+
+          return;
+        }
+
+        result.innerHTML =
+          unique
+            .slice(0,20)
+            .map(name=>`
+              <div class="card"
+                   style="margin-top:8px">
+                <strong>
+                  🏆 ${escapeHTML(name)}
+                </strong>
+              </div>
+            `)
+            .join("");
+
+      }
+    );
+
+
+  /*
+  =========================================================
+  AI
+  =========================================================
+  */
+
+  async function runAI(){
+
+    const question =
+      document
+        .getElementById("aiQuestion")
+        .value
+        .trim();
+
+    const result =
+      document.getElementById(
+        "aiResult"
+      );
+
+    if(!question){
+
+      result.style.display =
+        "block";
+
+      result.textContent =
+        "ჯერ ჩაწერე კითხვა.";
+
+      return;
+    }
+
+    result.style.display =
+      "block";
+
+    result.textContent =
+      "🤖 AI მუშაობს...";
+
+    try{
+
+      const response =
+        await fetch(
+          "/api/ai-search",
+          {
+            method:"POST",
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+            body:JSON.stringify({
+              question,
+              matches:
+                state.allMatches
+            })
+          }
+        );
+
+      const text =
+        await response.text();
+
+      if(!response.ok){
+
+        throw new Error(
+          text || "AI API error"
+        );
+      }
+
+      let data;
+
+      try{
+        data =
+          JSON.parse(text);
+      }catch{
+        data = {
+          answer:text
+        };
+      }
+
+      result.textContent =
+        data.answer ||
+        data.message ||
+        text;
+
+    }catch(error){
+
+      result.textContent =
+        "AI ამჟამად ვერ მუშაობს.\n\n" +
+        error.message;
+    }
+  }
+
+
+  /*
+  =========================================================
+  ESCAPE HTML
+  =========================================================
+  */
+
+  function escapeHTML(value){
+
+    return String(
+      value ?? ""
+    )
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+  }
+
+
+  /*
+  =========================================================
+  INITIAL LOAD
+  =========================================================
+  */
+
+  renderCountries();
+
+  loadLive();
+
+  /*
+  LIVE AUTO REFRESH
+  ყოველ 60 წამში.
+  */
+
+  setInterval(
+    ()=>{
+      loadLive();
+
+      if(state.section === "today"){
+        loadToday();
+      }
+
+    },
+    60000
+  );
+
+</script>
+
+  <script src="/champi.js"></script>
+
+</body>
+</html>
