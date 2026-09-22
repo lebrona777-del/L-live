@@ -1,0 +1,5169 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#075b3b">
+<title>L-LIVE — World Football</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#f3f7f5;
+color:#10251c;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+
+.header{
+position:sticky;
+top:0;
+z-index:50;
+background:#075b3b;
+color:#fff;
+padding:13px 15px;
+display:flex;
+align-items:center;
+justify-content:space-between
+}
+
+.logo{
+font-size:25px;
+font-weight:950
+}
+
+.sub{
+font-size:10px;
+opacity:.75;
+letter-spacing:.7px
+}
+
+.container{
+max-width:950px;
+margin:auto;
+padding:12px 12px 80px
+}
+
+.nav{
+display:flex;
+gap:7px;
+overflow:auto;
+padding:2px 0 12px;
+position:sticky;
+top:64px;
+z-index:30;
+background:#f3f7f5
+}
+
+.nav button{
+background:#fff;
+border:1px solid #d9e5df;
+border-radius:12px;
+padding:10px 13px;
+white-space:nowrap;
+font-weight:750;
+color:#315046
+}
+
+.nav button.active{
+background:#075b3b;
+color:#fff;
+border-color:#075b3b
+}
+
+.card{
+background:#fff;
+border:1px solid #e0ebe6;
+border-radius:16px;
+padding:14px;
+margin:10px 0;
+box-shadow:0 2px 10px #143d2a0c
+}
+
+.title{
+font-size:18px;
+font-weight:900;
+margin:6px 0 12px
+}
+
+.muted{
+color:#687a72;
+font-size:12px
+}
+
+.filters{
+display:flex;
+gap:7px;
+overflow:auto;
+margin-bottom:8px
+}
+
+.pill{
+background:#fff;
+border:1px solid #d8e4df;
+border-radius:18px;
+padding:8px 13px;
+white-space:nowrap
+}
+
+.pill.active{
+background:#075b3b;
+color:#fff
+}
+
+.match{
+display:grid;
+grid-template-columns:1fr 95px 1fr;
+align-items:center;
+text-align:center;
+gap:10px
+}
+
+.team{
+font-weight:850
+}
+
+.teamLogo{
+width:38px;
+height:38px;
+object-fit:contain;
+display:block;
+margin:0 auto 5px
+}
+
+.score{
+font-size:23px;
+font-weight:950
+}
+
+.status{
+font-size:11px;
+margin-top:4px
+}
+
+.live{
+color:#d51e2c;
+font-weight:900
+}
+
+.upcoming{
+color:#075b3b;
+font-weight:800
+}
+
+.finished{
+color:#63766e
+}
+
+.open{
+background:transparent;
+width:100%;
+padding:0;
+text-align:left
+}
+
+.comp{
+font-size:12px;
+color:#63766e;
+font-weight:750;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+gap:7px
+}
+
+.compLogo{
+width:24px;
+height:24px;
+object-fit:contain
+}
+
+.detail{
+display:none
+}
+
+.detail.show{
+display:block
+}
+
+.back{
+background:#e7f0ec;
+color:#075b3b;
+border-radius:10px;
+padding:9px 12px;
+font-weight:800;
+margin-bottom:10px
+}
+
+.hero{
+background:#075b3b;
+color:#fff;
+border-radius:18px;
+padding:19px
+}
+
+.hero .match{
+grid-template-columns:1fr 110px 1fr
+}
+
+.hero .score{
+font-size:38px
+}
+
+.hero .teamLogo{
+width:55px;
+height:55px
+}
+
+.tabs{
+display:flex;
+background:#fff;
+border-radius:12px;
+overflow:auto;
+margin:12px 0
+}
+
+.tab{
+flex:1;
+min-width:100px;
+background:#fff;
+padding:12px
+}
+
+.tab.active{
+color:#075b3b;
+font-weight:900;
+border-bottom:3px solid #075b3b
+}
+
+.event{
+display:flex;
+gap:9px;
+align-items:center;
+padding:11px 0;
+border-bottom:1px solid #edf2ef
+}
+
+.minute{
+width:48px;
+font-weight:900
+}
+
+.icon{
+width:28px;
+text-align:center
+}
+
+.competition,
+.teamRow{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 4px;
+border-bottom:1px solid #edf1ef
+}
+
+.badge{
+width:42px;
+height:42px;
+border-radius:11px;
+background:#e7f0ec;
+display:grid;
+place-items:center;
+font-size:20px;
+flex:none
+}
+
+.badge img{
+width:32px;
+height:32px;
+object-fit:contain
+}
+
+.grow{
+flex:1
+}
+
+.arrow{
+color:#075b3b;
+font-weight:900
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+font-size:13px
+}
+
+.table th,
+.table td{
+padding:9px 5px;
+border-bottom:1px solid #edf1ef;
+text-align:center
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2){
+text-align:left
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px
+}
+
+.field{
+width:100%;
+padding:11px;
+border:1px solid #d4e0db;
+border-radius:10px;
+margin:4px 0 8px;
+background:#fff
+}
+
+.primary{
+background:#075b3b;
+color:#fff;
+border-radius:10px;
+padding:11px 15px;
+font-weight:850
+}
+
+.danger{
+background:#b51d2a;
+color:#fff;
+border-radius:10px;
+padding:9px 12px
+}
+
+.smallbtn{
+padding:8px 10px;
+border-radius:9px;
+background:#edf3f0;
+color:#075b3b;
+font-weight:750
+}
+
+.adminbar{
+display:flex;
+gap:7px;
+flex-wrap:wrap;
+margin-top:9px
+}
+
+.login{
+max-width:420px;
+margin:35px auto;
+background:#fff;
+padding:20px;
+border-radius:18px;
+box-shadow:0 5px 25px #153c2a18
+}
+
+.hidden{
+display:none!important
+}
+
+.empty{
+text-align:center;
+padding:30px;
+color:#6c7d76
+}
+
+.metricgrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px
+}
+
+.metric{
+background:#f5f9f7;
+border:1px solid #e0ebe6;
+border-radius:12px;
+padding:11px;
+text-align:center
+}
+
+.metric b{
+display:block;
+font-size:22px
+}
+
+.metric span{
+font-size:11px;
+color:#687a72
+}
+
+.bar{
+height:10px;
+background:#e8efec;
+border-radius:99px;
+overflow:hidden
+}
+
+.bar>i{
+display:block;
+height:100%;
+background:#075b3b;
+border-radius:99px
+}
+
+.analysis-note{
+padding:12px;
+background:#f5f9f7;
+border-left:4px solid #075b3b;
+border-radius:8px;
+line-height:1.5
+}
+
+.available{
+color:#075b3b;
+font-weight:800
+}
+
+.unavailable{
+color:#8a6d3b
+}
+
+.formline{
+display:flex;
+align-items:center;
+gap:8px;
+margin:8px 0
+}
+
+.formdot{
+width:28px;
+height:28px;
+border-radius:50%;
+display:grid;
+place-items:center;
+background:#e7f0ec;
+font-weight:900
+}
+
+.statrow{
+display:grid;
+grid-template-columns:1fr 70px 1fr;
+gap:8px;
+align-items:center;
+padding:9px 0;
+border-bottom:1px solid #edf1ef
+}
+
+.statrow .right{
+text-align:right
+}
+
+.center{
+text-align:center;
+font-weight:850
+}
+
+.worldHeader{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-bottom:10px
+}
+
+.worldTitle{
+font-size:20px;
+font-weight:950
+}
+
+.liveDot{
+display:inline-flex;
+align-items:center;
+gap:5px;
+font-size:12px;
+font-weight:900;
+color:#d51e2c
+}
+
+.liveDot i{
+width:8px;
+height:8px;
+border-radius:50%;
+background:#d51e2c;
+display:block
+}
+
+.statName{
+font-weight:750
+}
+
+.statValue{
+font-weight:900;
+font-size:14px
+}
+
+.statBox{
+margin-top:10px
+}
+
+.statLabel{
+font-size:11px;
+color:#687a72;
+margin-bottom:5px
+}
+
+.dualStat{
+display:grid;
+grid-template-columns:1fr 70px 1fr;
+gap:8px;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid #edf1ef
+}
+
+.dualStat .home{
+text-align:left;
+font-weight:850
+}
+
+.dualStat .away{
+text-align:right;
+font-weight:850
+}
+
+.dualStat .value{
+text-align:center;
+font-weight:900
+}
+
+.sourceBadge{
+display:inline-flex;
+padding:5px 8px;
+border-radius:9px;
+background:#e7f0ec;
+color:#075b3b;
+font-size:10px;
+font-weight:850
+}
+
+.notice{
+padding:11px;
+border-radius:10px;
+background:#f5f9f7;
+color:#52665e;
+font-size:12px;
+line-height:1.5
+}
+
+.loading{
+padding:25px;
+text-align:center;
+color:#687a72
+}
+
+.sectionHeader{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px
+}
+
+.refreshBtn{
+background:#e7f0ec;
+color:#075b3b;
+border-radius:10px;
+padding:8px 11px;
+font-weight:800
+}
+
+@media(max-width:560px){
+
+.grid{
+grid-template-columns:1fr
+}
+
+.match{
+grid-template-columns:1fr 70px 1fr
+}
+
+.hero .match{
+grid-template-columns:1fr 80px 1fr
+}
+
+.team{
+font-size:14px
+}
+
+.metricgrid{
+grid-template-columns:repeat(2,1fr)
+}
+
+.statrow,
+.dualStat{
+grid-template-columns:1fr 55px 1fr
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+<div>
+<div class="logo">L-LIVE</div>
+<div class="sub">GEORGIAN + WORLD FOOTBALL • LIVE SCORE • STATISTICS</div>
+</div>
+
+<button class="pill" onclick="showAdminLogin()">🔒 ADMIN</button>
+
+</header>
+
+<main class="container">
+
+<div id="publicShell">
+
+<nav class="nav">
+
+<button class="active" onclick="go('home',this)">
+🏠 მთავარი
+</button>
+
+<button onclick="go('live',this)">
+🔴 LIVE
+</button>
+
+<button onclick="go('world',this)">
+🌍 მსოფლიო
+</button>
+
+<button onclick="go('competitions',this)">
+🏆 ჩემპიონატები
+</button>
+
+<button onclick="go('teams',this)">
+⚽ გუნდები
+</button>
+
+<button onclick="go('results',this)">
+📋 შედეგები
+</button>
+
+</nav>
+
+
+<section id="homePage">
+
+<div class="card">
+
+<input
+id="searchBox"
+class="field"
+style="margin:0"
+placeholder="🔎 მოძებნე გუნდი, ჩემპიონატი ან მატჩი"
+oninput="renderHome()">
+
+</div>
+
+<div class="filters">
+
+<button class="pill active"
+onclick="setHomeFilter('all',this)">
+ყველა
+</button>
+
+<button class="pill"
+onclick="setHomeFilter('live',this)">
+LIVE
+</button>
+
+<button class="pill"
+onclick="setHomeFilter('upcoming',this)">
+მომავალი
+</button>
+
+<button class="pill"
+onclick="setHomeFilter('finished',this)">
+დასრულებული
+</button>
+
+</div>
+
+<div id="homeList"></div>
+
+<div class="title">
+🌍 მსოფლიო ფეხბურთი
+</div>
+
+<div id="homeWorldList"></div>
+
+</section>
+
+
+<section id="livePage" class="hidden">
+
+<div class="sectionHeader">
+
+<div class="title">
+🔴 LIVE
+</div>
+
+<button class="refreshBtn"
+onclick="loadWorldLive()">
+↻ განახლება
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="liveDot">
+<i></i>
+მსოფლიო LIVE
+</div>
+
+<div id="liveWorldList"></div>
+
+</div>
+
+<div class="title">
+🇬🇪 საქართველო LIVE
+</div>
+
+<div id="liveList"></div>
+
+</section>
+
+
+<section id="worldPage" class="hidden">
+
+<div class="worldHeader">
+
+<div class="worldTitle">
+🌍 მსოფლიო ფეხბურთი
+</div>
+
+<button class="refreshBtn"
+onclick="loadWorldData()">
+↻ განახლება
+</button>
+
+</div>
+
+<div class="filters">
+
+<button id="worldTodayBtn"
+class="pill active"
+onclick="setWorldFilter('today',this)">
+დღეს
+</button>
+
+<button class="pill"
+onclick="setWorldFilter('live',this)">
+LIVE
+</button>
+
+<button class="pill"
+onclick="setWorldFilter('upcoming',this)">
+მომავალი
+</button>
+
+</div>
+
+<div id="worldList"></div>
+
+</section>
+
+
+<section id="competitionsPage" class="hidden">
+
+<div class="title">
+🏆 ჩემპიონატები
+</div>
+
+<div id="competitionList"></div>
+
+</section>
+
+
+<section id="teamsPage" class="hidden">
+
+<div class="title">
+⚽ გუნდები
+</div>
+
+<div id="teamList"></div>
+
+<div class="title">
+🌍 მსოფლიო გუნდების ძებნა
+</div>
+
+<div class="card">
+
+<input
+id="worldTeamSearch"
+class="field"
+placeholder="მაგ. Barcelona, Real Madrid, Liverpool">
+
+<button class="primary"
+onclick="searchWorldTeams()">
+ძებნა
+</button>
+
+</div>
+
+<div id="worldTeamResults"></div>
+
+</section>
+
+
+<section id="resultsPage" class="hidden">
+
+<div class="title">
+📋 შედეგები
+</div>
+
+<div id="resultsList"></div>
+
+</section>
+
+
+<section id="detailPage" class="detail">
+
+<button class="back"
+onclick="closeDetail()">
+← უკან
+</button>
+
+<div id="detailContent"></div>
+
+</section>
+
+
+<section id="competitionDetail" class="detail">
+
+<button class="back"
+onclick="closeCompetition()">
+← ჩემპიონატები
+</button>
+
+<div id="competitionContent"></div>
+
+</section>
+
+
+<section id="teamDetail" class="detail">
+
+<button class="back"
+onclick="closeTeam()">
+← გუნდები
+</button>
+
+<div id="teamContent"></div>
+
+</section>
+
+</div>
+
+
+<section id="loginPage" class="hidden">
+
+<div class="login">
+
+<h2>🔐 Owner Admin</h2>
+
+<p class="muted">
+მხოლოდ აპის მფლობელი შედის აქ.
+</p>
+
+<input
+id="email"
+class="field"
+type="email"
+placeholder="Admin Email">
+
+<input
+id="password"
+class="field"
+type="password"
+placeholder="Password">
+
+<button
+class="primary"
+style="width:100%"
+onclick="login()">
+შესვლა
+</button>
+
+<p id="loginError" class="muted"></p>
+
+<button
+class="smallbtn"
+style="margin-top:8px"
+onclick="showPublic()">
+← დაბრუნება LIVE-ზე
+</button>
+
+</div>
+
+</section>
+
+
+<section id="adminPage" class="hidden">
+
+<button class="back"
+onclick="showPublic()">
+← Public LIVE
+</button>
+
+<div class="card">
+
+<b>🔐 OWNER ADMIN</b>
+
+<p class="muted">
+შესული ხარ:
+<span id="adminEmail"></span>
+</p>
+
+<button class="danger"
+onclick="logout()">
+გასვლა
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+🏆 ჩემპიონატის დამატება
+</div>
+
+<input
+id="newComp"
+class="field"
+placeholder="მაგ. თბილისის ლიგა 1">
+
+<input
+id="newRegion"
+class="field"
+placeholder="რეგიონი">
+
+<button
+class="primary"
+onclick="createCompetition()">
+დამატება
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+⚽ გუნდის დამატება
+</div>
+
+<div class="grid">
+
+<input
+id="newTeam"
+class="field"
+placeholder="გუნდის სახელი">
+
+<select
+id="newTeamComp"
+class="field">
+
+<option value="">
+აირჩიე ჩემპიონატი
+</option>
+
+</select>
+
+</div>
+
+<button
+class="primary"
+onclick="createTeam()">
+დამატება
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+➕ მატჩის დამატება
+</div>
+
+<div class="grid">
+
+<select id="mComp" class="field">
+<option value="">
+აირჩიე ჩემპიონატი
+</option>
+</select>
+
+<input
+id="mVenue"
+class="field"
+placeholder="სტადიონი">
+
+<select id="mHome" class="field">
+<option value="">
+აირჩიე მასპინძელი
+</option>
+</select>
+
+<select id="mAway" class="field">
+<option value="">
+აირჩიე სტუმარი
+</option>
+</select>
+
+<input
+id="mDate"
+class="field"
+type="date">
+
+<input
+id="mTime"
+class="field"
+type="time">
+
+</div>
+
+<button
+class="primary"
+onclick="createMatch()">
+მატჩის შექმნა
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+🏆 ჩემი ჩემპიონატები
+</div>
+
+<div id="adminCompetitions"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+⚽ ჩემი გუნდები
+</div>
+
+<div id="adminTeams"></div>
+
+</div>
+
+
+<div class="card">
+
+<div class="title">
+🎮 მატჩების მართვა
+</div>
+
+<div id="adminMatches"></div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+onValue,
+push,
+set,
+update,
+remove
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+
+/* =========================================================
+   FIREBASE
+   ========================================================= */
+
+const firebaseConfig={
+
+apiKey:
+"AIzaSyDzCxUHJvIS-TBPJQnDZuuZX7GP_Wt8fHI",
+
+authDomain:
+"l-live.firebaseapp.com",
+
+databaseURL:
+"https://l-live-default-rtdb.firebaseio.com",
+
+projectId:
+"l-live",
+
+storageBucket:
+"l-live.firebasestorage.app",
+
+messagingSenderId:
+"1080946597468",
+
+appId:
+"1:1080946597468:web:17682b7b655f78ef549099",
+
+measurementId:
+"G-VS20XDM1MJ"
+
+};
+
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getDatabase(app);
+
+const auth=
+getAuth(app);
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let competitions={};
+let teams={};
+let matches={};
+
+let worldMatches=[];
+let worldLive=[];
+let worldTeams=[];
+
+let worldFilter="today";
+
+let admin=false;
+
+let currentId=null;
+let currentComp=null;
+let currentTeam=null;
+
+let currentWorldMatch=null;
+
+let tab="events";
+
+let homeFilter="all";
+
+let worldAnalysisCache={};
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+const $=
+id=>document.getElementById(id);
+
+
+function esc(v){
+
+return String(v??"")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+
+function teamName(id){
+
+return teams[id]?.name ||
+"უცნობი გუნდი";
+
+}
+
+
+function compName(id){
+
+return competitions[id]?.name ||
+"ჩემპიონატი";
+
+}
+
+
+function statusLabel(m){
+
+if(m.status==="live")
+return "LIVE";
+
+if(m.status==="half")
+return "ტაიმი";
+
+if(m.status==="finished")
+return "დასრულებული";
+
+return "მომავალი";
+
+}
+
+
+function matchDate(m){
+
+if(!m.date)
+return "";
+
+return `${m.date}${m.time?" • "+m.time:""}`;
+
+}
+
+
+function worldStatusLabel(m){
+
+const s=
+m?.status?.short||
+"";
+
+const map={
+
+"TBD":"დაგეგმილი",
+
+"NS":"მომავალი",
+
+"1H":"LIVE — I ტაიმი",
+
+"HT":"ტაიმი",
+
+"2H":"LIVE — II ტაიმი",
+
+"ET":"LIVE — დამატებითი",
+
+"P":"პენალტები",
+
+"BT":"ტაიმი",
+
+"FT":"დასრულებული",
+
+"AET":"დასრულებული",
+
+"PEN":"დასრულებული",
+
+"CANC":"გაუქმებული",
+
+"PST":"გადადებული",
+
+"ABD":"შეწყვეტილი"
+
+};
+
+return map[s]||
+m?.status?.long||
+s||
+"მატჩი";
+
+}
+
+
+function worldIsLive(m){
+
+const s=
+m?.status?.short||
+"";
+
+return [
+"1H",
+"2H",
+"HT",
+"ET",
+"P",
+"BT"
+].includes(s);
+
+}
+
+
+function worldIsFinished(m){
+
+const s=
+m?.status?.short||
+"";
+
+return [
+"FT",
+"AET",
+"PEN"
+].includes(s);
+
+}
+
+
+function worldIsUpcoming(m){
+
+return !worldIsLive(m)&&
+!worldIsFinished(m);
+
+}
+
+
+function formatWorldDate(date){
+
+if(!date)
+return "";
+
+const d=
+new Date(date);
+
+if(Number.isNaN(d.getTime()))
+return date;
+
+return d.toLocaleString(
+"ka-GE",
+{
+timeZone:"Asia/Tbilisi",
+day:"2-digit",
+month:"2-digit",
+year:"numeric",
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+}
+
+
+/* =========================================================
+   PAGES
+   ========================================================= */
+
+function hidePages(){
+
+[
+"homePage",
+"livePage",
+"worldPage",
+"competitionsPage",
+"teamsPage",
+"resultsPage",
+"detailPage",
+"competitionDetail",
+"teamDetail"
+]
+.forEach(
+id=>$(id).classList.add("hidden")
+);
+
+}
+
+
+window.go=(page,btn)=>{
+
+hidePages();
+
+const map={
+
+home:"homePage",
+live:"livePage",
+world:"worldPage",
+competitions:"competitionsPage",
+teams:"teamsPage",
+results:"resultsPage"
+
+};
+
+if(!$(map[page]))
+return;
+
+$(map[page]).classList.remove("hidden");
+
+document
+.querySelectorAll(".nav button")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+if(btn)
+btn.classList.add("active");
+
+if(page==="world")
+renderWorld();
+
+if(page==="live")
+renderLive();
+
+};
+
+
+/* =========================================================
+   FIREBASE HOME
+   ========================================================= */
+
+window.setHomeFilter=(f,btn)=>{
+
+homeFilter=f;
+
+document
+.querySelectorAll(".filters .pill")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+renderHome();
+
+};
+
+
+function matchCard(id,m){
+
+const home=
+teamName(m.homeTeamId)||
+m.home||
+"მასპინძელი";
+
+const away=
+teamName(m.awayTeamId)||
+m.away||
+"სტუმარი";
+
+return `
+
+<div class="card">
+
+<button
+class="open"
+onclick="openMatch('${id}')">
+
+<div class="comp">
+
+${esc(compName(m.competitionId))}
+
+</div>
+
+<div class="match">
+
+<div class="team">
+
+${esc(home)}
+
+</div>
+
+<div>
+
+<div class="score">
+
+${
+m.status==="upcoming"
+?"— : —"
+:`${m.homeScore||0} : ${m.awayScore||0}`
+}
+
+</div>
+
+<div class="status ${
+m.status==="live"||m.status==="half"
+?"live"
+:m.status==="finished"
+?"finished"
+:"upcoming"
+}">
+
+${esc(statusLabel(m))}
+
+${
+(m.status==="live"||m.status==="half")&&m.minute
+?` • ${m.minute}'`
+:""
+}
+
+</div>
+
+</div>
+
+<div class="team">
+
+${esc(away)}
+
+</div>
+
+</div>
+
+<div
+class="muted"
+style="margin-top:9px">
+
+${esc(matchDate(m))}
+${m.venue?" • "+esc(m.venue):""}
+
+</div>
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function filterMatches(){
+
+let arr=
+Object.entries(matches);
+
+const q=
+($("searchBox")?.value||"")
+.trim()
+.toLowerCase();
+
+if(q){
+
+arr=
+arr.filter(
+([id,m])=>{
+
+const text=[
+
+teamName(m.homeTeamId),
+teamName(m.awayTeamId),
+compName(m.competitionId),
+m.home,
+m.away,
+m.date,
+m.time
+
+]
+.join(" ")
+.toLowerCase();
+
+return text.includes(q);
+
+}
+);
+
+}
+
+if(homeFilter!=="all"){
+
+arr=
+arr.filter(
+([id,m])=>
+m.status===homeFilter
+);
+
+}
+
+return arr;
+
+}
+
+
+function sortMatches(arr){
+
+return arr.sort(
+(a,b)=>{
+
+const da=
+`${a[1].date||""} ${a[1].time||""}`;
+
+const db=
+`${b[1].date||""} ${b[1].time||""}`;
+
+return da.localeCompare(db);
+
+}
+);
+
+}
+
+
+function renderHome(){
+
+const arr=
+sortMatches(
+filterMatches()
+);
+
+$("homeList").innerHTML=
+arr.length
+?arr
+.map(
+([id,m])=>
+matchCard(id,m)
+)
+.join("")
+:
+`<div class="empty">
+მატჩები ვერ მოიძებნა.
+</div>`;
+
+renderHomeWorld();
+
+}
+
+
+function renderLive(){
+
+const arr=
+Object.entries(matches)
+.filter(
+([id,m])=>
+m.status==="live"||
+m.status==="half"
+);
+
+$("liveList").innerHTML=
+arr.length
+?arr
+.map(
+([id,m])=>
+matchCard(id,m)
+)
+.join("")
+:
+`<div class="empty">
+ამჟამად საქართველოს LIVE მატჩი არ არის.
+</div>`;
+
+renderWorldLiveList();
+
+}
+
+
+/* =========================================================
+   WORLD MATCH CARD
+   ========================================================= */
+
+function worldMatchCard(m){
+
+const home=
+m?.teams?.home||
+{};
+
+const away=
+m?.teams?.away||
+{};
+
+const league=
+m?.league||
+{};
+
+const scoreHome=
+m?.score?.home;
+
+const scoreAway=
+m?.score?.away;
+
+const finished=
+worldIsFinished(m);
+
+const live=
+worldIsLive(m);
+
+const score=
+finished||live
+?`${scoreHome??0} : ${scoreAway??0}`
+:"— : —";
+
+return `
+
+<div class="card">
+
+<button
+class="open"
+onclick="openWorldMatch('${esc(String(m.id))}')">
+
+<div class="comp">
+
+${
+league.logo
+?
+`<img
+class="compLogo"
+src="${esc(league.logo)}"
+onerror="this.style.display='none'">`
+:""
+}
+
+<span>
+${esc(league.name||"World Football")}
+${league.country
+?` • ${esc(league.country)}`
+:""}
+</span>
+
+</div>
+
+<div class="match">
+
+<div class="team">
+
+${
+home.logo
+?
+`<img
+class="teamLogo"
+src="${esc(home.logo)}"
+onerror="this.style.display='none'">`
+:""
+}
+
+${esc(home.name||"Home")}
+
+</div>
+
+<div>
+
+<div class="score">
+${score}
+</div>
+
+<div class="status ${
+live
+?"live"
+:finished
+?"finished"
+:"upcoming"
+}">
+
+${esc(worldStatusLabel(m))}
+
+${
+live&&m.status?.elapsed!==null
+?` • ${m.status.elapsed}'`
+:""
+}
+
+</div>
+
+</div>
+
+<div class="team">
+
+${
+away.logo
+?
+`<img
+class="teamLogo"
+src="${esc(away.logo)}"
+onerror="this.style.display='none'">`
+:""
+}
+
+${esc(away.name||"Away")}
+
+</div>
+
+</div>
+
+<div
+class="muted"
+style="margin-top:9px">
+
+${esc(formatWorldDate(m.date))}
+
+${
+m.venue?.name
+?` • ${esc(m.venue.name)}`
+:""
+}
+
+</div>
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   WORLD LISTS
+   ========================================================= */
+
+function renderHomeWorld(){
+
+const list=
+worldLive.length
+?worldLive.slice(0,8)
+:
+worldMatches.slice(0,8);
+
+$("homeWorldList").innerHTML=
+list.length
+?list
+.map(worldMatchCard)
+.join("")
+:
+`<div class="empty">
+მსოფლიო მატჩები იტვირთება...
+</div>`;
+
+}
+
+
+function renderWorldLiveList(){
+
+const list=
+worldLive||[];
+
+$("liveWorldList").innerHTML=
+list.length
+?list
+.map(worldMatchCard)
+.join("")
+:
+`<div class="empty">
+ამჟამად მსოფლიოში LIVE მატჩი არ არის.
+</div>`;
+
+}
+
+
+function renderWorld(){
+
+let list=[];
+
+if(worldFilter==="live"){
+
+list=
+worldLive;
+
+}else if(worldFilter==="upcoming"){
+
+list=
+worldMatches
+.filter(worldIsUpcoming);
+
+}else{
+
+list=
+worldMatches;
+
+}
+
+$("worldList").innerHTML=
+list.length
+?list
+.map(worldMatchCard)
+.join("")
+:
+`<div class="empty">
+მსოფლიო მატჩები ვერ მოიძებნა.
+</div>`;
+
+}
+
+
+window.setWorldFilter=(filter,btn)=>{
+
+worldFilter=filter;
+
+document
+.querySelectorAll("#worldPage .filters .pill")
+.forEach(
+x=>x.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+if(filter==="live"){
+
+loadWorldLive();
+
+}else{
+
+loadWorldData();
+
+}
+
+renderWorld();
+
+};
+
+
+/* =========================================================
+   WORLD API
+   ========================================================= */
+
+async function loadWorldLive(){
+
+try{
+
+const response=
+await fetch(
+"/api/world-live",
+{
+cache:"no-store"
+}
+);
+
+const data=
+await response.json();
+
+if(!data.ok){
+
+throw new Error(
+data.error||
+"World LIVE error"
+);
+
+}
+
+worldLive=
+Array.isArray(data.matches)
+?data.matches
+:[];
+
+renderWorldLiveList();
+renderHomeWorld();
+
+if(worldFilter==="live")
+renderWorld();
+
+}catch(error){
+
+console.error(
+"World LIVE:",
+error
+);
+
+$("liveWorldList").innerHTML=
+`<div class="empty">
+მსოფლიო LIVE მონაცემების ჩატვირთვა ვერ მოხერხდა.
+</div>`;
+
+}
+
+}
+
+
+async function loadWorldData(){
+
+try{
+
+const response=
+await fetch(
+"/api/world-fixtures",
+{
+cache:"no-store"
+}
+);
+
+const data=
+await response.json();
+
+if(!data.ok){
+
+throw new Error(
+data.error||
+"World fixtures error"
+);
+
+}
+
+worldMatches=
+Array.isArray(data.matches)
+?data.matches
+:[];
+
+renderWorld();
+renderHomeWorld();
+
+}catch(error){
+
+console.error(
+"World fixtures:",
+error
+);
+
+$("worldList").innerHTML=
+`<div class="empty">
+მსოფლიო მატჩების ჩატვირთვა ვერ მოხერხდა.
+</div>`;
+
+}
+
+}
+
+
+async function loadWorldAll(){
+
+await Promise.allSettled([
+loadWorldLive(),
+loadWorldData()
+]);
+
+}
+
+
+/* =========================================================
+   WORLD MATCH DETAIL
+   ========================================================= */
+
+window.openWorldMatch=async id=>{
+
+currentWorldMatch=
+worldLive.find(
+m=>String(m.id)===String(id)
+)||
+worldMatches.find(
+m=>String(m.id)===String(id)
+);
+
+if(!currentWorldMatch){
+
+return;
+
+}
+
+currentId=null;
+currentComp=null;
+currentTeam=null;
+
+hidePages();
+
+$("detailPage")
+.classList.remove("hidden");
+
+tab="events";
+
+renderWorldDetail();
+
+};
+
+
+function worldEventIcon(type){
+
+if(type==="Goal")
+return "⚽";
+
+if(type==="Card")
+return "🟨";
+
+if(type==="subst")
+return "🔄";
+
+if(type==="Var")
+return "📺";
+
+return "•";
+
+}
+
+
+function worldEventsHtml(fixture){
+
+const events=
+Array.isArray(
+fixture?.events
+)
+?fixture.events
+:[];
+
+if(!events.length){
+
+return `
+<div class="empty">
+ამ მატჩისთვის ქრონოლოგიური მოვლენები
+წყაროდან არ არის მოწოდებული.
+</div>
+`;
+
+}
+
+return events
+.map(
+e=>{
+
+const player=
+e.player?.name||
+"";
+
+const assist=
+e.assist?.name||
+"";
+
+let text=
+e.detail||
+e.type||
+"მოვლენა";
+
+if(player)
+text+=
+` — ${player}`;
+
+if(assist)
+text+=
+` • ასისტი: ${assist}`;
+
+return `
+
+<div class="event">
+
+<div class="minute">
+${e.time?.elapsed??""}'
+</div>
+
+<div class="icon">
+${worldEventIcon(e.type)}
+</div>
+
+<div>
+${esc(text)}
+</div>
+
+</div>
+
+`;
+
+}
+)
+.join("");
+
+}
+
+
+function normalizeStatValue(value){
+
+if(value===null||
+value===undefined||
+value==="")
+return null;
+
+return String(value);
+
+}
+
+
+function statDisplayName(name){
+
+const map={
+
+"Shots on Goal":
+"დარტყმები კარში",
+
+"Shots off Goal":
+"არაზუსტი დარტყმები",
+
+"Total Shots":
+"სულ დარტყმები",
+
+"Blocked Shots":
+"დაბლოკილი დარტყმები",
+
+"Shots insidebox":
+"დარტყმები საჯარიმოში",
+
+"Shots outsidebox":
+"დარტყმები საჯარიმოს გარედან",
+
+"Fouls":
+"ფოლები",
+
+"Corners":
+"კუთხურები",
+
+"Offsides":
+"ოფსაიდები",
+
+"Ball Possession":
+"ბურთის ფლობა",
+
+"Yellow Cards":
+"ყვითელი ბარათები",
+
+"Red Cards":
+"წითელი ბარათები",
+
+"Goalkeeper Saves":
+"მეკარის სეივები",
+
+"Total passes":
+"სულ პასები",
+
+"Passes accurate":
+"ზუსტი პასები",
+
+"Passes %":
+"პასების სიზუსტე",
+
+"expected_goals":
+"xG",
+
+"Duels":
+"დუელები",
+
+"Duels won":
+"მოგებული დუელები",
+
+"Tackles":
+"ვარდნები",
+
+"Blocks":
+"ბლოკები",
+
+"Interceptions":
+"ჩაჭრები",
+
+"Long Balls":
+"გრძელი პასები",
+
+"Crosses":
+"ჩაწოდებები",
+
+"Dribbles":
+"დრიბლინგები"
+
+};
+
+return map[name]||name;
+
+}
+
+
+function renderWorldStats(statistics,fixture){
+
+if(!Array.isArray(statistics)||
+!statistics.length){
+
+return `
+<div class="card">
+
+<h3>📊 მატჩის სტატისტიკა</h3>
+
+<div class="unavailable">
+ამ მატჩისთვის დამატებითი სტატისტიკა
+წყაროდან არ არის მოწოდებული.
+</div>
+
+</div>
+`;
+
+}
+
+const homeId=
+fixture?.teams?.home?.id;
+
+const awayId=
+fixture?.teams?.away?.id;
+
+const homeName=
+fixture?.teams?.home?.name||
+"მასპინძელი";
+
+const awayName=
+fixture?.teams?.away?.name||
+"სტუმარი";
+
+const homeStats=
+statistics.find(
+x=>String(x.team?.id)===String(homeId)
+)||statistics[0];
+
+const awayStats=
+statistics.find(
+x=>String(x.team?.id)===String(awayId)
+)||statistics[1];
+
+const homeList=
+Array.isArray(homeStats?.statistics)
+?homeStats.statistics
+:[];
+
+const awayList=
+Array.isArray(awayStats?.statistics)
+?awayStats.statistics
+:[];
+
+const map=new Map();
+
+homeList.forEach(item=>{
+
+map.set(
+item.type,
+{
+home:normalizeStatValue(item.value),
+away:null
+}
+);
+
+});
+
+awayList.forEach(item=>{
+
+const existing=
+map.get(item.type)||{
+home:null,
+away:null
+};
+
+existing.away=
+normalizeStatValue(item.value);
+
+map.set(
+item.type,
+existing
+);
+
+});
+
+const preferred=[
+
+"Shots on Goal",
+"Shots off Goal",
+"Total Shots",
+"Blocked Shots",
+"Shots insidebox",
+"Shots outsidebox",
+"Ball Possession",
+"Passes accurate",
+"Total passes",
+"Passes %",
+"Corner Kicks",
+"Corners",
+"Offsides",
+"Fouls",
+"Yellow Cards",
+"Red Cards",
+"Goalkeeper Saves",
+"Tackles",
+"Blocks",
+"Interceptions",
+"Duels",
+"Duels won",
+"Crosses",
+"Long Balls",
+"Dribbles"
+
+];
+
+const keys=[];
+
+preferred.forEach(k=>{
+
+if(map.has(k))
+keys.push(k);
+
+});
+
+map.forEach(
+(value,key)=>{
+
+if(!keys.includes(key))
+keys.push(key);
+
+}
+);
+
+return `
+
+<div class="card">
+
+<h3>📊 სრული მატჩის სტატისტიკა</h3>
+
+<div class="sourceBadge">
+რეალური მონაცემი • API-Football
+</div>
+
+<div style="margin-top:10px">
+
+${keys.map(
+key=>{
+
+const row=
+map.get(key);
+
+return `
+
+<div class="dualStat">
+
+<div class="home">
+${esc(row.home??"—")}
+</div>
+
+<div class="value">
+${esc(statDisplayName(key))}
+</div>
+
+<div class="away">
+${esc(row.away??"—")}
+</div>
+
+</div>
+
+`;
+
+}
+).join("")}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function renderLineups(fixture){
+
+const lineups=
+Array.isArray(
+fixture?.lineups
+)
+?fixture.lineups
+:[];
+
+if(!lineups.length){
+
+return `
+
+<div class="card">
+
+<h3>👥 შემადგენლობები</h3>
+
+<div class="unavailable">
+შემადგენლობები ამ მატჩისთვის წყაროდან
+არ არის მოწოდებული.
+</div>
+
+</div>
+
+`;
+
+}
+
+return lineups
+.map(
+team=>{
+
+const name=
+team.team?.name||
+"გუნდი";
+
+const startXI=
+Array.isArray(team.startXI)
+?team.startXI
+:[];
+
+const subs=
+Array.isArray(team.substitutes)
+?team.substitutes
+:[];
+
+return `
+
+<div class="card">
+
+<h3>
+👥 ${esc(name)}
+</h3>
+
+<b>ძირითადი შემადგენლობა</b>
+
+${
+startXI.length
+?
+startXI.map(
+p=>`
+
+<div class="event">
+
+<div class="minute">
+${p.player?.number??""}
+</div>
+
+<div class="grow">
+${esc(p.player?.name||"")}
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="muted">
+ძირითადი შემადგენლობა არ არის მოწოდებული.
+</div>`
+}
+
+<b style="display:block;margin-top:12px">
+ცვლილებების სკამი
+</b>
+
+${
+subs.length
+?
+subs.map(
+p=>`
+
+<div class="event">
+
+<div class="minute">
+${p.player?.number??""}
+</div>
+
+<div class="grow">
+${esc(p.player?.name||"")}
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="muted">
+შემადგენლობა არ არის მოწოდებული.
+</div>`
+}
+
+</div>
+
+`;
+
+}
+)
+.join("");
+
+}
+
+
+function renderWorldAnalysis(data){
+
+const fixture=
+data?.fixture||
+data?.response?.[0];
+
+if(!fixture){
+
+return `
+<div class="empty">
+მატჩის დეტალური მონაცემები ვერ მოიძებნა.
+</div>
+`;
+
+}
+
+const goalsHome=
+fixture.goals?.home;
+
+const goalsAway=
+fixture.goals?.away;
+
+const score=
+`${goalsHome??0} : ${goalsAway??0}`;
+
+const events=
+Array.isArray(fixture.events)
+?fixture.events
+:[];
+
+const home=
+fixture.teams?.home?.name||
+"მასპინძელი";
+
+const away=
+fixture.teams?.away?.name||
+"სტუმარი";
+
+return `
+
+<div class="card">
+
+<div class="notice">
+
+<span class="sourceBadge">
+API-Football
+</span>
+
+<br><br>
+
+მონაცემები მოდის რეალური მატჩის წყაროდან.
+L-LIVE არ ქმნის გამოგონილ სტატისტიკას.
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>⚽ მატჩის ქრონოლოგია</h3>
+
+${worldEventsHtml(fixture)}
+
+</div>
+
+${renderWorldStats(
+data.statistics||[],
+fixture
+)}
+
+${renderLineups(fixture)}
+
+<div class="card">
+
+<h3>🏟️ მატჩის ინფორმაცია</h3>
+
+<div class="statrow">
+
+<div>სტადიონი</div>
+
+<div class="center">
+${esc(
+fixture.fixture?.venue?.name||
+"—"
+)}
+</div>
+
+<div class="right">
+${esc(
+fixture.fixture?.venue?.city||
+""
+)}
+</div>
+
+</div>
+
+<div class="statrow">
+
+<div>მსაჯი</div>
+
+<div class="center">
+${esc(
+fixture.fixture?.referee||
+"—"
+)}
+</div>
+
+<div></div>
+
+</div>
+
+<div class="statrow">
+
+<div>მდგომარეობა</div>
+
+<div class="center">
+${esc(
+worldStatusLabel({
+status:
+fixture.fixture?.status
+})
+)}
+</div>
+
+<div></div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+async function loadWorldAnalysis(id){
+
+if(worldAnalysisCache[id]){
+
+return worldAnalysisCache[id];
+
+}
+
+const response=
+await fetch(
+"/api/world-analysis/"+encodeURIComponent(id),
+{
+cache:"no-store"
+}
+);
+
+const data=
+await response.json();
+
+if(!data.ok){
+
+throw new Error(
+data.error||
+"Analysis error"
+);
+
+}
+
+worldAnalysisCache[id]=data;
+
+return data;
+
+}
+
+
+window.setWorldTab=async t=>{
+
+tab=t;
+
+renderWorldDetail();
+
+};
+
+
+function renderWorldDetail(){
+
+const m=
+currentWorldMatch;
+
+if(!m)
+return;
+
+const home=
+m.teams?.home||
+{};
+
+const away=
+m.teams?.away||
+{};
+
+const score=
+worldIsUpcoming(m)
+?"— : —"
+:`${m.score?.home??0} : ${m.score?.away??0}`;
+
+$("detailContent").innerHTML=`
+
+<div class="hero">
+
+<div class="comp">
+
+${
+m.league?.logo
+?
+`<img
+class="compLogo"
+src="${esc(m.league.logo)}">`
+:""
+}
+
+${esc(m.league?.name||"World Football")}
+
+</div>
+
+<div class="match">
+
+<div class="team">
+
+${
+home.logo
+?
+`<img
+class="teamLogo"
+src="${esc(home.logo)}">`
+:""
+}
+
+${esc(home.name||"Home")}
+
+</div>
+
+<div>
+
+<div class="score">
+${score}
+</div>
+
+<div>
+
+${esc(worldStatusLabel(m))}
+
+${
+worldIsLive(m)&&
+m.status?.elapsed!==null
+?` • ${m.status.elapsed}'`
+:""
+}
+
+</div>
+
+</div>
+
+<div class="team">
+
+${
+away.logo
+?
+`<img
+class="teamLogo"
+src="${esc(away.logo)}">`
+:""
+}
+
+${esc(away.name||"Away")}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="tabs">
+
+<button
+class="tab ${tab==="events"?"active":""}"
+onclick="setWorldTab('events')">
+მოვლენები
+</button>
+
+<button
+class="tab ${tab==="stats"?"active":""}"
+onclick="setWorldTab('stats')">
+📊 სტატისტიკა
+</button>
+
+<button
+class="tab ${tab==="lineups"?"active":""}"
+onclick="setWorldTab('lineups')">
+👥 შემადგენლობა
+</button>
+
+</div>
+
+<div id="worldDetailContent">
+
+<div class="loading">
+მატჩის დეტალური მონაცემები იტვირთება...
+</div>
+
+</div>
+
+`;
+
+loadWorldAnalysis(
+m.id
+)
+.then(
+data=>{
+
+if(!currentWorldMatch||
+String(currentWorldMatch.id)!==
+String(m.id))
+return;
+
+const fixture=
+data.fixture||
+data.response?.[0];
+
+let html="";
+
+if(tab==="events"){
+
+html=`
+
+<div class="card">
+
+<h3>⚽ მოვლენები</h3>
+
+${worldEventsHtml(fixture)}
+
+</div>
+
+`;
+
+}else if(tab==="stats"){
+
+html=renderWorldStats(
+data.statistics||[],
+fixture
+);
+
+}else{
+
+html=renderLineups(
+fixture
+);
+
+}
+
+$("worldDetailContent").innerHTML=
+html;
+
+}
+)
+.catch(
+error=>{
+
+console.error(
+"World analysis:",
+error
+);
+
+$("worldDetailContent").innerHTML=
+
+`<div class="card">
+
+<div class="unavailable">
+
+მატჩის დეტალური სტატისტიკის ჩატვირთვა ვერ მოხერხდა.
+
+<br><br>
+
+${esc(error.message)}
+
+</div>
+
+</div>`;
+
+}
+);
+
+}
+
+
+window.closeDetail=()=>{
+
+currentId=null;
+currentWorldMatch=null;
+
+hidePages();
+
+$("homePage")
+.classList.remove("hidden");
+
+};
+
+
+window.setTab=t=>{
+
+tab=t;
+
+renderMatchDetail();
+
+};
+
+
+/* =========================================================
+   FIREBASE MATCH DETAIL
+   ========================================================= */
+
+function recentTeamMatches(teamId,currentMatchId){
+
+return Object.entries(matches)
+.filter(
+([id,m])=>
+id!==currentMatchId &&
+m.status==="finished" &&
+(
+m.homeTeamId===teamId||
+m.awayTeamId===teamId
+)
+)
+.sort(
+(a,b)=>{
+
+const da=
+`${a[1].date||""} ${a[1].time||""}`;
+
+const db=
+`${b[1].date||""} ${b[1].time||""}`;
+
+return db.localeCompare(da);
+
+}
+)
+.slice(0,5);
+
+}
+
+
+function resultForTeam(m,teamId){
+
+const hs=
+Number(m.homeScore||0);
+
+const as=
+Number(m.awayScore||0);
+
+const home=
+m.homeTeamId===teamId;
+
+const gf=
+home?hs:as;
+
+const ga=
+home?as:hs;
+
+if(gf>ga)
+return"W";
+
+if(gf<ga)
+return"L";
+
+return"D";
+
+}
+
+
+function formHtml(arr){
+
+if(!arr.length)
+return `<span class="unavailable">მიუწვდომელია</span>`;
+
+return arr.map(
+x=>`
+<span class="formdot">${x}</span>
+`
+).join("");
+
+}
+
+
+function h2hMatches(m){
+
+const a=m.homeTeamId;
+const b=m.awayTeamId;
+
+if(!a||!b)
+return[];
+
+return Object.entries(matches)
+.filter(
+([id,x])=>
+id!==currentId &&
+x.status==="finished" &&
+(
+(x.homeTeamId===a&&x.awayTeamId===b)||
+(x.homeTeamId===b&&x.awayTeamId===a)
+)
+)
+.sort(
+(x,y)=>{
+
+const dx=
+`${x[1].date||""} ${x[1].time||""}`;
+
+const dy=
+`${y[1].date||""} ${y[1].time||""}`;
+
+return dy.localeCompare(dx);
+
+}
+)
+.slice(0,5);
+
+}
+
+
+function statValue(stats,keys){
+
+for(
+const key of keys
+){
+
+if(
+stats&&
+stats[key]!==undefined&&
+stats[key]!==null
+){
+
+return stats[key];
+
+}
+
+}
+
+return null;
+
+}
+
+
+function renderAnalysis(m){
+
+const home=
+teamName(m.homeTeamId)||
+m.home||
+"მასპინძელი";
+
+const away=
+teamName(m.awayTeamId)||
+m.away||
+"სტუმარი";
+
+const events=
+Array.isArray(m.events)
+?m.events
+:Object.values(m.events||{});
+
+const goals=
+events.filter(
+e=>e.type==="goal"
+);
+
+const yellow=
+events.filter(
+e=>e.type==="yellow"
+);
+
+const red=
+events.filter(
+e=>e.type==="red"
+);
+
+const subs=
+events.filter(
+e=>e.type==="sub"
+);
+
+const homeRecent=
+recentTeamMatches(
+m.homeTeamId,
+currentId
+)
+.map(
+([id,x])=>
+resultForTeam(
+x,
+m.homeTeamId
+)
+);
+
+const awayRecent=
+recentTeamMatches(
+m.awayTeamId,
+currentId
+)
+.map(
+([id,x])=>
+resultForTeam(
+x,
+m.awayTeamId
+)
+);
+
+const h2h=
+h2hMatches(m);
+
+const rows=
+buildStandings(
+m.competitionId
+);
+
+const hp=
+rows.findIndex(
+x=>x.id===m.homeTeamId
+);
+
+const ap=
+rows.findIndex(
+x=>x.id===m.awayTeamId
+);
+
+const homePosition=
+hp>=0?hp+1:null;
+
+const awayPosition=
+ap>=0?ap+1:null;
+
+const stats=
+m.statistics&&
+typeof m.statistics==="object"
+?m.statistics
+:{};
+
+const possessionHome=
+statValue(
+stats,
+[
+"homePossession",
+"possessionHome"
+]
+);
+
+const possessionAway=
+statValue(
+stats,
+[
+"awayPossession",
+"possessionAway"
+]
+);
+
+let summary="";
+
+if(m.status==="upcoming"){
+
+summary=`
+მატჩი ჯერ არ დაწყებულა.
+ხელმისაწვდომი მონაცემებიდან შესაძლებელია მხოლოდ
+გუნდების, ჩემპიონატისა და არსებული ისტორიული მატჩების
+ჩვენება.
+მომავლის შედეგის პროგნოზი ამ გვერდზე არ კეთდება.
+`;
+
+}else{
+
+summary=`
+${home} — ${away}.
+მატჩის სტატუსია: ${statusLabel(m)}.
+ანგარიში: ${m.homeScore||0} : ${m.awayScore||0}.
+მატჩში დაფიქსირდა ${goals.length} გოლი,
+${yellow.length} ყვითელი ბარათი,
+${red.length} წითელი ბარათი და
+${subs.length} ცვლილება.
+`;
+
+}
+
+return `
+
+<div class="card">
+
+<h3>📊 Match Analysis</h3>
+
+<div class="analysis-note">
+
+<b>🤖 ავტომატური ანალიზი</b>
+
+<div style="margin-top:7px">
+${esc(summary)}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📈 მატჩის ძირითადი მაჩვენებლები</h3>
+
+<div class="metricgrid">
+
+<div class="metric">
+<b>${m.homeScore||0}</b>
+<span>${esc(home)} — გოლები</span>
+</div>
+
+<div class="metric">
+<b>${m.awayScore||0}</b>
+<span>${esc(away)} — გოლები</span>
+</div>
+
+<div class="metric">
+<b>${yellow.length}</b>
+<span>ყვითელი</span>
+</div>
+
+<div class="metric">
+<b>${red.length}</b>
+<span>წითელი</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>🏆 ჩემპიონატის პოზიციები</h3>
+
+<div class="statrow">
+
+<div>
+${esc(home)}
+</div>
+
+<div class="center">
+${homePosition?homePosition+" ადგილი":"—"}
+</div>
+
+<div class="right">
+${esc(away)}
+</div>
+
+</div>
+
+<div class="muted" style="margin-top:9px">
+
+პოზიცია ითვლება L-LIVE-ის ამ ჩემპიონატში
+დაფიქსირებული დასრულებული მატჩებიდან.
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📋 ბოლო 5 მატჩის ფორმა</h3>
+
+<div class="formline">
+
+<b>${esc(home)}</b>
+
+<span class="grow">
+${formHtml(homeRecent)}
+</span>
+
+</div>
+
+<div class="formline">
+
+<b>${esc(away)}</b>
+
+<span class="grow">
+${formHtml(awayRecent)}
+</span>
+
+</div>
+
+<div class="muted">
+W = მოგება • D = ფრე • L = წაგება
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>⚔️ ურთიერთშეხვედრები</h3>
+
+${
+h2h.length
+?
+h2h.map(
+([id,x])=>`
+
+<div class="event">
+
+<div class="minute">
+${esc(x.date||"")}
+</div>
+
+<div class="grow">
+
+<b>
+${esc(teamName(x.homeTeamId))}
+</b>
+
+&nbsp;
+
+${x.homeScore??0}:${x.awayScore??0}
+
+&nbsp;
+
+<b>
+${esc(teamName(x.awayTeamId))}
+</b>
+
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="unavailable">
+ამ ორ გუნდს შორის წინა დასრულებული მატჩი
+მონაცემებში არ მოიძებნა.
+</div>`
+}
+
+</div>
+
+
+<div class="card">
+
+<h3>📊 დამატებითი სტატისტიკა</h3>
+
+${
+possessionHome!==null||
+possessionAway!==null
+?
+`
+
+<div class="statrow">
+
+<div>${esc(home)}</div>
+
+<div class="center">
+${esc(possessionHome??"—")}
+</div>
+
+<div class="right">
+${esc(possessionAway??"—")}
+</div>
+
+</div>
+
+<div class="muted">
+ბურთის ფლობა
+</div>
+
+`
+:
+`
+<div class="unavailable">
+ამ მატჩისთვის დამატებითი ოფიციალური სტატისტიკა
+ჯერ არ არის მოწოდებული.
+</div>
+`
+}
+
+</div>
+
+`;
+
+}
+
+
+function renderMatchDetail(){
+
+const m=
+matches[currentId];
+
+if(!m)
+return;
+
+const events=
+Array.isArray(m.events)
+?m.events
+:Object.values(m.events||{});
+
+const ev=
+events.length
+?
+events.map(
+e=>`
+
+<div class="event">
+
+<div class="minute">
+${e.minute??""}'
+</div>
+
+<div class="icon">
+
+${
+e.type==="goal"
+?"⚽"
+:e.type==="yellow"
+?"🟨"
+:e.type==="red"
+?"🟥"
+:"🔄"
+}
+
+</div>
+
+<div>
+${esc(e.text||e.type||"მოვლენა")}
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="empty">
+მოვლენები ჯერ არ არის.
+</div>`;
+
+
+const stats=`
+
+<div class="card">
+
+<h3>სტატისტიკა</h3>
+
+<p>
+ანგარიში:
+<b>
+${
+m.status==="upcoming"
+?"— : —"
+:`${m.homeScore||0} — ${m.awayScore||0}`
+}
+</b>
+</p>
+
+<p>
+მიმდინარე წუთი:
+${m.minute??0}'
+</p>
+
+<p>
+მოვლენები:
+${events.length}
+</p>
+
+</div>
+
+`;
+
+
+const lineups=`
+
+<div class="card">
+
+<h3>შემადგენლობები</h3>
+
+<p>
+${esc(teamName(m.homeTeamId)||m.home)}
+</p>
+
+<p>
+${esc(teamName(m.awayTeamId)||m.away)}
+</p>
+
+<div class="muted">
+შემადგენლობები მხოლოდ მაშინ გამოჩნდება,
+როცა შესაბამისი რეალური მონაცემი დაემატება.
+</div>
+
+</div>
+
+`;
+
+
+$("detailContent").innerHTML=`
+
+<div class="hero">
+
+<div class="comp">
+
+${esc(
+compName(m.competitionId)
+)}
+
+</div>
+
+<div class="match">
+
+<div class="team">
+${esc(
+teamName(m.homeTeamId)||m.home
+)}
+</div>
+
+<div>
+
+<div class="score">
+
+${
+m.status==="upcoming"
+?"— : —"
+:`${m.homeScore||0} : ${m.awayScore||0}`
+}
+
+</div>
+
+<div>
+
+${esc(statusLabel(m))}
+
+${
+(m.status==="live"||m.status==="half")&&m.minute
+?` • ${m.minute}'`
+:""
+}
+
+</div>
+
+</div>
+
+<div class="team">
+
+${esc(
+teamName(m.awayTeamId)||m.away
+)}
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="tabs">
+
+<button
+class="tab ${tab==="events"?"active":""}"
+onclick="setTab('events')">
+მოვლენები
+</button>
+
+<button
+class="tab ${tab==="stats"?"active":""}"
+onclick="setTab('stats')">
+სტატისტიკა
+</button>
+
+<button
+class="tab ${tab==="analysis"?"active":""}"
+onclick="setTab('analysis')">
+📊 Analysis
+</button>
+
+<button
+class="tab ${tab==="lineups"?"active":""}"
+onclick="setTab('lineups')">
+შემადგენლობა
+</button>
+
+</div>
+
+${
+tab==="events"
+?`<div class="card">${ev}</div>`
+:
+tab==="stats"
+?stats
+:
+tab==="analysis"
+?renderAnalysis(m)
+:
+lineups
+}
+
+`;
+
+}
+
+
+/* =========================================================
+   COMPETITIONS
+   ========================================================= */
+
+function renderCompetitions(){
+
+const arr=
+Object.entries(competitions);
+
+$("competitionList").innerHTML=
+arr.length
+?
+arr.map(
+([id,c])=>`
+
+<div class="card">
+
+<button
+class="open"
+onclick="openCompetition('${id}')">
+
+<div class="competition">
+
+<div class="badge">
+🏆
+</div>
+
+<div class="grow">
+
+<b>
+${esc(c.name)}
+</b>
+
+<div class="muted">
+${esc(c.region||"საქართველო")}
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+</div>
+
+</button>
+
+</div>
+
+`
+).join("")
+:
+`<div class="empty">
+ჩემპიონატები ჯერ არ არის.
+</div>`;
+
+}
+
+
+function renderTeams(){
+
+const arr=
+Object.entries(teams);
+
+$("teamList").innerHTML=
+arr.length
+?
+arr.map(
+([id,t])=>`
+
+<div class="card">
+
+<button
+class="open"
+onclick="openTeam('${id}')">
+
+<div class="teamRow">
+
+<div class="badge">
+⚽
+</div>
+
+<div class="grow">
+
+<b>
+${esc(t.name)}
+</b>
+
+<div class="muted">
+${esc(
+compName(t.competitionId)
+)}
+</div>
+
+</div>
+
+<div class="arrow">
+→
+</div>
+
+</div>
+
+</button>
+
+</div>
+
+`
+).join("")
+:
+`<div class="empty">
+გუნდები ჯერ არ არის.
+</div>`;
+
+}
+
+
+/* =========================================================
+   COMPETITION DETAIL
+   ========================================================= */
+
+window.openCompetition=id=>{
+
+currentComp=id;
+
+currentWorldMatch=null;
+
+hidePages();
+
+$("competitionDetail")
+.classList.remove("hidden");
+
+renderCompetitionDetail();
+
+};
+
+
+window.closeCompetition=()=>{
+
+currentComp=null;
+
+hidePages();
+
+$("competitionsPage")
+.classList.remove("hidden");
+
+};
+
+
+function renderCompetitionDetail(){
+
+const c=
+competitions[currentComp];
+
+if(!c)
+return;
+
+const ms=
+Object.entries(matches)
+.filter(
+([id,m])=>
+m.competitionId===currentComp
+);
+
+const ts=
+Object.entries(teams)
+.filter(
+([id,t])=>
+t.competitionId===currentComp
+);
+
+const rows=
+buildStandings(currentComp);
+
+$("competitionContent").innerHTML=`
+
+<div class="card">
+
+<h2>
+${esc(c.name)}
+</h2>
+
+<div class="muted">
+${esc(c.region||"საქართველო")}
+</div>
+
+</div>
+
+<div class="title">
+მატჩები
+</div>
+
+${
+ms.length
+?
+ms.map(
+([id,m])=>
+matchCard(id,m)
+).join("")
+:
+`<div class="empty">
+ამ ჩემპიონატში მატჩები ჯერ არ არის.
+</div>`
+}
+
+<div class="title">
+ცხრილი
+</div>
+
+<div class="card">
+
+${standingsTable(rows)}
+
+</div>
+
+<div class="title">
+გუნდები
+</div>
+
+<div class="card">
+
+${
+ts.length
+?
+ts.map(
+([id,t])=>`
+
+<div class="teamRow">
+
+<div class="badge">
+⚽
+</div>
+
+<div class="grow">
+<b>${esc(t.name)}</b>
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="empty">
+გუნდები ჯერ არ არის.
+</div>`
+}
+
+</div>
+
+`;
+
+}
+
+
+function buildStandings(compId){
+
+const map={};
+
+Object.entries(teams)
+.filter(
+([id,t])=>
+t.competitionId===compId
+)
+.forEach(
+([id,t])=>{
+
+map[id]={
+id,
+name:t.name,
+p:0,
+w:0,
+d:0,
+l:0,
+gf:0,
+ga:0,
+pts:0
+};
+
+}
+);
+
+
+Object.values(matches)
+.filter(
+m=>
+m.competitionId===compId &&
+m.status==="finished"
+)
+.forEach(
+m=>{
+
+if(
+!map[m.homeTeamId]||
+!map[m.awayTeamId]
+)
+return;
+
+const h=
+map[m.homeTeamId];
+
+const a=
+map[m.awayTeamId];
+
+const hs=
++m.homeScore||0;
+
+const as=
++m.awayScore||0;
+
+h.p++;
+a.p++;
+
+h.gf+=hs;
+h.ga+=as;
+
+a.gf+=as;
+a.ga+=hs;
+
+if(hs>as){
+
+h.w++;
+a.l++;
+h.pts+=3;
+
+}else if(hs<as){
+
+a.w++;
+h.l++;
+a.pts+=3;
+
+}else{
+
+h.d++;
+a.d++;
+h.pts++;
+a.pts++;
+
+}
+
+}
+);
+
+
+return Object.values(map)
+.sort(
+(a,b)=>
+(b.pts-a.pts)||
+((b.gf-b.ga)-(a.gf-a.ga))||
+(b.gf-a.gf)
+);
+
+}
+
+
+function standingsTable(rows){
+
+if(!rows.length)
+return `<div class="empty">
+ცხრილი ჯერ არ არის.
+</div>`;
+
+return `
+
+<table class="table">
+
+<tr>
+
+<th>#</th>
+<th>გუნდი</th>
+<th>თ</th>
+<th>მ</th>
+<th>ფ</th>
+<th>წ</th>
+<th>ქ</th>
+
+</tr>
+
+${
+rows.map(
+(r,i)=>`
+
+<tr>
+
+<td>${i+1}</td>
+
+<td>${esc(r.name)}</td>
+
+<td>${r.p}</td>
+
+<td>${r.w}</td>
+
+<td>${r.d}</td>
+
+<td>${r.l}</td>
+
+<td>
+<b>${r.pts}</b>
+</td>
+
+</tr>
+
+`
+).join("")
+}
+
+</table>
+
+`;
+
+}
+
+
+/* =========================================================
+   TEAM
+   ========================================================= */
+
+window.openTeam=id=>{
+
+currentTeam=id;
+
+currentWorldMatch=null;
+
+hidePages();
+
+$("teamDetail")
+.classList.remove("hidden");
+
+renderTeamDetail();
+
+};
+
+
+window.closeTeam=()=>{
+
+currentTeam=null;
+
+hidePages();
+
+$("teamsPage")
+.classList.remove("hidden");
+
+};
+
+
+function renderTeamDetail(){
+
+const t=
+teams[currentTeam];
+
+if(!t)
+return;
+
+const ms=
+Object.entries(matches)
+.filter(
+([id,m])=>
+m.homeTeamId===currentTeam||
+m.awayTeamId===currentTeam
+);
+
+$("teamContent").innerHTML=`
+
+<div class="card">
+
+<div class="teamRow">
+
+<div class="badge">
+⚽
+</div>
+
+<div class="grow">
+
+<h2>
+${esc(t.name)}
+</h2>
+
+<div class="muted">
+${esc(
+compName(t.competitionId)
+)}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="title">
+მატჩები
+</div>
+
+${
+ms.length
+?
+ms.map(
+([id,m])=>
+matchCard(id,m)
+).join("")
+:
+`<div class="empty">
+მატჩები ჯერ არ არის.
+</div>`
+}
+
+`;
+
+}
+
+
+/* =========================================================
+   WORLD TEAM SEARCH
+   ========================================================= */
+
+window.searchWorldTeams=async()=>{
+
+const q=
+$("worldTeamSearch")
+.value
+.trim();
+
+if(!q){
+
+$("worldTeamResults").innerHTML=
+`<div class="empty">
+ჩაწერე გუნდის სახელი.
+</div>`;
+
+return;
+
+}
+
+/*
+API-Football-ში გუნდის ძებნისთვის
+ჩვენი არსებული server.js პირდაპირ
+team search endpoint-ს ჯერ არ გვაძლევს.
+
+ამიტომ აქ მომხმარებელს ვთავაზობთ
+მსოფლიო გუნდის მატჩებიდან მოძებნას.
+*/
+
+const source=
+[
+...worldMatches,
+...worldLive
+];
+
+const map=new Map();
+
+source.forEach(
+m=>{
+
+[
+m.teams?.home,
+m.teams?.away
+]
+.forEach(
+t=>{
+
+if(
+t?.name &&
+t.name
+.toLowerCase()
+.includes(
+q.toLowerCase()
+)
+){
+
+map.set(
+String(t.id),
+t
+);
+
+}
+
+}
+);
+
+}
+);
+
+worldTeams=
+Array.from(map.values());
+
+$("worldTeamResults").innerHTML=
+worldTeams.length
+?
+worldTeams.map(
+t=>`
+
+<div class="card">
+
+<div class="teamRow">
+
+<div class="badge">
+
+${
+t.logo
+?
+`<img
+src="${esc(t.logo)}">`
+:"⚽"
+}
+
+</div>
+
+<div class="grow">
+
+<b>
+${esc(t.name)}
+</b>
+
+<div class="muted">
+Team ID: ${esc(t.id)}
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`
+).join("")
+:
+`<div class="empty">
+გუნდი ამჟამად ჩატვირთულ მატჩებში ვერ მოიძებნა.
+</div>`;
+
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+window.showPublic=()=>{
+
+$("publicShell")
+.classList.remove("hidden");
+
+$("loginPage")
+.classList.add("hidden");
+
+$("adminPage")
+.classList.add("hidden");
+
+go(
+"home",
+document.querySelector(".nav button")
+);
+
+};
+
+
+window.showAdminLogin=()=>{
+
+if(auth.currentUser){
+
+showAdmin();
+
+return;
+
+}
+
+$("publicShell")
+.classList.add("hidden");
+
+$("adminPage")
+.classList.add("hidden");
+
+$("loginPage")
+.classList.remove("hidden");
+
+};
+
+
+window.showAdmin=()=>{
+
+if(!auth.currentUser){
+
+showAdminLogin();
+
+return;
+
+}
+
+$("publicShell")
+.classList.add("hidden");
+
+$("loginPage")
+.classList.add("hidden");
+
+$("adminPage")
+.classList.remove("hidden");
+
+renderAdmin();
+
+};
+
+
+window.login=async()=>{
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+$("email").value.trim(),
+$("password").value
+);
+
+$("loginError").textContent="";
+
+}catch(e){
+
+$("loginError").textContent=
+"შესვლა ვერ მოხერხდა. შეამოწმე მონაცემები.";
+
+}
+
+};
+
+
+window.logout=()=>signOut(auth);
+
+
+async function ownerWrite(
+path,
+data
+){
+
+if(!admin){
+
+alert(
+"Owner Admin წვდომა საჭიროა"
+);
+
+return false;
+
+}
+
+await update(
+ref(db,path),
+{
+...data,
+updatedAt:Date.now()
+}
+);
+
+return true;
+
+}
+
+
+function fillAdminSelects(){
+
+const comps=
+`<option value="">
+აირჩიე ჩემპიონატი
+</option>`+
+Object.entries(competitions)
+.map(
+([id,c])=>
+`<option value="${id}">
+${esc(c.name)}
+</option>`
+)
+.join("");
+
+$("newTeamComp").innerHTML=
+comps;
+
+$("mComp").innerHTML=
+comps;
+
+const teamsHtml=
+`<option value="">
+აირჩიე გუნდი
+</option>`+
+Object.entries(teams)
+.map(
+([id,t])=>
+`<option value="${id}">
+${esc(t.name)}
+</option>`
+)
+.join("");
+
+$("mHome").innerHTML=
+teamsHtml;
+
+$("mAway").innerHTML=
+teamsHtml;
+
+}
+
+
+function renderAdmin(){
+
+if(!admin)
+return;
+
+$("adminCompetitions").innerHTML=
+Object.entries(competitions)
+.map(
+([id,c])=>`
+
+<div class="teamRow">
+
+<div class="grow">
+
+<b>
+${esc(c.name)}
+</b>
+
+<div class="muted">
+${esc(c.region||"საქართველო")}
+</div>
+
+</div>
+
+<button
+class="danger"
+onclick="deleteCompetition('${id}')">
+წაშლა
+</button>
+
+</div>
+
+`
+)
+.join("")
+||
+`<div class="empty">
+ჩემპიონატები არ არის.
+</div>`;
+
+
+$("adminTeams").innerHTML=
+Object.entries(teams)
+.map(
+([id,t])=>`
+
+<div class="teamRow">
+
+<div class="grow">
+
+<b>
+${esc(t.name)}
+</b>
+
+<div class="muted">
+${esc(
+compName(t.competitionId)
+)}
+</div>
+
+</div>
+
+<button
+class="danger"
+onclick="deleteTeam('${id}')">
+წაშლა
+</button>
+
+</div>
+
+`
+)
+.join("")
+||
+`<div class="empty">
+გუნდები არ არის.
+</div>`;
+
+
+$("adminMatches").innerHTML=
+Object.entries(matches)
+.map(
+([id,m])=>`
+
+<div class="card">
+
+<b>
+
+${esc(
+teamName(m.homeTeamId)
+)}
+
+—
+
+${esc(
+teamName(m.awayTeamId)
+)}
+
+</b>
+
+<div class="muted">
+
+${esc(
+compName(m.competitionId)
+)}
+
+<br>
+
+${esc(
+matchDate(m)
+)}
+
+</div>
+
+<div class="adminbar">
+
+<button
+class="smallbtn"
+onclick="startMatch('${id}')">
+▶ LIVE
+</button>
+
+<button
+class="smallbtn"
+onclick="minute('${id}',1)">
++1'
+</button>
+
+<button
+class="smallbtn"
+onclick="minute('${id}',-1)">
+-1'
+</button>
+
+<button
+class="smallbtn"
+onclick="goal('${id}','home')">
+⚽ ${esc(
+teamName(m.homeTeamId)
+)}
+</button>
+
+<button
+class="smallbtn"
+onclick="goal('${id}','away')">
+⚽ ${esc(
+teamName(m.awayTeamId)
+)}
+</button>
+
+<button
+class="smallbtn"
+onclick="addEvent('${id}','yellow')">
+🟨
+</button>
+
+<button
+class="smallbtn"
+onclick="addEvent('${id}','red')">
+🟥
+</button>
+
+<button
+class="smallbtn"
+onclick="addEvent('${id}','sub')">
+🔄
+</button>
+
+<button
+class="smallbtn"
+onclick="half('${id}')">
+⏸ ტაიმი
+</button>
+
+<button
+class="primary"
+onclick="finish('${id}')">
+🏁 დასრულება
+</button>
+
+<button
+class="danger"
+onclick="deleteMatch('${id}')">
+წაშლა
+</button>
+
+</div>
+
+</div>
+
+`
+)
+.join("")
+||
+`<div class="empty">
+მატჩები არ არის.
+</div>`;
+
+}
+
+
+/* =========================================================
+   ADMIN CRUD
+   ========================================================= */
+
+window.createCompetition=async()=>{
+
+const name=
+$("newComp")
+.value
+.trim();
+
+if(!name)
+return alert(
+"ჩაწერე ჩემპიონატის სახელი"
+);
+
+const r=
+push(
+ref(db,"competitions")
+);
+
+await set(
+r,
+{
+name,
+region:
+$("newRegion")
+.value
+.trim()||
+"საქართველო",
+createdAt:
+Date.now()
+}
+);
+
+$("newComp").value="";
+$("newRegion").value="";
+
+};
+
+
+window.createTeam=async()=>{
+
+const name=
+$("newTeam")
+.value
+.trim();
+
+const competitionId=
+$("newTeamComp")
+.value
+.trim();
+
+if(!name||
+!competitionId)
+return alert(
+"აირჩიე ჩემპიონატი და ჩაწერე გუნდის სახელი"
+);
+
+const r=
+push(
+ref(db,"teams")
+);
+
+await set(
+r,
+{
+name,
+competitionId,
+createdAt:
+Date.now()
+}
+);
+
+$("newTeam").value="";
+$("newTeamComp").value="";
+
+};
+
+
+window.createMatch=async()=>{
+
+const competitionId=
+$("mComp")
+.value
+.trim();
+
+const homeTeamId=
+$("mHome")
+.value
+.trim();
+
+const awayTeamId=
+$("mAway")
+.value
+.trim();
+
+if(
+!competitionId||
+!homeTeamId||
+!awayTeamId
+)
+return alert(
+"აირჩიე ჩემპიონატი და ორივე გუნდი"
+);
+
+const r=
+push(
+ref(db,"matches")
+);
+
+await set(
+r,
+{
+
+competitionId,
+
+homeTeamId,
+
+awayTeamId,
+
+venue:
+$("mVenue")
+.value
+.trim(),
+
+date:
+$("mDate")
+.value,
+
+time:
+$("mTime")
+.value,
+
+status:
+"upcoming",
+
+minute:
+0,
+
+homeScore:
+0,
+
+awayScore:
+0,
+
+events:[],
+
+createdAt:
+Date.now(),
+
+updatedAt:
+Date.now()
+
+}
+);
+
+[
+"mComp",
+"mHome",
+"mAway",
+"mVenue",
+"mDate",
+"mTime"
+]
+.forEach(
+id=>
+$(id).value=""
+);
+
+};
+
+
+window.deleteCompetition=
+async id=>{
+
+if(
+confirm(
+"წავშალოთ ჩემპიონატი?"
+)
+)
+await remove(
+ref(
+db,
+"competitions/"+id
+)
+);
+
+};
+
+
+window.deleteTeam=
+async id=>{
+
+if(
+confirm(
+"წავშალოთ გუნდი?"
+)
+)
+await remove(
+ref(
+db,
+"teams/"+id
+)
+);
+
+};
+
+
+window.deleteMatch=
+async id=>{
+
+if(
+confirm(
+"წავშალოთ მატჩი?"
+)
+)
+await remove(
+ref(
+db,
+"matches/"+id
+)
+);
+
+};
+
+
+window.startMatch=
+id=>
+ownerWrite(
+"matches/"+id,
+{
+status:"live",
+minute:1
+}
+);
+
+
+window.half=
+id=>
+ownerWrite(
+"matches/"+id,
+{
+status:"half"
+}
+);
+
+
+window.finish=
+id=>
+ownerWrite(
+"matches/"+id,
+{
+status:"finished"
+}
+);
+
+
+window.minute=
+(id,n)=>{
+
+const m=
+matches[id];
+
+ownerWrite(
+"matches/"+id,
+{
+minute:
+Math.max(
+0,
+(m.minute||0)+n
+),
+status:
+m.status==="upcoming"
+?"live"
+:m.status
+}
+);
+
+};
+
+
+window.goal=
+async(id,side)=>{
+
+const m=
+matches[id];
+
+const events=
+[...(m.events||[])];
+
+events.push(
+{
+type:"goal",
+side,
+minute:
+m.minute||0,
+text:
+`გოლი — ${
+side==="home"
+?teamName(m.homeTeamId)
+:teamName(m.awayTeamId)
+}`
+}
+);
+
+await ownerWrite(
+"matches/"+id,
+{
+
+events,
+
+[
+side==="home"
+?"homeScore"
+:"awayScore"
+]:
+(
+m[
+side==="home"
+?"homeScore"
+:"awayScore"
+]||0
+)+1,
+
+status:
+"live"
+
+}
+);
+
+};
+
+
+window.addEvent=
+async(id,type)=>{
+
+const m=
+matches[id];
+
+const events=
+[...(m.events||[])];
+
+const label={
+yellow:"ყვითელი ბარათი",
+red:"წითელი ბარათი",
+sub:"ცვლილება"
+}[type];
+
+events.push(
+{
+type,
+minute:
+m.minute||0,
+text:
+label
+}
+);
+
+await ownerWrite(
+"matches/"+id,
+{
+events,
+status:
+m.status==="upcoming"
+?"live"
+:m.status
+}
+);
+
+};
+
+
+/* =========================================================
+   FIREBASE LISTENERS
+   ========================================================= */
+
+onValue(
+ref(db,"competitions"),
+s=>{
+
+competitions=
+s.val()||{};
+
+renderCompetitions();
+
+fillAdminSelects();
+
+renderAdmin();
+
+if(currentComp)
+renderCompetitionDetail();
+
+}
+);
+
+
+onValue(
+ref(db,"teams"),
+s=>{
+
+teams=
+s.val()||{};
+
+renderTeams();
+
+fillAdminSelects();
+
+renderAdmin();
+
+if(currentTeam)
+renderTeamDetail();
+
+if(currentComp)
+renderCompetitionDetail();
+
+}
+);
+
+
+onValue(
+ref(db,"matches"),
+s=>{
+
+matches=
+s.val()||{};
+
+renderHome();
+
+renderLive();
+
+renderResults();
+
+renderAdmin();
+
+if(currentId)
+renderMatchDetail();
+
+if(currentComp)
+renderCompetitionDetail();
+
+if(currentTeam)
+renderTeamDetail();
+
+}
+);
+
+
+onAuthStateChanged(
+auth,
+u=>{
+
+admin=
+!!u;
+
+if(u){
+
+$("adminEmail")
+.textContent=
+u.email||"";
+
+showAdmin();
+
+}else if(
+!$("adminPage")
+.classList
+.contains("hidden")
+){
+
+showPublic();
+
+}
+
+}
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+renderHome();
+
+renderCompetitions();
+
+renderTeams();
+
+renderResults();
+
+loadWorldAll();
+
+
+/* =========================================================
+   AUTO REFRESH WORLD LIVE
+   ========================================================= */
+
+setInterval(
+()=>{
+
+loadWorldLive();
+
+},
+30000
+);
+
+</script>
+
+</body>
+</html>
