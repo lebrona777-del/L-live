@@ -1,0 +1,15 @@
+{
+  "name": "l-live",
+  "version": "3.0.0",
+  "description": "L-LIVE Georgian football live scores",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
