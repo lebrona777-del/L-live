@@ -1,0 +1,14 @@
+{
+  "name": "l-live-news",
+  "version": "1.0.0",
+  "description": "L-LIVE Georgian Sports Online Newspaper",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
