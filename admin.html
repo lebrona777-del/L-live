@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>L-LIVE — ადმინისტრატორი</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(
+          circle at top left,
+          #e9f7ef 0,
+          transparent 32rem
+        ),
+        #f5f8f6;
+      color: #111815;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: auto;
+      padding: 24px 18px 60px;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      text-decoration: none;
+      color: #168b5a;
+      font-size: 38px;
+      font-weight: 950;
+      letter-spacing: -2.5px;
+      line-height: .9;
+    }
+
+    .logo span {
+      display: block;
+      margin-top: 6px;
+      color: #18201c;
+      font-size: 10px;
+      letter-spacing: 3px;
+      font-weight: 900;
+    }
+
+    .back {
+      text-decoration: none;
+      background: #fff;
+      border: 1px solid #dce8e1;
+      border-radius: 14px;
+      padding: 11px 15px;
+      color: #166c49;
+      font-weight: 850;
+      box-shadow:
+        0 6px 20px rgba(20, 60, 40, .05);
+    }
+
+    .back:active {
+      transform: scale(.98);
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 25px;
+      padding: 28px;
+      box-shadow:
+        0 12px 40px rgba(20, 50, 35, .07);
+      border: 1px solid #e0e9e4;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      letter-spacing: -1px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: -.7px;
+    }
+
+    .subtitle {
+      margin: 0 0 25px;
+      color: #727d77;
+      line-height: 1.55;
+    }
+
+    .login-box {
+      max-width: 500px;
+      margin: 50px auto;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    label {
+      display: block;
+      margin: 19px 0 8px;
+      font-weight: 900;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #dce7e1;
+      border-radius: 15px;
+      padding: 14px;
+      outline: none;
+      background: #fbfdfc;
+      color: #111815;
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #168b5a;
+      box-shadow:
+        0 0 0 4px rgba(22,139,90,.09);
+    }
+
+    textarea {
+      min-height: 240px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    input[type="file"] {
+      padding: 12px;
+      background: #fff;
+    }
+
+    .primary {
+      width: 100%;
+      margin-top: 25px;
+      border: 0;
+      border-radius: 15px;
+      padding: 15px;
+      background: #168b5a;
+      color: white;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow:
+        0 9px 22px rgba(22,139,90,.18);
+      transition:
+        transform .15s ease,
+        background .15s ease;
+    }
+
+    .primary:hover {
+      background: #0f7449;
+    }
+
+    .primary:active {
+      transform: scale(.99);
+    }
+
+    .primary:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .secondary {
+      border: 1px solid #dce7e1;
+      background: #fff;
+      border-radius: 13px;
+      padding: 10px 14px;
+      color: #27332d;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 14px;
+      display: none;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffe9e9;
+      color: #a52222;
+      border: 1px solid #ffd0d0;
+    }
+
+    .message.success {
+      display: block;
+      background: #e5f6ec;
+      color: #23744d;
+      border: 1px solid #cdebd9;
+    }
+
+    .preview {
+      margin-top: 12px;
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 15px;
+      display: none;
+      border: 1px solid #e0e8e3;
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .articles {
+      margin-top: 38px;
+      padding-top: 28px;
+      border-top: 1px solid #e5ebe7;
+    }
+
+    .articles-heading {
+      margin-bottom: 18px;
+    }
+
+    #articleList {
+      display: grid;
+      gap: 14px;
+    }
+
+    .article-item {
+      background: #f8fbf9;
+      border: 1px solid #dfe9e3;
+      border-radius: 18px;
+      padding: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .article-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .article-item h3 {
+      margin: 0 0 7px;
+      font-size: 18px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .article-meta {
+      color: #78837d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .delete {
+      flex-shrink: 0;
+      border: 0;
+      background: #d53d3d;
+      color: white;
+      border-radius: 11px;
+      padding: 10px 14px;
+      font-weight: 900;
+      cursor: pointer;
+      transition:
+        background .15s ease,
+        transform .15s ease;
+    }
+
+    .delete:hover {
+      background: #b92e2e;
+    }
+
+    .delete:active {
+      transform: scale(.97);
+    }
+
+    .delete:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .empty-list {
+      padding: 25px;
+      border: 1px dashed #d6e2db;
+      border-radius: 16px;
+      text-align: center;
+      color: #78827d;
+      background: #fbfdfc;
+    }
+
+    @media (max-width: 600px) {
+
+      .page {
+        padding: 17px 14px 50px;
+      }
+
+      .top {
+        align-items: flex-start;
+      }
+
+      .logo {
+        font-size: 32px;
+      }
+
+      .logo span {
+        font-size: 9px;
+        letter-spacing: 2.5px;
+      }
+
+      .back {
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 21px;
+      }
+
+      .login-box {
+        margin: 35px auto;
+      }
+
+      h1 {
+        font-size: 29px;
+      }
+
+      h2 {
+        font-size: 25px;
+      }
+
+      .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .admin-header .secondary {
+        width: 100%;
+      }
+
+      .article-item {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .delete {
+        width: 100%;
+        min-height: 45px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="top">
+
+    <a
+      href="/"
+      class="logo"
+    >
+      L-LIVE
+
+      <span>
+        SPORT NEWS
+      </span>
+    </a>
+
+    <a
+      href="/"
+      class="back"
+    >
+      ← მთავარი
+    </a>
+
+  </div>
+
+
+  <section
+    id="loginSection"
+    class="card login-box"
+  >
+
+    <h1>
+      ადმინისტრატორი
+    </h1>
+
+    <p class="subtitle">
+      შედი ადმინისტრატორის პაროლით.
+    </p>
+
+    <label for="password">
+      პაროლი
+    </label>
+
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      placeholder="შეიყვანე ადმინისტრატორის პაროლი"
+    >
+
+    <button
+      id="loginButton"
+      class="primary"
+      type="button"
+    >
+      შესვლა
+    </button>
+
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
+
+  </section>
+
+
+  <section
+    id="adminSection"
+    class="card hidden"
+  >
+
+    <div class="admin-header">
+
+      <div>
+
+        <h1>
+          ახალი სტატია
+        </h1>
+
+        <p class="subtitle">
+          დაამატე ახალი სპორტული ამბავი L-LIVE-ზე.
+        </p>
+
+      </div>
+
+      <button
+        id="logoutButton"
+        class="secondary"
+        type="button"
+      >
+        გამოსვლა
+      </button>
+
+    </div>
+
+
+    <form id="articleForm">
+
+      <label for="title">
+        სათაური
+      </label>
+
+      <input
+        id="title"
+        name="title"
+        type="text"
+        maxlength="180"
+        required
+        placeholder="მაგ: საქართველოს ნაკრებმა მნიშვნელოვანი გამარჯვება მოიპოვა"
+      >
+
+
+      <label for="category">
+        კატეგორია
+      </label>
+
+      <select
+        id="category"
+        name="category"
+        required
+      >
+
+        <option value="ფეხბურთი">
+          ⚽ ფეხბურთი
+        </option>
+
+        <option value="კალათბურთი">
+          🏀 კალათბურთი
+        </option>
+
+        <option value="რაგბი">
+          🏉 რაგბი
+        </option>
+
+        <option value="სხვა">
+          სხვა
+        </option>
+
+      </select>
+
+
+      <label for="text">
+        სტატიის ტექსტი
+      </label>
+
+      <textarea
+        id="text"
+        name="text"
+        maxlength="50000"
+        required
+        placeholder="დაწერე სტატიის სრული ინფორმაცია..."
+      ></textarea>
+
+
+      <label for="image">
+        სტატიის ფოტო
+      </label>
+
+      <input
+        id="image"
+        name="image"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        required
+      >
+
+
+      <img
+        id="preview"
+        class="preview"
+        alt="ფოტოს წინასწარი ნახვა"
+      >
+
+
+      <button
+        id="publishButton"
+        class="primary"
+        type="submit"
+      >
+        სტატიის გამოქვეყნება
+      </button>
+
+    </form>
+
+
+    <div
+      id="articleMessage"
+      class="message"
+    ></div>
+
+
+    <div class="articles">
+
+      <div class="articles-heading">
+
+        <h2>
+          გამოქვეყნებული სტატიები
+        </h2>
+
+      </div>
+
+      <div id="articleList">
+        იტვირთება...
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+  const loginSection =
+    document.getElementById("loginSection");
+
+  const adminSection =
+    document.getElementById("adminSection");
+
+  const loginButton =
+    document.getElementById("loginButton");
+
+  const logoutButton =
+    document.getElementById("logoutButton");
+
+  const passwordInput =
+    document.getElementById("password");
+
+  const loginMessage =
+    document.getElementById("loginMessage");
+
+  const articleMessage =
+    document.getElementById("articleMessage");
+
+  const articleForm =
+    document.getElementById("articleForm");
+
+  const publishButton =
+    document.getElementById("publishButton");
+
+  const imageInput =
+    document.getElementById("image");
+
+  const preview =
+    document.getElementById("preview");
+
+  const articleList =
+    document.getElementById("articleList");
+
+
+  /* =========================
+     HELPERS
+  ========================== */
+
+  function showMessage(
+    element,
+    text,
+    type
+  ) {
+
+    element.textContent =
+      text;
+
+    element.className =
+      "message " + type;
+
+  }
+
+
+  function clearMessage(
+    element
+  ) {
+
+    element.textContent =
+      "";
+
+    element.className =
+      "message";
+
+  }
+
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(
+      value ?? ""
+    )
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  }
+
+
+  /* =========================
+     SAFE API RESPONSE READER
+  ========================== */
+
+  async function readApiResponse(
+    response
+  ) {
+
+    const raw =
+      await response.text();
+
+
+    if (!raw.trim()) {
+
+      throw new Error(
+        "სერვერმა ცარიელი პასუხი დააბრუნა (HTTP " +
+        response.status +
+        ")."
+      );
+
+    }
+
+
+    let data;
+
+
+    try {
+
+      data =
+        JSON.parse(raw);
+
+    } catch {
+
+      const previewText =
+        raw
+          .replace(/<[^>]*>/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 180);
+
+
+      throw new Error(
+        "სერვერის პასუხი JSON არ არის (HTTP " +
+        response.status +
+        ")." +
+        (
+          previewText
+            ? " პასუხი: " + previewText
+            : ""
+        )
+      );
+
+    }
+
+
+    return data;
+
+  }
+
+
+  /* =========================
+     AUTH
+  ========================== */
+
+  async function checkAdmin() {
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/me",
+          {
+            credentials:
+              "same-origin",
+            cache:
+              "no-store"
+          }
+        );
+
+
+      const data =
+        await readApiResponse(
+          response
+        );
+
+
+      if (data.admin) {
+
+        showAdmin();
+
+      } else {
+
+        showLogin();
+
+      }
+
+    } catch {
+
+      showLogin();
+
+    }
+
+  }
+
+
+  function showLogin() {
+
+    loginSection
+      .classList
+      .remove("hidden");
+
+    adminSection
+      .classList
+      .add("hidden");
+
+  }
+
+
+  function showAdmin() {
+
+    loginSection
+      .classList
+      .add("hidden");
+
+    adminSection
+      .classList
+      .remove("hidden");
+
+    loadArticles();
+
+  }
+
+
+  /* =========================
+     LOGIN
+  ========================== */
+
+  loginButton.addEventListener(
+    "click",
+    async () => {
+
+      clearMessage(
+        loginMessage
+      );
+
+
+      const password =
+        passwordInput.value;
+
+
+      if (!password) {
+
+        showMessage(
+          loginMessage,
+          "შეიყვანე პაროლი.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      loginButton.disabled =
+        true;
+
+      loginButton.textContent =
+        "მიმდინარეობს...";
+
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/login",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              credentials:
+                "same-origin",
+
+              body:
+                JSON.stringify({
+                  password
+                })
+            }
+          );
+
+
+        const data =
+          await readApiResponse(
+            response
+          );
+
+
+        if (
+          !response.ok ||
+          !data.ok
+        ) {
+
+          throw new Error(
+            data.error ||
+            "შესვლა ვერ მოხერხდა."
+          );
+
+        }
+
+
+        passwordInput.value =
+          "";
+
+        showAdmin();
+
+
+      } catch (error) {
+
+        showMessage(
+          loginMessage,
+          error.message ||
+            "შესვლა ვერ მოხერხდა.",
+          "error"
+        );
+
+      } finally {
+
+        loginButton.disabled =
+          false;
+
+        loginButton.textContent =
+          "შესვლა";
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     ENTER TO LOGIN
+  ========================== */
+
+  passwordInput.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        event.preventDefault();
+
+        loginButton.click();
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     LOGOUT
+  ========================== */
+
+  logoutButton.addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await fetch(
+          "/api/logout",
+          {
+            method: "POST",
+            credentials:
+              "same-origin"
+          }
+        );
+
+      } finally {
+
+        showLogin();
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     IMAGE PREVIEW
+  ========================== */
+
+  imageInput.addEventListener(
+    "change",
+    () => {
+
+      const file =
+        imageInput.files &&
+        imageInput.files[0];
+
+
+      if (!file) {
+
+        preview.style.display =
+          "none";
+
+        preview.removeAttribute(
+          "src"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const url =
+          URL.createObjectURL(
+            file
+          );
+
+        preview.src =
+          url;
+
+        preview.style.display =
+          "block";
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+        preview.style.display =
+          "none";
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     CREATE ARTICLE
+  ========================== */
+
+  articleForm.addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      clearMessage(
+        articleMessage
+      );
+
+
+      const file =
+        imageInput.files &&
+        imageInput.files[0];
+
+
+      if (!file) {
+
+        showMessage(
+          articleMessage,
+          "სტატიის ფოტო აუცილებელია.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      publishButton.disabled =
+        true;
+
+      publishButton.textContent =
+        "იტვირთება...";
+
+
+      try {
+
+        const formData =
+          new FormData(
+            articleForm
+          );
+
+
+        const response =
+          await fetch(
+            "/api/articles",
+            {
+              method: "POST",
+              body: formData,
+              credentials:
+                "same-origin"
+            }
+          );
+
+
+        const data =
+          await readApiResponse(
+            response
+          );
+
+
+        if (
+          !response.ok ||
+          !data.ok
+        ) {
+
+          throw new Error(
+            data.error ||
+            "სტატიის დამატება ვერ მოხერხდა."
+          );
+
+        }
+
+
+        articleForm.reset();
+
+
+        preview.style.display =
+          "none";
+
+        preview.removeAttribute(
+          "src"
+        );
+
+
+        showMessage(
+          articleMessage,
+          "სტატია წარმატებით გამოქვეყნდა.",
+          "success"
+        );
+
+
+        await loadArticles();
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+        showMessage(
+          articleMessage,
+          error.message ||
+            "სტატიის დამატება ვერ მოხერხდა.",
+          "error"
+        );
+
+      } finally {
+
+        publishButton.disabled =
+          false;
+
+        publishButton.textContent =
+          "სტატიის გამოქვეყნება";
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     LOAD ARTICLES
+  ========================== */
+
+  async function loadArticles() {
+
+    articleList.innerHTML = `
+      <div class="empty-list">
+        სტატიები იტვირთება...
+      </div>
+    `;
+
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/articles",
+          {
+            credentials:
+              "same-origin",
+            cache:
+              "no-store"
+          }
+        );
+
+
+      const data =
+        await readApiResponse(
+          response
+        );
+
+
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
+
+        throw new Error(
+          data.error ||
+          "სტატიების ჩატვირთვა ვერ მოხერხდა."
+        );
+
+      }
+
+
+      renderArticles(
+        data.articles || []
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      articleList.innerHTML = `
+        <div class="article-item">
+
+          <div class="article-info">
+
+            <h3>
+              შეცდომა
+            </h3>
+
+            <div class="article-meta">
+              ${escapeHtml(
+                error.message ||
+                "სტატიების ჩატვირთვა ვერ მოხერხდა."
+              )}
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================
+     RENDER ARTICLES
+  ========================== */
+
+  function renderArticles(
+    articles
+  ) {
+
+    if (
+      !Array.isArray(
+        articles
+      ) ||
+      !articles.length
+    ) {
+
+      articleList.innerHTML = `
+        <div class="empty-list">
+          ჯერ არცერთი სტატია არ არის გამოქვეყნებული.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    articleList.innerHTML =
+      articles
+        .map(
+          article => {
+
+            const date =
+              new Date(
+                article.createdAt
+              ).toLocaleDateString(
+                "ka-GE"
+              );
+
+
+            return `
+
+              <div
+                class="article-item"
+                data-article-id="${escapeHtml(
+                  article.id
+                )}"
+              >
+
+                <div class="article-info">
+
+                  <h3>
+                    ${escapeHtml(
+                      article.title
+                    )}
+                  </h3>
+
+                  <div class="article-meta">
+
+                    ${escapeHtml(
+                      article.category ||
+                      "სხვა"
+                    )}
+
+                    ·
+
+                    ${escapeHtml(
+                      date
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                <button
+                  class="delete delete-button"
+                  type="button"
+                  data-id="${escapeHtml(
+                    article.id
+                  )}"
+                >
+                  🗑️ სტატიის წაშლა
+                </button>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join("");
+
+
+    articleList
+      .querySelectorAll(
+        ".delete-button"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            async () => {
+
+              const id =
+                button.dataset.id;
+
+
+              if (!id) {
+
+                return;
+
+              }
+
+
+              const confirmed =
+                window.confirm(
+                  "ნამდვილად გინდა ამ სტატიის წაშლა?"
+                );
+
+
+              if (!confirmed) {
+
+                return;
+
+              }
+
+
+              await deleteArticle(
+                id,
+                button
+              );
+
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  /* =========================
+     DELETE ARTICLE
+  ========================== */
+
+  async function deleteArticle(
+    id,
+    button
+  ) {
+
+    clearMessage(
+      articleMessage
+    );
+
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "იშლება...";
+
+
+    try {
+
+      const response =
+        await fetch(
+          "/api/articles/" +
+            encodeURIComponent(
+              id
+            ),
+          {
+            method: "DELETE",
+            credentials:
+              "same-origin",
+            cache:
+              "no-store"
+          }
+        );
+
+
+      const data =
+        await readApiResponse(
+          response
+        );
+
+
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
+
+        throw new Error(
+          data.error ||
+          "სტატიის წაშლა ვერ მოხერხდა."
+        );
+
+      }
+
+
+      showMessage(
+        articleMessage,
+        "სტატია წარმატებით წაიშალა.",
+        "success"
+      );
+
+
+      await loadArticles();
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "🗑️ სტატიის წაშლა";
+
+
+      showMessage(
+        articleMessage,
+        error.message ||
+          "სტატიის წაშლა ვერ მოხერხდა.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     START
+  ========================== */
+
+  checkAdmin();
+
+</script>
+
+</body>
+</html>
